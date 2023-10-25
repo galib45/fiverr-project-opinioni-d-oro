@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>{% block title %}{% endblock %} - Opinioni D'oro</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Poppins&family=Open+Sans&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+	<link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
+	<style>{% block style %}{% endblock %}</style>
+</head>
+<body>
+	<div class="container">
+		<!-- Navigation Bar -->
+		<nav>
+		<div class="navbar">
+			<div class="navbar-brand">
+				<h1>Opinioni D'oro</h1>
+			</div>
+			<div class="navbar-nav">
+				<a href="{{ url_for('index') }}">Home</a>
+				<a href="{{ url_for('about') }}">About</a>
+				<a href="{{ url_for('pricing') }}">Pricing</a>
+				<a href="{{ url_for('contact') }}">Contact</a>
+				<a href="{{ url_for('login') }}">Login</a>
+			</div>
+			<div class="navbar-menu">
+				<span class="material-symbols-outlined">menu</span>
+			</div>
+		</div>
+		<div class="navbar-vertical">
+			<a href="#">
+				<span class="material-symbols-outlined">home</span>
+				Home
+			</a>
+			<a href="#">
+				<span class="material-symbols-outlined">info</span>
+				About
+			</a>
+			<a href="#">
+				<span class="material-symbols-outlined">sell</span>
+				Pricing
+			</a>
+			<a href="#">
+				<span class="material-symbols-outlined">contact_page</span>
+				Contact
+			</a>
+			<a href="#">
+				<span class="material-symbols-outlined">login</span>
+				Login
+			</a>
+		</div>
+		</nav>
+
+		{% block content %}{% endblock %}
+		<div class="section copyright">
+			<span class="material-symbols-outlined">copyright</span>
+			<p>2023 Opinioni D'oro. All Rights Reserved.</p>
+		</div>
+	</div>
+	<script src="{{ url_for('static', filename='index.js') }}" defer></script>
+	<script>{% block script %}{% endblock %}</script>
+</body>
+</html>

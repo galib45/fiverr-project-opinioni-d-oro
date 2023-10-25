@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% set active_page = 'home' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<div class="container-inner">
+	<div class="section welcome">
+		<h1>Empower Your Business with Honest Reviews</h1>
+		<p>
+			Opinioni D'oro offers a powerful platform for businesses, providing valuable customer feedback and insights. 
+			Enhance your reputation, trust, and growth by monitoring reviews and identifying trends. 
+			Join us today for a prosperous and trustworthy partnership in business success.
+		</p>
+		<div class="button-holder">
+			<div class="button">
+				<a href="{{ url_for('contact') }}">
+					Get Started
+					<span class="material-symbols-outlined icon-right">arrow_forward</span>
+				</a>
+			</div>
+		</div>
+	</div>
+
+	<div class="section how-it-works">
+		<div>
+			<span class="material-symbols-outlined">subscriptions</span>
+			<h1> Subscribe</h1>
+			<p> 
+				Contact us, we will create your account, give your credentials and a shareable link
+			</p>
+		</div>
+		<div>
+			<span class="material-symbols-outlined">share</span>
+			<h1> Share </h1>
+			<p> 
+				Now share the link we provided with your customers and tell them to put a review
+			</p>
+		</div>
+		<div>
+			<span class="material-symbols-outlined">check</span>
+			<h1> Get Reviews </h1>
+			<p> 
+				Start getting honest review from customers and flourish in your business
+			</p>
+		</div>
+	</div>
+
+	<div class="section why-choose-us">
+		<div>
+			<div><h1> Boost Customer Trust </h1>
+			<p> 
+				Our service is built to boost customer trust by collecting and displaying honest feedback from your patrons. 
+				Potential customers are more likely to choose your business when they see that others have had positive experiences.
+			</p></div>
+			<div><img src="{{ url_for('static', filename='trust.jpg') }}"></div>
+		</div>
+		<div>
+			<div><h1> Enhance Your Reputation </h1>
+			<p> 
+				GoldenOpinions helps you enhance your business reputation in the eyes of your customers. 
+				Positive reviews and a stellar online presence contribute to a strong, trustworthy image, which, in turn, leads to increased sales and loyalty.
+			</p></div>
+			<div><img src="{{ url_for('static', filename='reputation.jpg') }}"></div>
+		</div>
+		<div>
+			<div><h1> Reward Loyal Customers </h1>
+			<p> 
+				Our platform enables you to reward loyal customers with exclusive discounts and promotions. 
+				As they continue to provide feedback and support your business, you can reciprocate their loyalty, ensuring they keep coming back.
+			</p></div>
+			<div><img src="{{ url_for('static', filename='loyalty.jpg') }}"></div>
+		</div>
+	</div>
+</div>
+{% endblock %}
