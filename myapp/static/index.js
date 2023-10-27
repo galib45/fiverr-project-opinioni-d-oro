@@ -1,8 +1,8 @@
 navbarMenuEl = document.querySelector('.navbar-menu');
-navbarVerticalEl = document.querySelector('.navbar-vertical');
+navbarWrapperEl = document.querySelector('.navbar-wrapper');
 
 navbarMenuEl.addEventListener('click', function() {
-    console.log(navbarVerticalEl.style.height);
-    if (navbarVerticalEl.style.height != '270px') navbarVerticalEl.style.height = '270px';
-    else navbarVerticalEl.style.height = '0px';
+    console.log(navbarWrapperEl.style.gridTemplateRows);
+    if (navbarWrapperEl.style.gridTemplateRows !== '1fr') navbarWrapperEl.style.gridTemplateRows = '1fr';
+    else navbarWrapperEl.style.gridTemplateRows = '0fr';
 });

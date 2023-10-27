@@ -4,7 +4,49 @@
 {% block title %}Login{% endblock %}
 
 {% block content %}
-<div class="container-inner">
-	<h1>Not Implemented!</h1>
+<div class="form">
+    <form action="" method="post" id="login-form" novalidate>
+        <div class="form-title">Sign In</div>
+        {{ form.hidden_tag() }}
+        <div>
+            {{ form.username.label }}
+            {{ form.username(placeholder="Enter your username") }}
+            <span class="form-error" id="username-error"></span>
+            {% for error in form.username.errors %}
+                <span class="form-error">{{ error }}</span>
+            {% endfor %}
+        </div>
+        <div>
+            {{ form.password.label }}
+            {{ form.password(placeholder="Enter your password") }}
+            <span class="form-error" id="password-error"></span>
+            {% for error in form.password.errors %}
+                <span class="form-error">{{ error }}</span>
+            {% endfor %}
+        </div>
+        <div>{{ form.submit() }}</div>
+    </form>
 </div>
+{% endblock %}
+
+{% block script %}
+document.getElementById('login-form').addEventListener('submit', function (event) {
+    // Get the username & password field value
+    const username = document.getElementById('username').value.trim();
+    const password = document.getElementById('password').value.trim();
+
+    // Validation
+    const usernameErrorEl = document.getElementById('username-error');
+    const passwordErrorEl = document.getElementById('password-error');
+
+    if(username === '' || password === '') {
+        // Prevent the default form submission
+        event.preventDefault();
+        
+        if (username === '') usernameErrorEl.textContent = 'Username is required.';
+        else usernameErrorEl.textContent = '';
+        if (password === '') passwordErrorEl.textContent = 'Password is required.';
+        else passwordErrorEl.textContent = '';
+    }
+});
 {% endblock %}

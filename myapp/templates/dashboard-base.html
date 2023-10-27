@@ -10,8 +10,6 @@
 	<link href="https://fonts.googleapis.com/css2?family=Poppins&family=Open+Sans&display=swap" rel="stylesheet">
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 	<link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
-	<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
-	</link>
 	<style>{% block style %}{% endblock %}</style>
 </head>
 <body>
@@ -24,13 +22,9 @@
 				<div><div>Golden</div><div>Opinions</div></div>
 			</a>
 			<div class="navbar-nav">
-				<a href="{{ url_for('index') }}">Home</a>
-				<a href="{{ url_for('contact') }}">Contact</a>
-				{% if current_user.is_anonymous %}
-					<a href="{{ url_for('login') }}">Login</a>
-				{% else %}
-					<a href="{{ url_for('dashboard') }}">Dashboard</a>
-				{% endif %}
+				<a href="{{ url_for('dashboard') }}">Dashboard</a>
+				<a href="{{ url_for('settings') }}">Settings</a>
+				<a href="{{ url_for('logout') }}">Logout</a>
 			</div>
 			<div class="navbar-menu">
 				<span class="material-symbols-outlined">menu</span>
@@ -38,26 +32,18 @@
 		</div>
 		<div class="navbar-wrapper">
 			<div class="navbar-vertical">
-				<a href="{{ url_for('index') }}">
-					<span class="material-symbols-outlined">home</span>
-					<span>Home</span>
+				<a href="{{ url_for('dashboard') }}">
+					<span class="material-symbols-outlined">dashboard</span>
+					<span>Dashboard</span>
 				</a>
-				<a href="{{ url_for('contact') }}">
-					<span class="material-symbols-outlined">contact_page</span>
-					<span>Contact</span>
+				<a href="{{ url_for('settings') }}">
+					<span class="material-symbols-outlined">settings</span>
+					<span>Settings</span>
 				</a>
-				{% if current_user.is_anonymous %}
-					<a href="{{ url_for('login') }}">
-						<span class="material-symbols-outlined">login</span>
-						<span>Login</span>
-					</a>
-				{% else %}
-					<a href="{{ url_for('dashboard') }}">
-						<span class="material-symbols-outlined">dashboard</span>
-						<span>Dashboard</span>
-					</a>
-				{% endif %}
-				
+				<a href="{{ url_for('logout') }}">
+					<span class="material-symbols-outlined">logout</span>
+					<span>Logout</span>
+				</a>
 			</div>
 		</div>
 		</nav>
@@ -75,7 +61,7 @@
 		</div>
 		<div class="section copyright">
 			<span class="material-symbols-outlined">copyright</span>
-			<p>2023 Opinioni D'oro. All Rights Reserved.</p>
+			<p>2023 Golden Opinions. All Rights Reserved.</p>
 		</div>
 	</div>
 	<script src="{{ url_for('static', filename='index.js') }}" defer></script>

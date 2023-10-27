@@ -5,9 +5,15 @@
     font-family: 'Poppins', sans-serif;
 }
 
-.container-inner {
-    min-height: 81vh;
+.container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100dvh;
 }
+
+/* .container-inner { */
+/*     min-height: 81vh; */
+/* } */
 
 nav {
     background: #ffc14d;
@@ -19,22 +25,61 @@ div.navbar {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 10px 5%;
+    padding: 0 5%;
+    gap: 20px;
 }
 
-div.navbar > * {
+.navbar-brand {
     display: flex;
-    flex-wrap: wrap;
+    height: 60px;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    color: black;
+    font-size: 24px;
+    font-weight: 600;
+}
+
+.navbar-brand > div {
+    display: flex;
+    gap: 8px;
+}
+
+.navbar-brand img {
+    height: 130%;
+    margin: -8px 0;
+}
+
+@media only screen and (max-width: 360px) {
+    .navbar-brand {
+        font-size: 20px;
+        line-height: 22px;
+    }
+
+    .navbar-brand > div {
+        /* flex-direction: column; */
+        gap: 6px;
+    }
+}
+
+div.navbar-nav {
+    display: flex;
+    gap: 5px;
 }
 
 div.navbar-nav > a {
-    margin: 0;
+    margin: auto 0;
     text-decoration: none;
     text-transform: uppercase;
     font-weight: 600;
     color: #005248;
     padding: 10px 20px;
     border-radius: 4px;
+}
+
+div.navbar-nav > a:last-child {
+    padding: 6px 20px;
+    border: 3px solid #005248;
 }
 
 div.navbar-nav > a:hover {
@@ -99,21 +144,38 @@ div.navbar-menu > span {
     font-size: 32px;
 }
 
+.navbar-wrapper {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 500ms ease-in-out;
+}
+
 div.navbar-vertical {
     display: flex;
     flex-direction: column;
-    height: 0px;
-    transition: height 500ms ease-in-out;
+    overflow: hidden;
+    gap: 5px
 }
 
 div.navbar-vertical > a {
-    margin: 0;
     text-decoration: none;
     text-transform: uppercase;
     font-weight: 600;
     color: #005248;
-    padding: 15px 5%;
+    padding: 15px;
     display: flex;
+    align-items: center;
+    margin: 0 5%;
+    border-radius: 0.75em;
+}
+
+div.navbar-vertical > a:first-child {
+    margin-top: 20px;
+}
+
+div.navbar-vertical > a:last-child {
+    border: 3px solid #005248;
+    margin-bottom: 40px;
 }
 
 div.navbar-vertical > a:hover {
@@ -126,6 +188,10 @@ div.navbar-vertical > a > span {
     font-variation-settings: 'FILL' 1, 'wght' 600, 'GRAD' 0, 'opsz' 24;
 }
 
+div.navbar-vertical > a > span:last-child {
+    margin: auto 0;
+}
+
 .section {
     padding: 20px 5%;
 }
@@ -134,6 +200,7 @@ div.navbar-vertical > a > span {
     display: flex;
     background: #ffc14d;
     justify-content: center;
+    margin-top: auto;
 }
 
 .copyright > p {
@@ -160,6 +227,11 @@ div.navbar-vertical > a > span {
 
 .why-choose-us > div > div {
     width: 50%;
+}
+
+.why-choose-us h1 {
+    line-height: 1.1;
+    padding-bottom: 16px;
 }
 
 .why-choose-us img {
@@ -243,6 +315,95 @@ div.button > a:hover {
 
 div.button > a > span {
     font-variation-settings: 'FILL' 1, 'wght' 600, 'GRAD' 0, 'opsz' 24;
+}
+
+.flashed_messages {
+    padding: 10px;
+    width: 90%;
+    margin: 10px auto;
+    text-align: center;
+    color: #d50000;
+}
+
+.flashed_messages > li {
+    list-style: none;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 5%;
+}
+
+.form form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    padding: 20px;
+    gap: 30px;
+    width: 100%;
+}
+
+.form form > div {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    max-width: 425px;
+}
+
+.form-title {
+    font-size: 1.4em;
+    padding: 10px 0;
+    font-weight: 600;
+}
+
+.form-error {
+    color: #d50000;
+    font-size: 0.85em;
+    text-align: right;
+}
+
+.form input[type="text"], .form input[type="password"] {
+    font-size: 1em;
+    padding: 10px;
+    line-height: 1.5;
+    border: 1px solid #dddddd;
+    border-radius: 4px;
+    box-shadow: 0px 0px 1px 1px rgb(0 0 0 / 25%);
+}
+
+.form input[type="text"]:hover, .form input[type="password"]:hover {
+    box-shadow: 0px 0px 2px 2px rgb(0 0 0 / 35%);
+}
+
+.form input[type="text"]:focus, .form input[type="password"]:focus {
+    box-shadow: 0px 0px 3px 2px rgb(0 0 0 / 45%);
+    outline: none;
+}
+
+.form input[type="text"]::placeholder, .form input[type="password"]::placeholder {
+    color: #aaaaaa;
+}
+
+.form input[type="submit"] {
+    padding: 10px 20px;
+    color: #005248;
+    background: #ffecdb;
+    font-weight: bold;
+    font-size: 1em;
+    text-transform: uppercase;
+    border: none;
+    border-radius: 0.75em;
+    box-shadow: 1px 1px 4px 0px rgb(128 128 128 / 75%);
+    margin: 20px auto 0 auto;
+}
+
+.form input[type="submit"]:hover {
+    color: white;
+    background: #005248;
 }
 
 @media only screen and (max-width: 768px) {

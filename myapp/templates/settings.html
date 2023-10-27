@@ -1,0 +1,10 @@
+{% extends "dashboard-base.html" %}
+{% set active_page = 'dashboard' %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="container-inner">
+	<h1>Settings - {{ current_user.username }}</h1>
+</div>
+{% endblock %}

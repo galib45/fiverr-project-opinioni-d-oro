@@ -1,0 +1,19 @@
+{% extends "dashboard-base.html" %}
+{% set active_page = 'dashboard' %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="container-inner">
+	{% if current_user.username == 'admin' %}
+		<div class="section dashboard-admin">
+			<h2>Welcome, {{ current_user.username }}</h2>
+			<div class="admin-overview">
+				
+			</div>
+		</div>
+	{% else %}
+	
+	{% endif %}
+</div>
+{% endblock %}
