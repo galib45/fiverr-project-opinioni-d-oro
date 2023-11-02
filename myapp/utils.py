@@ -3,8 +3,22 @@ from urllib.parse import urlparse, urlencode, urlunparse
 import json
 import re
 import random
+from sys import stderr
+from inspect import getframeinfo, stack
 
 request_count = 0
+
+def log_info(info):
+	caller = stack()[1]
+	filename = caller.filename.split('/')[-1]
+	lineno = caller.lineno
+	print(f'[{filename}, line {lineno}]\t[INFO] {info}\t')
+
+def log_error(error):
+	caller = stack()[1]
+	filename = caller.filename.split('/')[-1]
+	lineno = caller.lineno
+	print(f'[{filename}, line {lineno}]\t[ERROR] {error}', file=stderr)
 
 def get_ua_list(filename):
     ua_list = []
@@ -18,7 +32,7 @@ ua_list = get_ua_list('useragents.txt')
 def get_random_ua():
     global ua_list
     ua = random.choice(ua_list)
-    print('User-Agent:', ua)
+    log_info(f'User-Agent: {ua}')
     return ua
 
 ua = get_random_ua()
@@ -31,19 +45,27 @@ def requests_get(url):
     }
     reponse = None
     try: response = requests.get(url, headers=headers)
-    except Exception as e: print(e)
+    except Exception as e: 
+        log_error(e)
     request_count += 1
     if request_count % 10 == 0: ua = get_random_ua()
     return response
 
-def get_unique_id(share_url):
+def get_id_from_url(share_url):
     response = requests_get(share_url)
+    
+    pattern = r'"ChIJ[a-zA-Z0-9]+\\"'
+    result = re.search(pattern, response.text)
+    place_id = None
+    if result: place_id = result.group()[1:-2]
+    
     actual_url = response.url
     pattern = r'1s0x[0-9a-f]+:0x[0-9a-f]+'
     result = re.search(pattern, actual_url)
     unique_id = None
-    if result != None: unique_id = result.group()
-    return unique_id
+    if result: unique_id = result.group()[2:]
+
+    return place_id, unique_id
 
 def build_pb(unique_id, page_id=''):
     pb = '!1m7!' + unique_id + '!3s!6m4!4m1!1e1!4m1!1e3!2m2!1i10!2s' + page_id + '!3e2!5m2!1sobw0ZajDMcOcseMP2oSm2A0!7e81!8m5!1b1!2b1!3b1!5b1!7b1!11m6!1e3!2e1!3sen!4sbd!6m1!1i2'

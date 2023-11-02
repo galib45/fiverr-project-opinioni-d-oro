@@ -3,6 +3,29 @@
 
 {% block title %}Login{% endblock %}
 
+{% block style %}
+.password-input-container {
+    position: relative;
+}
+
+.password-input-container > input {
+    width: 100%;
+}
+
+.password-input-container > span {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #777777;
+    cursor: pointer;
+}
+
+.password-input-container > span:hover {
+    color: black;
+}
+{% endblock %}
+
 {% block content %}
 <div class="form">
     <form action="" method="post" id="login-form" novalidate>
@@ -18,7 +41,10 @@
         </div>
         <div>
             {{ form.password.label }}
-            {{ form.password(placeholder="Enter your password") }}
+            <div class="password-input-container">
+                {{ form.password(placeholder="Enter your password") }}
+                <span class="material-symbols-outlined">visibility</span>
+            </div>
             <span class="form-error" id="password-error"></span>
             {% for error in form.password.errors %}
                 <span class="form-error">{{ error }}</span>
@@ -30,23 +56,73 @@
 {% endblock %}
 
 {% block script %}
-document.getElementById('login-form').addEventListener('submit', function (event) {
-    // Get the username & password field value
-    const username = document.getElementById('username').value.trim();
-    const password = document.getElementById('password').value.trim();
+document.querySelectorAll('.password-input-container > span').forEach((icon) => {
+    icon.addEventListener('click', (event) => {
+        toggleElement = event.target
+        inputElement = toggleElement.parentElement.querySelector('input');
+        if (inputElement.type === 'password') inputElement.type = 'text';
+        else inputElement.type = 'password';
+        if (toggleElement.style.color !== 'black') toggleElement.style.color = 'black';
+        else toggleElement.style.color = '#dddddd';
+    });
+});
 
-    // Validation
-    const usernameErrorEl = document.getElementById('username-error');
-    const passwordErrorEl = document.getElementById('password-error');
-
-    if(username === '' || password === '') {
-        // Prevent the default form submission
-        event.preventDefault();
-        
-        if (username === '') usernameErrorEl.textContent = 'Username is required.';
-        else usernameErrorEl.textContent = '';
-        if (password === '') passwordErrorEl.textContent = 'Password is required.';
-        else passwordErrorEl.textContent = '';
+function validateInput(inputValue, errorElement, errorMessage, regex, inputElement) {
+    if (inputValue === '') {
+        validationError = true;
+        errorElement.textContent = errorMessage;
+        errorElement.style.display = 'block';
+        inputElement.classList.remove('valid-input');
+        inputElement.classList.add('invalid-input');
+    } else if (regex && !regex.test(inputValue)) {
+        validationError = true;
+        errorElement.textContent = 'Invalid format';
+        errorElement.style.display = 'block';
+        inputElement.classList.remove('valid-input');
+        inputElement.classList.add('invalid-input');
+    } else {
+        errorElement.textContent = '';
+        errorElement.style.display = 'none';
+        inputElement.classList.remove('invalid-input');
+        inputElement.classList.add('valid-input');
     }
+}
+
+// Get all the elements
+const usernameErrorEl = document.getElementById('username-error');
+const passwordErrorEl = document.getElementById('password-error');
+
+// Define an array of objects with input elements, corresponding error elements, messages, and regex for password validation
+const inputs = [
+    { input: document.getElementById('username'), errorElement: usernameErrorEl, message: 'Username is required.' },
+    { input: document.getElementById('password'), errorElement: passwordErrorEl, message: 'Password is required.' }
+];
+
+// Attach input event listeners to each input element
+inputs.forEach((inputObj) => {
+    const inputElement = inputObj.input;
+    inputElement.addEventListener('input', () => {
+        validateInput(inputElement.value.trim(), inputObj.errorElement, inputObj.message, inputObj.regex, inputElement);
+    });
+});
+
+document.getElementById('login-form').addEventListener('submit', function (event) {
+    // Check if the password and confirm password match
+    if (passwordElement.value !== confirmPasswordElement.value) {
+        validationError = true;
+        confirmPasswordErrorEl.textContent = 'Passwords do not match';
+        confirmPasswordErrorEl.style.display = 'block';
+        confirmPasswordElement.classList.remove('valid-input');
+        confirmPasswordElement.classList.add('invalid-input');
+    }
+
+    // Revalidate all inputs
+    validationError = false;
+    inputs.forEach((inputObj) => {
+        const inputElement = inputObj.input;
+        validateInput(inputElement.value.trim(), inputObj.errorElement, inputObj.message, inputObj.regex, inputElement);
+    });
+
+    if (validationError) event.preventDefault();
 });
 {% endblock %}

@@ -100,24 +100,33 @@ a.material-symbols-outlined:hover {
 	<div class="section dashboard-admin">
 		<div>
 			<h2>Welcome, {{ current_user.username }}</h2>
+			<div class="button">
+				<a href="{{ url_for('addstore') }}">
+					<span class="button-text">Add Store</span>
+					<span class="material-symbols-outlined icon-right">add</span>
+				</a>
+			</div>
 		</div>
-		{% if customers is defined and customers|length > 0 %}
-		<div class="general-overview">
+		{% if stores is defined and stores|length > 0 %}
+		<div class="admin-overview">
 			<div class="table-wrapper">
-				<table>
+				<table class="store-list">
 					<caption>Overview</caption>
 					<thead><tr>
-						<th>Name</th>
-						<th>Email Address</th>
+						<th>Store Name</th>
+						<th>Address</th>
 						<th>Phone Number</th>
-						<th>Coupon Codes</th>
+						<th>Action</th>
 					</tr></thead>
 					<tbody>
-					{% for customer in customers %}
+					{% for store in stores %}
 					<tr>
-						<td>{{ customer[1] }}</td>
-						<td>{{ customer[2] }}</td>
-						<td>{{ customer[3] }}</td>
+						<td>{{ store.name }}</td>
+						<td>{{ store.address }}</td>
+						<td>{{ store.phone_number }}</td>
+						<td>
+							<a href="{{ url_for('delstore', username=store[0]) }}" class="material-symbols-outlined">delete</a>
+						</td>
 					</tr>
 					{% endfor %}
 					</tbody>
