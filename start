@@ -1,3 +1,3 @@
 #! /bin/bash
 set -xe
-uvicorn main:app --host 127.0.0.1 --port 5000 --reload
+gunicorn main:app --bind 127.0.0.1:5000 -w 1 --reload --log-config logging.conf

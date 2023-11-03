@@ -5,6 +5,7 @@ import re
 import random
 from sys import stderr
 from inspect import getframeinfo, stack
+from myapp import app
 
 request_count = 0
 
@@ -12,13 +13,13 @@ def log_info(info):
 	caller = stack()[1]
 	filename = caller.filename.split('/')[-1]
 	lineno = caller.lineno
-	print(f'[{filename}, line {lineno}]\t[INFO] {info}\t')
+	app.logger.info(f'[{filename}, line {lineno}] {info}\t')
 
 def log_error(error):
 	caller = stack()[1]
 	filename = caller.filename.split('/')[-1]
 	lineno = caller.lineno
-	print(f'[{filename}, line {lineno}]\t[ERROR] {error}', file=stderr)
+	app.logger.error(f'[{filename}, line {lineno}] {error}', file=stderr)
 
 def get_ua_list(filename):
     ua_list = []
