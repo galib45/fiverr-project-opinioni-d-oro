@@ -26,3 +26,10 @@ class LoginForm(FlaskForm):
     username = StringField('Username')
     password = PasswordField('Password')
     submit = SubmitField('Login')
+
+class RegisterCustomerForm(FlaskForm):
+    email = StringField('Email')
+    name = StringField('Name')
+    phone_number = StringField('Phone Number')
+    privacy_policy = BooleanField()
+    submit = SubmitField('Register')

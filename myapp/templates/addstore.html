@@ -212,7 +212,7 @@ generateIdButton.addEventListener('click', (event) => {
     validateInput(googleMapURLElement.value.trim(), googleMapURLErrorEl, 'Google Map Link of the store is required.', undefined, googleMapURLElement);
     loaderElement.style.display = 'block';
     console.log('generating id ...');
-    url = '/home/getid/' + googleMapURLElement.value.trim().split('/').pop()
+    url = '/getid/' + googleMapURLElement.value.trim().split('/').pop()
     console.log(url);
     fetch(url).then(response => response.json())
     .then((data) => {

@@ -4,10 +4,15 @@
 {% block title %}Dashboard{% endblock %}
 
 {% block style %}
-.dashboard-admin > div:first-child {
+.dashboard {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.dashboard > div:first-child {
 	display: flex;
-    justify-content: space-between;
-    align-items: center;
+	justify-content: space-between;
 }
 
 .admin-overview {
@@ -79,6 +84,17 @@ a.material-symbols-outlined:hover {
     color: black;
 }
 
+.coupon {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+.coupon > * {
+    text-align: left;
+}
+
 @media only screen and (max-width: 480px) {
 	.button-text {
 		display:none;
@@ -96,35 +112,64 @@ a.material-symbols-outlined:hover {
 {% endblock %}
 
 {% block content %}
-<div class="container-inner">
-	<div class="section dashboard-admin">
+<div class="section dashboard">
+	<div>
 		<div>
-			<h2>Welcome, {{ current_user.username }}</h2>
+			<h2>{{ store.name }}</h2>
+			<h3>{{ store.address }}</h3>
 		</div>
-		{% if customers is defined and customers|length > 0 %}
-		<div class="general-overview">
-			<div class="table-wrapper">
-				<table>
-					<caption>Overview</caption>
-					<thead><tr>
-						<th>Name</th>
-						<th>Email Address</th>
-						<th>Phone Number</th>
-						<th>Coupon Codes</th>
-					</tr></thead>
-					<tbody>
-					{% for customer in customers %}
-					<tr>
-						<td>{{ customer[1] }}</td>
-						<td>{{ customer[2] }}</td>
-						<td>{{ customer[3] }}</td>
-					</tr>
-					{% endfor %}
-					</tbody>
-				</table>
-			</div>
-		</div>
-		{% endif %}
+		<div id="qrcode"></div>
 	</div>
+	{% if store is defined and store.customers|length > 0 %}
+	<div class="general-overview">
+		<div class="table-wrapper">
+			<table>
+				<caption>Overview</caption>
+				<thead><tr>
+					<th>Name</th>
+					<th>Email Address</th>
+					<th>Phone Number</th>
+					<th>Coupon Codes</th>
+				</tr></thead>
+				<tbody>
+				{% for customer in store.customers %}
+				<tr>
+					<td>{{ customer.name }}</td>
+					<td>{{ customer.email }}</td>
+					<td>{{ customer.phone_number }}</td>
+					<td class="coupon">{% for coupon in customer.coupons %}
+					{% if coupon.store_id == store.id %}
+					<div>
+					<span><b>{{ coupon.code }}</b></span>
+					<div>Expires at: <span class="datetime">{{ coupon.expire_date.isoformat() }}</span></div>
+					</div>
+					{% endif %}
+					{% endfor %}</td>
+				</tr>
+				{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
+	{% endif %}
 </div>
+{% endblock %}
+
+{% block script %}
+dateTimeElements = document.querySelectorAll('.datetime');
+dateTimeElements.forEach( element => {
+	dt = new Date(element.textContent + 'Z')
+	element.textContent = dt.toDateString() + ', ' + dt.toLocaleTimeString()
+});
+
+url = new URL(document.URL)
+
+new QRCode(document.getElementById("qrcode"), {
+    text: url.origin + '/store/{{store.id}}/review',
+    width: 128,
+    height: 128,
+    colorDark : "#000000",
+    colorLight : "#ffffff",
+    correctLevel : QRCode.CorrectLevel.H
+});
 {% endblock %}

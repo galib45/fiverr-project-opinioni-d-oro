@@ -11,6 +11,12 @@ store_customer = db.Table(
     db.Column('customer_id', db.Integer, db.ForeignKey('customer.id'))
 )
 
+campaign_customer = db.Table(
+    'campaign_customer',
+    db.Column('campaign_id', db.Integer, db.ForeignKey('campaign.id')),
+    db.Column('customer_id', db.Integer, db.ForeignKey('customer.id'))
+)
+
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(20), unique=True)
@@ -36,27 +42,44 @@ class Store(db.Model):
     google_map_url = db.Column(db.String(50))
     place_id = db.Column(db.String(50))
     hex_id = db.Column(db.String(50))
+    date_created = db.Column(db.DateTime())
+    upto_timestamp = db.Column(db.DateTime())
     coupon_offer = db.Column(db.String)
     owner_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     customers = db.relationship('Customer', secondary='store_customer', backref='store')
+    campaigns = db.relationship('Campaign', backref='store', lazy='dynamic')
     coupons = db.relationship('Coupon', backref='store', lazy='dynamic')
+    reviews = db.relationship('Review', backref='store', lazy='dynamic')
 
     def __repr__(self):
         return f"Store(name='{self.name}', address='{self.address}', phone_number='{self.phone_number}')"
 
+class Campaign(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String)
+    description = db.Column(db.String)
+    offer = db.Column(db.String)
+    code = db.Column(db.String(10))
+    expire_date = db.Column(db.DateTime())
+    store_id = db.Column(db.Integer, db.ForeignKey('store.id'))
+    customers = db.relationship('Customer', secondary='campaign_customer', backref='campaign')
+
+    def __repr__(self):
+        return f"Campaign(name='{self.name}', offer='{self.offer}', code='{self.code}')"
 
 class Customer(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String)
     email = db.Column(db.String(50), unique=True)
     phone_number = db.Column(db.String(20))
-    email_verified = db.Column(db.Boolean, default=False)
+    account_id = db.Column(db.String)
     phone_verified = db.Column(db.Boolean, default=False)
+    got_coupon_date = db.Column(db.DateTime())
     coupons = db.relationship('Coupon', backref='customer', lazy='dynamic')
+    reviews = db.relationship('Review', backref='customer', lazy='dynamic')
 
     def __repr__(self):
-        return f"Customer(email='{self.email}', phone='{self.phone}', email_verified={self.email_verified}, phone_verified={self.phone_verified}, review_count={self.review_count}, unique_sentence='{self.unique_sentence}', coupon_code='{self.coupon_code}', coupon_code_timestamp='{self.coupon_code_timestamp}')"
-
+        return f"Customer(name='{self.name}', email='{self.email}', phone_number='{self.phone_number}')"
 
 class Coupon(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -64,3 +87,31 @@ class Coupon(db.Model):
     expire_date = db.Column(db.DateTime())
     store_id = db.Column(db.Integer, db.ForeignKey('store.id'))
     customer_id = db.Column(db.Integer, db.ForeignKey('customer.id'))
+
+    def __repr__(self):
+        return f"Coupon(code='{self.code}', expire_date='{self.expire_date}')"
+
+class Review(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    store_id = db.Column(db.Integer, db.ForeignKey('store.id'))
+    customer_id = db.Column(db.Integer, db.ForeignKey('customer.id'))
+    updates = db.relationship('Update', backref='review', lazy='dynamic')
+
+class Update(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    rating = db.Column(db.Integer)
+    text = db.Column(db.String)
+    timestamp = db.Column(db.String)
+    review_id = db.Column(db.Integer, db.ForeignKey('review.id'))
+    photos = db.relationship('Photo', backref='update', lazy='dynamic')
+    
+    def __repr__(self):
+        return f"Update(text='{self.text}', timestamp='{self.timestamp}')"
+
+class Photo(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    url = db.Column(db.String)
+    update_id = db.Column(db.Integer, db.ForeignKey('update.id'))
+
+    def __repr__(self):
+        return f"Store(url='{self.url}')"

@@ -3,11 +3,16 @@ from urllib.parse import urlparse, urlencode, urlunparse
 import json
 import re
 import random
+import secrets
+from string import ascii_uppercase, digits
 from sys import stderr
 from inspect import getframeinfo, stack
 from myapp import app
 
 request_count = 0
+
+def generate_random_code(length=8):
+    return ''.join(secrets.choice(ascii_uppercase + digits) for i in range(length))
 
 def log_info(info):
 	caller = stack()[1]
@@ -36,10 +41,7 @@ def get_random_ua():
     log_info(f'User-Agent: {ua}')
     return ua
 
-ua = get_random_ua()
-
-def requests_get(url):
-    global ua
+def requests_get(url, ua):
     global request_count
     headers = {
         'User-Agent': ua
@@ -49,11 +51,11 @@ def requests_get(url):
     except Exception as e: 
         log_error(e)
     request_count += 1
-    if request_count % 10 == 0: ua = get_random_ua()
     return response
 
 def get_id_from_url(share_url):
-    response = requests_get(share_url)
+    ua = get_random_ua()
+    response = requests_get(share_url, ua)
     
     pattern = r'"ChIJ[a-zA-Z0-9]+\\"'
     result = re.search(pattern, response.text)
@@ -68,8 +70,16 @@ def get_id_from_url(share_url):
 
     return place_id, unique_id
 
+def get_ua_id(share_url, ua):
+    response = requests_get(share_url, ua)
+    pattern = r'\"Bangladesh\"\],null,0,\".*?\"'
+    result = re.search(pattern, response.text)
+    ua_id = None
+    if result: ua_id = result.group()[22:-1]
+    return ua_id
+
 def build_pb(unique_id, page_id=''):
-    pb = '!1m7!' + unique_id + '!3s!6m4!4m1!1e1!4m1!1e3!2m2!1i10!2s' + page_id + '!3e2!5m2!1sobw0ZajDMcOcseMP2oSm2A0!7e81!8m5!1b1!2b1!3b1!5b1!7b1!11m6!1e3!2e1!3sen!4sbd!6m1!1i2'
+    pb = '!1m7!1s' + unique_id + '!3s!6m4!4m1!1e1!4m1!1e3!2m2!1i10!2s' + page_id + '!3e2!5m2!1sHE9HZbeXBv-t4-EPjcSyuA0!7e81!8m5!1b1!2b1!3b1!5b1!7b1!11m6!1e3!2e1!3sen!4sbd!6m1!1i2'
     return pb
 
 def build_url(query_params):
@@ -83,7 +93,7 @@ def build_url(query_params):
     ))
     return url
 
-def get_review_list(unique_id):
+def get_review_list(unique_id, upto_timestamp):
     page_id = ''
     query_params = {
         'authuser': '0',
@@ -93,29 +103,41 @@ def get_review_list(unique_id):
 
     idx = 1
     review_list = []
+    ua = get_random_ua()
 
     while True:
         query_params['pb'] = build_pb(unique_id, page_id)
         url = build_url(query_params)
-        response = requests_get(url)
+        response = requests_get(url, ua)
         data = json.loads(response.text[5:])
         page_id = data[1]
+        limit_reached = False
         for item in data[2]:
-            name = item[0][1][4][0][4]
-            time = item[0][1][6]
+            account_slot = item[0][1]
             review_slot = item[0][2]
+            
+            name = account_slot[4][0][4]
+            timestamp = account_slot[3]/1000000
+            if timestamp < upto_timestamp:
+                limit_reached = True
+                break
+            account_id = account_slot[10]
+            
+            rating = review_slot[0][0]
             review = ''
+            photos = []
             if len(review_slot) > 1: 
-                if review_slot[1] != None: review = review_slot[1][0]
-            if __name__ == '__main__': print(idx, name + ', ' + time + ', ' + review.replace('\n', ' '))
-            review_list.append([name, time, review])
+                if review_slot[1] is not None: review = review_slot[1][0]
+                if review_slot[2] is not None: photos = [photo[0] for photo in review_slot[2]]
+            review_list.append([account_id, timestamp, rating, review, photos])
             idx += 1
         if page_id==None: break
+        if limit_reached: break
 
     return review_list
 
 if __name__ == '__main__':
-    share_url = 'https://maps.app.goo.gl/QgLtXEWHt5m9ZbAt8'
-    unique_id = get_unique_id(share_url)
-    review_list = get_review_list(unique_id)
+    share_url = 'https://maps.app.goo.gl/rTC36vzFQ4uKqZqC7'
+    _, unique_id = get_id_from_url(share_url)
+    review_list = get_review_list(share_url, unique_id)
     print(request_count)

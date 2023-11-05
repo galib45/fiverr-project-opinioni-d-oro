@@ -96,44 +96,42 @@ a.material-symbols-outlined:hover {
 {% endblock %}
 
 {% block content %}
-<div class="container-inner">
-	<div class="section dashboard-admin">
-		<div>
-			<h2>Welcome, {{ current_user.username }}</h2>
-			<div class="button">
-				<a href="{{ url_for('addstore') }}">
-					<span class="button-text">Add Store</span>
-					<span class="material-symbols-outlined icon-right">add</span>
-				</a>
-			</div>
+<div class="section dashboard-admin">
+	<div>
+		<h2>Welcome, {{ current_user.username }}</h2>
+		<div class="button">
+			<a href="{{ url_for('addstore') }}">
+				<span class="button-text">Add Store</span>
+				<span class="material-symbols-outlined icon-right">add</span>
+			</a>
 		</div>
-		{% if stores is defined and stores|length > 0 %}
-		<div class="admin-overview">
-			<div class="table-wrapper">
-				<table class="store-list">
-					<caption>Overview</caption>
-					<thead><tr>
-						<th>Store Name</th>
-						<th>Address</th>
-						<th>Phone Number</th>
-						<th>Action</th>
-					</tr></thead>
-					<tbody>
-					{% for store in stores %}
-					<tr>
-						<td>{{ store.name }}</td>
-						<td>{{ store.address }}</td>
-						<td>{{ store.phone_number }}</td>
-						<td>
-							<a href="{{ url_for('delstore', username=store[0]) }}" class="material-symbols-outlined">delete</a>
-						</td>
-					</tr>
-					{% endfor %}
-					</tbody>
-				</table>
-			</div>
-		</div>
-		{% endif %}
 	</div>
+	{% if stores is defined and stores|length > 0 %}
+	<div class="admin-overview">
+		<div class="table-wrapper">
+			<table class="store-list">
+				<caption>Overview</caption>
+				<thead><tr>
+					<th>Store Name</th>
+					<th>Address</th>
+					<th>Phone Number</th>
+					<th>Action</th>
+				</tr></thead>
+				<tbody>
+				{% for store in stores %}
+				<tr>
+					<td>{{ store.name }}</td>
+					<td>{{ store.address }}</td>
+					<td>{{ store.phone_number }}</td>
+					<td>
+						<a href="{{ url_for('delstore', store_id=store.id) }}" class="material-symbols-outlined">delete</a>
+					</td>
+				</tr>
+				{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
+	{% endif %}
 </div>
 {% endblock %}

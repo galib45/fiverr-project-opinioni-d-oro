@@ -1,0 +1,161 @@
+{% extends "store-base.html" %}
+{% block title %}Register - {{ store.name }}{% endblock %}
+
+{% block style %}
+.two-buttons {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+}
+
+@media only screen and (max-width: 480px) {
+	.two-buttons {
+        flex-direction: column;
+    }
+}
+{% endblock %}
+
+{% block content %}
+<div class="form">
+    <form action="" method="post" id="register-customer-form" novalidate>
+        <div class="form-title">Register</div>
+        {{ form.hidden_tag() }}
+        <div>
+            {{ form.email.label }}
+            {{ form.email(readonly='readonly', value=session['customer_email']) }}
+            <span class="form-error" id="email-error"></span>
+            {% for error in form.email.errors %}
+                <span class="form-error">{{ error }}</span>
+            {% endfor %}
+        </div>
+        <div>
+            {{ form.name.label }}
+            {{ form.name(placeholder='Enter your name', value=session['customer_name']) }}
+            <span class="form-error" id="name-error"></span>
+            {% for error in form.name.errors %}
+                <span class="form-error">{{ error }}</span>
+            {% endfor %}
+        </div>
+        <div>
+            {{ form.phone_number.label }}
+            {{ form.phone_number(placeholder='Enter your phone number') }}
+            <span class="form-error" id="phone-number-error"></span>
+            {% for error in form.phone_number.errors %}
+                <span class="form-error">{{ error }}</span>
+            {% endfor %}
+        </div>
+        <div>
+            <div>
+                {{ form.privacy_policy() }}
+                <label for="privacy_policy" style="padding: 0 10px;">
+                    By checking this, you are agreeing with our <a href="/privacy">privacy policy</a>
+                </label>
+            </div>
+            <span class="form-error" id="privacy-policy-error"></span>
+            {% for error in form.privacy_policy.errors %}
+                <span class="form-error">{{ error }}</span>
+            {% endfor %}
+        </div>
+        <div class="two-buttons">
+            {{ form.submit() }}
+            <div class="button"><a href="{{ url_for('google_logout') }}">Change Google Account</a></div>
+        </div>
+    </form>
+</div>
+{% endblock %}
+
+{% block script %}
+
+validationError = false;
+const privacyPolicyElement = document.getElementById('privacy_policy');
+
+// Get all the elements
+const emailErrorEl = document.getElementById('email-error');
+const nameErrorEl = document.getElementById('name-error');
+const phoneNumberErrorEl = document.getElementById('phone-number-error');
+const privacyPolicyErrorEl = document.getElementById('privacy-policy-error');
+
+function validateInput(inputValue, errorElement, errorMessage, regex, inputElement) {
+    if (inputValue === '') {
+        validationError = true;
+        errorElement.textContent = errorMessage;
+        errorElement.style.display = 'block';
+        inputElement.classList.remove('valid-input');
+        inputElement.classList.add('invalid-input');
+    } else if (regex && !regex.test(inputValue)) {
+        validationError = true;
+        errorElement.textContent = 'Invalid format';
+        if (inputElement == passwordElement) errorElement.textContent = 'minimum 6 characters, at least one number';
+        errorElement.style.display = 'block';
+        inputElement.classList.remove('valid-input');
+        inputElement.classList.add('invalid-input');
+    } else {
+        errorElement.textContent = '';
+        errorElement.style.display = 'none';
+        inputElement.classList.remove('invalid-input');
+        inputElement.classList.add('valid-input');
+    }
+}
+
+// Define regular expressions for email and Google Map link validation
+const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+// Define an array of objects with input elements, corresponding error elements, messages, and regex for password validation
+const inputs = [
+    { input: document.getElementById('email'), errorElement: emailErrorEl, message: 'Email is required.', regex: emailRegex },
+    { input: document.getElementById('name'), errorElement: nameErrorEl, message: 'Name is required.' },
+    { input: document.getElementById('phone_number'), errorElement: phoneNumberErrorEl, message: 'Phone number is required.' },
+    { input: privacyPolicyElement, errorElement: privacyPolicyErrorEl, message: 'You must agree to our privacy policy to continue.'}
+];
+
+// Attach input event listeners to each input element
+inputs.forEach((inputObj) => {
+    const inputElement = inputObj.input;
+    if (inputElement == privacyPolicyElement) {
+        inputElement.addEventListener('input', () => {
+            if (inputElement.checked == true) {
+                inputObj.errorElement.textContent = '';
+                inputObj.errorElement.style.display = 'none';
+                inputElement.classList.remove('invalid-input');
+                inputElement.classList.add('valid-input');
+            } else {
+                validationError = true;
+                inputObj.errorElement.textContent = inputObj.message;
+                inputObj.errorElement.style.display = 'block';
+                inputElement.classList.remove('valid-input');
+                inputElement.classList.add('invalid-input');
+            }
+        });
+    } else {
+        inputElement.addEventListener('input', () => {
+            validateInput(inputElement.value.trim(), inputObj.errorElement, inputObj.message, inputObj.regex, inputElement);
+        });
+    }
+});
+
+document.getElementById('register-customer-form').addEventListener('submit', function (event) {
+    // Revalidate all inputs
+    validationError = false;
+    inputs.forEach((inputObj) => {
+        const inputElement = inputObj.input;
+        if (inputElement == privacyPolicyElement) {
+            if (inputElement.checked == true) {
+                inputObj.errorElement.textContent = '';
+                inputObj.errorElement.style.display = 'none';
+                inputElement.classList.remove('invalid-input');
+                inputElement.classList.add('valid-input');
+            } else {
+                validationError = true;
+                inputObj.errorElement.textContent = inputObj.message;
+                inputObj.errorElement.style.display = 'block';
+                inputElement.classList.remove('valid-input');
+                inputElement.classList.add('invalid-input');
+            }
+        } else {
+            validateInput(inputElement.value.trim(), inputObj.errorElement, inputObj.message, inputObj.regex, inputElement);
+        }
+    });
+    if (validationError) event.preventDefault();
+});
+{% endblock %}
+

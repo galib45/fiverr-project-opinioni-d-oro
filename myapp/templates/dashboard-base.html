@@ -4,7 +4,7 @@
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="description" content="GoldenOpinions: Empower your business with honest reviews. Collect and display genuine customer feedback to boost trust, enhance your reputation, and reward loyal patrons. Revolutionize your business success today.">
-	<title>{% block title %}{% endblock %} - Opinioni D'oro</title>
+	<title>{% block title %}{% endblock %} - Golden Opinions</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -66,6 +66,7 @@
 		</div>
 	</div>
 	<script src="{{ url_for('static', filename='index.js') }}" defer></script>
+	<script src="{{ url_for('static', filename='qrcode.min.js') }}"></script>
 	<script>{% block script %}{% endblock %}</script>
 </body>
 </html>

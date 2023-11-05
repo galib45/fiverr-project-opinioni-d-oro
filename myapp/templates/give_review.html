@@ -1,0 +1,68 @@
+{% extends "store-base.html" %}
+{% block title %}Leave a review - {{ store.name }}{% endblock %}
+
+{% block style %}
+.give_review {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+}
+
+.instruction {
+    display: flex;
+    flex-direction: column;
+}
+
+.instruction h3 {
+    margin: 30px 0 5px;
+}
+
+.imgframe {
+    max-width: 500px;
+    max-height: 200px;
+    overflow: hidden;
+    margin: 20px 0;
+}
+
+.instruction img {
+    width: 100%;
+}
+
+.two-buttons {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+}
+
+@media only screen and (max-width: 480px) {
+	.two-buttons {
+        flex-direction: column;
+        gap: 20px;
+    }
+}
+{% endblock %}
+
+{% block content %}
+<div class="section give_review">
+    <div>
+        <div>You are logged in as <b>{{ customer.name }}</b> from <b>{{ customer.email }}</b>.</div>
+        <div>Leave a honest review describing your most recent experience with us.</div>
+        <div class="instruction">
+            <h3>Instructions</h3>
+            <div>
+                If you have multiple google accounts logged in to this browser, 
+                make sure that <b>{{ customer.email }}</b> is the default account. 
+                If unsure first remove all accounts then log into <b>{{ customer.email }}</b>
+            </div>
+            <br> 
+            <div>Come back to this page and click on the "Go to Review Page" button below.</div>
+        </div>
+    </div>
+    <div class="two-buttons">
+        <div class="button"><a href="{{ url_for('review_url', store_id=store.id) }}">Go to Review Page</a></div>
+        <div class="button"><a href="{{ url_for('google_logout') }}">Change Google Account</a></div>
+    </div>
+</div>
+{% endblock %}
+
+

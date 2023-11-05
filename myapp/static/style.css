@@ -295,6 +295,7 @@ div.button-holder {
 .button {
     width: fit-content;
     white-space: nowrap;
+    margin: 0 auto;
 }
 
 .button > a {
@@ -422,7 +423,7 @@ div.button-holder {
     border: 3px solid #005248;
     border-radius: 0.75em;
     box-shadow: 1px 1px 4px 0px rgb(128 128 128 / 75%);
-    margin: 20px auto 0 auto;
+    margin: 0 auto;
 }
 
 .form input[type="submit"]:hover {

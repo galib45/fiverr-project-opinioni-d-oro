@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="description" content="Golden Opinions: Empower your business with honest reviews. Collect and display genuine customer feedback to boost trust, enhance your reputation, and reward loyal patrons. Revolutionize your business success today.">
+	<title>{% block title %}{% endblock %}</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Poppins&family=Open+Sans&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" />
+	<link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
+	<style>{% block style %}{% endblock %}</style>
+</head>
+<body>
+	<div class="container">
+		<!-- Navigation Bar -->
+		<nav>
+		<div class="navbar">
+			<h1 class="navbar-brand">{{ store.name }}</h1>
+		</div>
+		</nav>
+		
+		<div class="container-inner">
+			{% block content %}{% endblock %}
+		</div>
+		<div class="section copyright">
+			<span class="material-symbols-outlined">copyright</span>
+			<p>2023 Golden Opinions. All Rights Reserved.</p>
+		</div>
+	</div>
+	<script>{% block script %}{% endblock %}</script>
+</body>
+</html>
