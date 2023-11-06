@@ -2,12 +2,41 @@ from datetime import datetime, timezone, timedelta
 from flask import abort, render_template, flash, redirect, url_for, request, send_file
 from flask.json import jsonify
 from flask_login import current_user, login_user, login_required, logout_user
+from flask_mail import Message
+from myapp import mail
 from myapp import app, db, login
 from myapp.forms import LoginForm, AddStoreForm
 from myapp.models import User, Store, Customer, Photo, Update, Review, Coupon
 from myapp.utils import log_info, log_error, get_id_from_url
 from werkzeug.exceptions import HTTPException
 from myapp import customer_routes
+
+def send_coupon_email(customer, coupon):
+    subject = f'Discount Coupon from {coupon.store.name}'
+    sender = app.config['MAIL_USERNAME']
+    recipients = [customer.email]
+    msg = Message(subject, sender=sender, recipients=recipients)
+    msg.body = f"You received a discount coupon from {coupon.store.name}. Your coupon code is {coupon.code}. It will expire at {coupon.expire_date.strftime('%a %d %b %Y, %I:%M%p')} UTC"
+    try: 
+        mail.send(msg)
+        coupon.email_sent = True
+        db.session.commit()
+    except Exception as e:
+        print(f'ERROR sending email to {customer.email}: {e}')
+    # print(f'Sending email to {customer.email} for {coupon.code}')
+    # print(f'ERROR: NOT IMPLEMENTED')
+
+def send_coupon_sms(customer, coupon):
+    print(f'Sending sms to {customer.email} for {coupon.code}')
+    print(f'ERROR: NOT IMPLEMENTED')
+
+@app.cli.command("send-coupons")
+def send_coupons():
+    customers = db.session.scalars(db.select(Customer)).all()
+    for customer in customers:
+        for coupon in customer.coupons:
+            if not coupon.email_sent: send_coupon_email(customer, coupon)
+            if not coupon.sms_sent: send_coupon_sms(customer, coupon)
 
 @app.cli.command("fetch-reviews")
 def fetch_reviews():

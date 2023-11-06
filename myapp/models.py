@@ -85,6 +85,8 @@ class Coupon(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     code = db.Column(db.String(10))
     expire_date = db.Column(db.DateTime())
+    email_sent = db.Column(db.Boolean)
+    sms_sent = db.Column(db.Boolean)
     store_id = db.Column(db.Integer, db.ForeignKey('store.id'))
     customer_id = db.Column(db.Integer, db.ForeignKey('customer.id'))
 
