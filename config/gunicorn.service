@@ -1,0 +1,13 @@
+[Unit]
+Description=Flask App
+After=network.target
+
+[Service]
+User=galib
+Group=galib
+WorkingDirectory=/home/galib/programming/python/opinioni-d-oro
+Environment="PATH=/home/galib/programming/python/opinioni-d-oro/.venv/bin"
+ExecStart=/home/galib/programming/python/opinioni-d-oro/.venv/bin/gunicorn --workers 4 --bind 127.0.0.1:8000 main:app
+
+[Install]
+WantedBy=multi-user.target
