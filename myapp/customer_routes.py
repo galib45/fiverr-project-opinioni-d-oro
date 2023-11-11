@@ -32,6 +32,8 @@ flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file(
 )
 
 flow.redirect_uri = "http://127.0.0.1:5000/google/callback"  # "https://goldenopinions.duckdns.org/google/callback"
+if app.config["ENVIRONMENT"] == "production":
+    flow.redirect_uri = "https://goldenopinions.duckdns.org/google/callback"
 
 
 # Login page
