@@ -128,7 +128,7 @@ a.material-symbols-outlined:hover {
 				<thead><tr>
 					<th>Name</th>
 					<th>Email Address</th>
-					<th>Phone Number</th>
+					<th>Updates</th>
 					<th>Coupon Codes</th>
 				</tr></thead>
 				<tbody>
@@ -136,7 +136,7 @@ a.material-symbols-outlined:hover {
 				<tr>
 					<td>{{ customer.name }}</td>
 					<td>{{ customer.email }}</td>
-					<td>{{ customer.phone_number }}</td>
+					<td>{{ data[customer.id] }}</td>
 					<td class="coupon">{% for coupon in customer.coupons %}
 					{% if coupon.store_id == store.id %}
 					<div>
