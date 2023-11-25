@@ -1,9 +1,10 @@
 from datetime import datetime
 
 from flask_login import UserMixin
+from werkzeug.security import check_password_hash, generate_password_hash
+
 from myapp import db
 from myapp.utils import get_id_from_url
-from werkzeug.security import check_password_hash, generate_password_hash
 
 store_customer = db.Table(
     "store_customer",
@@ -46,7 +47,7 @@ class Store(db.Model):
     hex_id = db.Column(db.String(50))
     date_created = db.Column(db.DateTime())
     upto_timestamp = db.Column(db.DateTime())
-    coupon_offer = db.Column(db.String)
+    settings = db.Column(db.String)
     owner_id = db.Column(db.Integer, db.ForeignKey("user.id"))
     customers = db.relationship("Customer", secondary="store_customer", backref="store")
     campaigns = db.relationship("Campaign", backref="store", lazy="dynamic")
@@ -92,6 +93,8 @@ class Coupon(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     code = db.Column(db.String(10))
     expire_date = db.Column(db.DateTime())
+    offer = db.Column(db.String)
+    redeemed = db.Column(db.Boolean)
     email_sent = db.Column(db.Boolean)
     sms_sent = db.Column(db.Boolean)
     store_id = db.Column(db.Integer, db.ForeignKey("store.id"))

@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta, timezone
 
 from flask import abort, flash, redirect, render_template, request, send_file, url_for
-from flask.json import jsonify
+from flask.json import dumps, jsonify, loads
 from flask_login import current_user, login_required, login_user, logout_user
 from flask_mail import Message
 from werkzeug.exceptions import HTTPException
@@ -34,7 +34,17 @@ def contact():
 
 @app.route("/settings")
 def settings():
-    return render_template("settings.html")
+    if current_user.is_authenticated:
+        if current_user.username == "admin":
+            return render_template("settings.html")
+        else:
+            store = current_user.stores[0]
+            if not store.settings:
+                store.settings = '{"coupon_offer": ""}'
+                db.session.commit()
+            settings = loads(store.settings)
+            return render_template("settings.html", settings=settings)
+    return redirect(url_for("login"))
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -64,10 +74,13 @@ def dashboard():
         else:
             store = current_user.stores[0]
             customers = store.customers
-            data = {customer.id: 0 for customer in customers}
+            data = {}
+            data["updates"] = {customer.id: 0 for customer in customers}
+            data["num_redeems"] = [coupon.redeemed for coupon in store.coupons].count(
+                True
+            )
             for review in store.reviews:
                 data[review.customer.id] = review.updates.count()
-            print(data)
             return render_template(
                 "dashboard.html", store=current_user.stores[0], data=data
             )
