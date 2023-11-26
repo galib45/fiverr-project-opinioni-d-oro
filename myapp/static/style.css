@@ -5,7 +5,7 @@
     font-family: 'Poppins', sans-serif;
 }
 
-.container {
+/* .container {
     display: flex;
     flex-direction: column;
     min-height: 100dvh;
@@ -144,7 +144,16 @@ div.navbar-menu > span {
     font-size: 32px;
 }
 
+.navbar-vertical {
+	transition: padding 300ms ease-in-out;
+}
+
 .navbar-wrapper {
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 300ms ease-in-out;
+}
+
+/*.navbar-wrapper {
     display: grid;
     grid-template-rows: 0fr;
     transition: grid-template-rows 500ms ease-in-out;
@@ -190,7 +199,7 @@ div.navbar-vertical > a > span {
 
 div.navbar-vertical > a > span:last-child {
     margin: auto 0;
-}
+}*/
 
 .section {
     padding: 20px 5%;

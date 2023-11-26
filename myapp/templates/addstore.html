@@ -91,5 +91,5 @@
             <div>{{ form.submit() }}</div>
         </form>
     </div>
-    <script src="{{ url_for('static', filename='addstore.js') }}" />
 {% endblock %}
+{% block script %}<script src="{{ url_for('static', filename='addstore.js') }}"></script>{% endblock %}

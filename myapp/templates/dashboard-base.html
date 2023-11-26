@@ -21,47 +21,54 @@
               rel="stylesheet">
         <style>{% block style %}{% endblock %}</style>
     </head>
-    <body translate="no">
+    <body>
+        {% import 'macros.html' as macros %}
         <div class="mycontainer">
             <!-- Navigation Bar -->
-            <nav>
-                <div class="navbar">
-                    <a class="navbar-brand" href="{{ url_for("index") }}">
-                        <img width="78"
-                             height="78"
+            <div>
+                <div class="w-full h-16 bg-amber-400 flex px-6">
+                    <a href="{{ url_for("index") }}" class="flex">
+                        <img width="64"
+                             height="64"
                              src="{{ url_for('static', filename='logo.webp') }}"
                              alt="logo">
-                        <div>
-                            <div>Golden</div>
-                            <div>Opinions</div>
-                        </div>
+                        <div class="text-lg md:text-2xl font-bold my-auto ml-2">Golden Opinions</div>
                     </a>
-                    <div class="navbar-nav">
-                        <a href="{{ url_for("dashboard") }}">Dashboard</a>
-                        <a href="{{ url_for("settings") }}">Settings</a>
-                        <a href="{{ url_for("logout") }}">Logout</a>
-                    </div>
-                    <div class="navbar-menu">
-                        <span class="material-symbols-outlined">menu</span>
-                    </div>
-                </div>
-                <div class="navbar-wrapper">
-                    <div class="navbar-vertical">
-                        <a href="{{ url_for("dashboard") }}">
-                            <span class="material-symbols-outlined">dashboard</span>
-                            <span>Dashboard</span>
-                        </a>
-                        <a href="{{ url_for("settings") }}">
-                            <span class="material-symbols-outlined">settings</span>
-                            <span>Settings</span>
-                        </a>
-                        <a href="{{ url_for("logout") }}">
-                            <span class="material-symbols-outlined">logout</span>
-                            <span>Logout</span>
-                        </a>
+                    <div class="my-auto ml-auto flex">
+                        <div class="my-auto uppercase font-bold text-sm md:text-base mr-1 hidden sm:flex">
+                            <div>
+                                <a href="{{ url_for("dashboard") }}"
+                                   class="hover:bg-teal-900 hover:text-white border-teal-900 rounded-md ml-3 px-4 py-[6px]">Dashboard</a>
+                            </div>
+                            <div>
+                                <a href="{{ url_for("settings") }}"
+                                   class="hover:bg-teal-900 hover:text-white border-teal-900 rounded-md ml-3 px-4 py-[6px]">Settings</a>
+                            </div>
+                            <div>
+                                <a href="{{ url_for("logout") }}"
+                                   class="hover:bg-teal-900 border-4 hover:text-white border-teal-900 rounded-md ml-3 px-4 py-[6px]">Logout</a>
+                            </div>
+                        </div>
+                        <div class="sm:hidden select-none cursor-pointer" id="navbar-menu">{{ macros.svg('menu', size=32) }}</div>
                     </div>
                 </div>
-            </nav>
+                <div class="sm:hidden navbar-wrapper grid">
+                    <div class="navbar-vertical bg-amber-400 w-full px-6 overflow-hidden uppercase font-bold flex-col">
+                        <div class="py-2 hover:text-rose-900 flex gap-2 cursor-pointer">
+                            {{ macros.svg("dashboard") }}
+                            <a href="{{ url_for("dashboard") }}" class="my-auto select-none">Dashboard</a>
+                        </div>
+                        <div class="py-2 hover:text-teal-900 flex gap-2">
+                            {{ macros.svg("settings") }}
+                            <a href="{{ url_for("settings") }}" class="mb-0 select-none">Settings</a>
+                        </div>
+                        <div class="py-2 hover:text-teal-900 flex gap-2 cursor-pointer">
+                            {{ macros.svg("logout") }}
+                            <a href="{{ url_for("logout") }}" class="mb-0 select-none">Logout</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
             {% with messages = get_flashed_messages() %}
                 {% if messages %}
                     <div class="flashed_messages">
