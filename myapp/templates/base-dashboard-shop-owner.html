@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head translate="no">
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="description"
+              content="GoldenOpinions: Empower your business with honest reviews. Collect and display genuine customer feedback to boost trust, enhance your reputation, and reward loyal patrons. Revolutionize your business success today.">
+        <title>
+            {% block title %}{% endblock %}
+        - Golden Opinions</title>
+        <meta name="viewport"
+              content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Poppins&family=Open+Sans&display=swap"
+              rel="stylesheet">
+        <link rel="stylesheet"
+              href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" />
+        <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
+        <link href="{{ url_for('static', filename='output.css') }}"
+              rel="stylesheet">
+        <style>{% block style %}{% endblock %}</style>
+    </head>
+    <body>
+        {% import 'macros.html' as macros %}
+        <div class="mycontainer">
+            <!-- Navigation Bar -->
+            <div>
+                <div class="w-full h-16 bg-amber-400 flex px-6">
+                    <a href="{{ url_for("index") }}" class="flex">
+                        <img width="64"
+                             height="64"
+                             src="{{ url_for('static', filename='logo.webp') }}"
+                             alt="logo">
+                        <div class="text-lg md:text-2xl font-bold my-auto ml-2">Golden Opinions</div>
+                    </a>
+                    <div class="my-auto ml-auto flex">
+                        <div class="my-auto uppercase font-bold text-sm mr-1 hidden lg:flex">
+                            <div>
+                                <a href="{{ url_for("dashboard") }}"
+                                   class="hover:bg-teal-900 hover:text-white border-teal-900 rounded-md ml-2 px-3 py-[6px]">Overview</a>
+                            </div>
+                            <div>
+                                <a href="{{ url_for("dashboard_customers") }}"
+                                   class="hover:bg-teal-900 hover:text-white border-teal-900 rounded-md ml-2 px-3 py-[6px]">Customers</a>
+                            </div>
+                            <div>
+                                <a href="{{ url_for("dashboard_campaigns") }}"
+                                   class="hover:bg-teal-900 hover:text-white border-teal-900 rounded-md ml-2 px-3 py-[6px]">Campaigns</a>
+                            </div>
+                            <div>
+                                <a href="{{ url_for("dashboard_qrcode") }}"
+                                   class="hover:bg-teal-900 hover:text-white border-teal-900 rounded-md ml-2 px-3 py-[6px]">QR Code</a>
+                            </div>
+                            <div>
+                                <a href="{{ url_for("settings") }}"
+                                   class="hover:bg-teal-900 hover:text-white border-teal-900 rounded-md ml-2 px-3 py-[6px]">Settings</a>
+                            </div>
+                            <div>
+                                <a href="{{ url_for("logout") }}"
+                                   class="hover:bg-teal-900 border-4 hover:text-white border-teal-900 rounded-md ml-2 px-3 py-[6px]">Logout</a>
+                            </div>
+                        </div>
+                        <div class="lg:hidden select-none cursor-pointer" id="navbar-menu">{{ macros.svg('menu', size=32) }}</div>
+                    </div>
+                </div>
+                <div class="lg:hidden navbar-wrapper relative">
+                    <div class="navbar-vertical bg-amber-400 w-fit absolute right-0 h-0 px-6 overflow-hidden uppercase font-bold flex-col">
+                        <div class="py-2 hover:text-teal-900 flex gap-2 cursor-pointer">
+                            <a href="{{ url_for("dashboard") }}" class="ml-auto my-auto select-none">Overview</a>
+                            {{ macros.svg("dashboard") }}
+                        </div>
+                        <div class="py-2 hover:text-teal-900 flex gap-2">
+                            <a href="{{ url_for("dashboard_customers") }}"
+                               class="ml-auto mb-0 select-none">Customers</a>
+                            {{ macros.svg("groups") }}
+                        </div>
+                        <div class="py-2 hover:text-teal-900 flex gap-2">
+                            <a href="{{ url_for("dashboard_campaigns") }}"
+                               class="ml-auto mb-0 select-none">Campaigns</a>
+                            {{ macros.svg("campaign") }}
+                        </div>
+                        <div class="py-2 hover:text-teal-900 flex gap-2">
+                            <a href="{{ url_for("dashboard_qrcode") }}"
+                               class="ml-auto mb-0 select-none">QR Code</a>
+                            {{ macros.svg("qrcode") }}
+                        </div>
+                        <div class="py-2 hover:text-teal-900 flex gap-2">
+                            <a href="{{ url_for("settings") }}" class="ml-auto mb-0 select-none">Settings</a>
+                            {{ macros.svg("settings") }}
+                        </div>
+                        <div class="py-2 hover:text-teal-900 flex gap-2 cursor-pointer">
+                            <a href="{{ url_for("logout") }}" class="ml-auto mb-0 select-none">Logout</a>
+                            {{ macros.svg("logout") }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    <div class="flashed_messages">
+                        {% for message in messages %}<div>{{ message }}</div>{% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
+            <div class="container-inner">
+                {% block content %}{% endblock %}
+            </div>
+            <div class="section copyright">
+                <span class="material-symbols-outlined">copyright</span>
+                <p>2023 Golden Opinions. All Rights Reserved.</p>
+            </div>
+        </div>
+        <script src="{{ url_for('static', filename='index.js') }}" defer></script>
+        {% block script %}{% endblock %}
+    </body>
+</html>

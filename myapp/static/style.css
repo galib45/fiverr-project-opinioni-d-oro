@@ -145,7 +145,7 @@ div.navbar-menu > span {
 }
 
 .navbar-vertical {
-	transition: padding 300ms ease-in-out;
+	transition: all 300ms ease-in-out;
 }
 
 .navbar-wrapper {

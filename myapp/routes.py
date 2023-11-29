@@ -36,7 +36,7 @@ def contact():
 def settings():
     if current_user.is_authenticated:
         if current_user.username == "admin":
-            return render_template("settings.html")
+            return render_template("settings-admin.html")
         else:
             store = current_user.stores[0]
             if not store.settings:
@@ -85,6 +85,58 @@ def dashboard():
                 "dashboard.html", store=current_user.stores[0], data=data
             )
     return redirect(url_for("login"))
+
+
+@app.route("/dashboard/customers")
+def dashboard_customers():
+    if current_user.is_authenticated:
+        if current_user.username != "admin":
+            store = current_user.stores[0]
+            data = {}
+            for review in store.reviews:
+                data[review.customer.id] = review.updates.count()
+            return render_template("dashboard-customers.html", store=store, data=data)
+        return redirect(url_for(dashboard))
+    else:
+        return redirect(url_for(login))
+
+
+@app.route("/dashboard/campaigns")
+def dashboard_campaigns():
+    if current_user.is_authenticated:
+        if current_user.username != "admin":
+            return "campaigns page"
+        return redirect(url_for(dashboard))
+    else:
+        return redirect(url_for(login))
+
+
+@app.route("/dashboard/qrcode")
+def dashboard_qrcode():
+    if current_user.is_authenticated:
+        if current_user.username != "admin":
+            return render_template("dashboard-qrcode.html")
+        return redirect(url_for(dashboard))
+    else:
+        return redirect(url_for(login))
+
+
+@app.route("/chartdata")
+def chartdata():
+    if current_user.is_authenticated and current_user.username != "admin":
+        store = current_user.stores[0]
+        data = {}
+        updates = []
+        for review in store.reviews:
+            for update in review.updates:
+                updates.append(
+                    {"rating": update.rating, "timestamp": float(update.timestamp)}
+                )
+        data["updates"] = updates
+        data["store_created"] = store.date_created.timestamp()
+        return jsonify(data)
+    else:
+        return jsonify({})
 
 
 @app.route("/addstore", methods=["GET", "POST"])

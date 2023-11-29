@@ -1,0 +1,43 @@
+{% extends "base-dashboard-shop-owner.html" %}
+{% set active_page = "dashboard" %}
+{% block title %}QR Code{% endblock %}
+{% block content %}
+    <div class="section flex justify-center gap-10">
+        <div class="my-auto flex-col text-center">
+            <div class="text-xl font-bold mb-2">QR Code</div>
+            <button id="download"
+                    class="bg-sky-600 hover:bg-sky-700 text-white font-bold px-4 py-2 rounded-lg border-2 border-black shadow-md shadow-gray-300">
+                Download
+            </button>
+        </div>
+        <div id="qrcode"></div>
+    </div>
+{% endblock %}
+{% block script %}
+    <script src="{{ url_for('static', filename='qrcode.min.js') }}"></script>
+    <script>
+      dateTimeElements = document.querySelectorAll('.datetime');
+      dateTimeElements.forEach( element => {
+        dt = new Date(element.textContent + 'Z')
+        element.textContent = dt.toDateString() + ', ' + dt.toLocaleTimeString()
+      });
+    
+      url = new URL(document.URL)
+      qrcode = new QRCode(document.getElementById("qrcode"), {
+        text: url.origin + '/store/{{ current_user.stores[0].id }}/review',
+        width: 128,
+        height: 128,
+        colorDark : "#000000",
+        colorLight : "#ffffff",
+        correctLevel : QRCode.CorrectLevel.H
+      });
+    
+      document.getElementById('download').addEventListener('click', function() {
+        var img = document.querySelector('#qrcode img');
+        var downloadLink = document.createElement('a');
+      downloadLink.download = 'qrcode.jpg';
+        downloadLink.href = img.src;
+        downloadLink.click();
+      });
+    </script>
+{% endblock %}

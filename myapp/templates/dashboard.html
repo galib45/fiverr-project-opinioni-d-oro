@@ -1,4 +1,4 @@
-{% extends "dashboard-base.html" %}
+{% extends "base-dashboard-shop-owner.html" %}
 {% set active_page = "dashboard" %}
 {% block title %}Dashboard{% endblock %}
 {% block style %}
@@ -13,79 +13,6 @@
     }
     .admin-overview {
     padding: 40px 0;
-    }
-    table {
-    border-collapse: collapse;
-    }
-    caption {
-    text-align: left;
-    padding: 10px;
-    font-size: 20px;
-    font-weight: 600;
-    margin-bottom: 10px;
-    }
-    thead > tr {
-    background: #005248;
-    color: white;
-    }
-    tbody > tr:nth-child(even) {
-    background: #eeeeee;
-    }
-    th:last-child, td:last-child {
-    min-width: fit-content;
-    text-align: center;
-    }
-    tr:last-child > td {
-    margin-bottom: 10px;
-    }
-    th:first-child, td:first-child {
-    padding-left: 10px;
-    }
-    th, td {
-    padding: 10px 20px;
-    text-align: left;
-    width: 30vw;
-    min-width: 200px;
-    font-family: 'Open Sans', sans-serif;
-    }
-    td {
-    font-size: 0.9rem;
-    }
-    .table-wrapper {
-    overflow-x: auto;
-    }
-    .store-item {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    }
-    a.material-symbols-outlined {
-    text-decoration: none;
-    color: #777777;
-    }
-    a.material-symbols-outlined:hover {
-    color: black;
-    }
-    .coupon {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 10px;
-    }
-    .coupon > * {
-    text-align: left;
-    }
-    @media only screen and (max-width: 480px) {
-    .button-text {
-    display:none;
-    }
-    .button > a {
-    border-radius: 50%;
-    padding: 5px;
-    }
-    .material-symbols-outlined {
-    font-size: 20px;
-    }
     }
 {% endblock %}
 {% block content %}
@@ -118,81 +45,15 @@
             </div>
         </div>
     </div>
-    <div class="section flex justify-center gap-10">
-        <div class="my-auto flex-col text-center">
-            <div class="text-xl font-bold mb-2">QR Code</div>
-            <button id="download"
-                    class="bg-sky-600 hover:bg-sky-700 text-white font-bold px-4 py-2 rounded-lg border-2 border-black shadow-md shadow-gray-300">
-                Download
-            </button>
+    <div class="section statistics my-10">
+        <div class="text-xl font-bold my-4">Average Rating</div>
+        <div class="bg-orange-50 shadow shadow-md max-w-lg">
+            <canvas id="chart"></canvas>
         </div>
-        <div id="qrcode"></div>
-    </div>
-    <div class="section dashboard">
-        {% if store is defined and store.customers|length > 0 %}
-            <div class="general-overview">
-                <div class="table-wrapper">
-                    <table>
-                        <caption>Overview</caption>
-                        <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Email Address</th>
-                                <th>Updates</th>
-                                <th>Coupon Codes</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for customer in store.customers %}
-                                <tr>
-                                    <td>{{ customer.name }}</td>
-                                    <td>{{ customer.email }}</td>
-                                    <td>{{ data[customer.id] }}</td>
-                                    <td class="coupon">
-                                        {% for coupon in customer.coupons %}
-                                            {% if coupon.store_id == store.id %}
-                                                <div>
-                                                    <span><b>{{ coupon.code }}</b></span>
-                                                    <div>
-                                                        Expires at: <span class="datetime">{{ coupon.expire_date.isoformat() }}</span>
-                                                    </div>
-                                                </div>
-                                            {% endif %}
-                                        {% endfor %}
-                                    </td>
-                                </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        {% endif %}
     </div>
 {% endblock %}
 {% block script %}
-    <script>
-      dateTimeElements = document.querySelectorAll('.datetime');
-      dateTimeElements.forEach( element => {
-        dt = new Date(element.textContent + 'Z')
-        element.textContent = dt.toDateString() + ', ' + dt.toLocaleTimeString()
-      });
-    
-      url = new URL(document.URL)
-      qrcode = new QRCode(document.getElementById("qrcode"), {
-        text: url.origin + '/store/{{ store.id }}/review',
-        width: 128,
-        height: 128,
-        colorDark : "#000000",
-        colorLight : "#ffffff",
-        correctLevel : QRCode.CorrectLevel.H
-      });
-    
-      document.getElementById('download').addEventListener('click', function() {
-        var img = document.querySelector('#qrcode img');
-        var downloadLink = document.createElement('a');
-        downloadLink.download = 'qrcode.jpg';
-        downloadLink.href = img.src;
-        downloadLink.click();
-      });
-    </script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.js'></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js'></script>
+    <script src='{{url_for('static', filename='dashboard.js')}}'></script>
 {% endblock %}

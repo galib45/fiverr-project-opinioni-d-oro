@@ -34,40 +34,9 @@
                              alt="logo">
                         <div class="text-lg md:text-2xl font-bold my-auto ml-2">Golden Opinions</div>
                     </a>
-                    <div class="my-auto ml-auto flex">
-                        <div class="my-auto uppercase font-bold text-sm md:text-base mr-1 hidden sm:flex">
-                            <div>
-                                <a href="{{ url_for("dashboard") }}"
-                                   class="hover:bg-teal-900 hover:text-white border-teal-900 rounded-md ml-3 px-4 py-[6px]">Dashboard</a>
-                            </div>
-                            <div>
-                                <a href="{{ url_for("settings") }}"
-                                   class="hover:bg-teal-900 hover:text-white border-teal-900 rounded-md ml-3 px-4 py-[6px]">Settings</a>
-                            </div>
-                            <div>
-                                <a href="{{ url_for("logout") }}"
-                                   class="hover:bg-teal-900 border-4 hover:text-white border-teal-900 rounded-md ml-3 px-4 py-[6px]">Logout</a>
-                            </div>
-                        </div>
-                        <div class="sm:hidden select-none cursor-pointer" id="navbar-menu">{{ macros.svg('menu', size=32) }}</div>
-                    </div>
+                    {% block horizontal_nav %}{% endblock %}
                 </div>
-                <div class="sm:hidden navbar-wrapper grid">
-                    <div class="navbar-vertical bg-amber-400 w-full px-6 overflow-hidden uppercase font-bold flex-col">
-                        <div class="py-2 hover:text-rose-900 flex gap-2 cursor-pointer">
-                            {{ macros.svg("dashboard") }}
-                            <a href="{{ url_for("dashboard") }}" class="my-auto select-none">Dashboard</a>
-                        </div>
-                        <div class="py-2 hover:text-teal-900 flex gap-2">
-                            {{ macros.svg("settings") }}
-                            <a href="{{ url_for("settings") }}" class="mb-0 select-none">Settings</a>
-                        </div>
-                        <div class="py-2 hover:text-teal-900 flex gap-2 cursor-pointer">
-                            {{ macros.svg("logout") }}
-                            <a href="{{ url_for("logout") }}" class="mb-0 select-none">Logout</a>
-                        </div>
-                    </div>
-                </div>
+                {% block vertical_nav %}{% endblock %}
             </div>
             {% with messages = get_flashed_messages() %}
                 {% if messages %}
@@ -84,8 +53,50 @@
                 <p>2023 Golden Opinions. All Rights Reserved.</p>
             </div>
         </div>
-        <script src="{{ url_for('static', filename='index.js') }}" defer></script>
+        <script>
+          document.addEventListener("DOMContentLoaded", () => {
+  // hover effect for icons in navbar menu items
+  icons = document.querySelectorAll(".navbar-wrapper svg");
+  icons.forEach((icon) => {
+    parent = icon.closest("div");
+    parent.onmouseover = () => {
+      icon.classList.add("fill-teal-900");
+    };
+    parent.onmouseleave = () => {
+      icon.classList.remove("fill-teal-900");
+    };
+  });
+  
+  // animate navbar menu
+  const navbarWapperEl = document.querySelector('.navbar-wrapper');
+  const navbarVerticalEl = document.querySelector('.navbar-vertical');
+  
+  document.getElementById('navbar-menu').onclick = () => {
+    if(navbarWapperEl.style.gridTemplateRows !== '1fr') {
+        navbarWapperEl.style.gridTemplateRows = '1fr';
+        navbarVerticalEl.style.paddingBottom = '1.25rem';
+      }
+      else {
+        navbarWapperEl.style.gridTemplateRows = '0fr';
+        navbarVerticalEl.style.paddingBottom = '0';
+      }
+  };
+
+  // hover effect for icons in buttons
+  icons = document.querySelectorAll('.button svg, input[type="submit"] svg');
+  icons.forEach((icon) => {
+    parent = icon.closest('div');
+    parent.onmouseover = () => {
+      icon.classList.add('fill-white');
+    };
+    parent.onmouseleave = () => {
+      icon.classList.remove('fill-white');
+    }
+  });
+});
+        </script>
         <script src="{{ url_for('static', filename='qrcode.min.js') }}"></script>
-        {% block script %}{% endblock %}
+        {% block script %}
+        {% endblock %}
     </body>
 </html>

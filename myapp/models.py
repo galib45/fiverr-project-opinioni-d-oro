@@ -120,7 +120,7 @@ class Update(db.Model):
     photos = db.relationship("Photo", backref="update", lazy="dynamic")
 
     def __repr__(self):
-        return f"Update(text='{self.text}', timestamp='{self.timestamp}')"
+        return f"Update(rating='{self.rating}', 'text='{self.text}', timestamp='{self.timestamp}')"
 
 
 class Photo(db.Model):

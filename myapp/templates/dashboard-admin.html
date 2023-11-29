@@ -1,137 +1,157 @@
 {% extends "dashboard-base.html" %}
-{% set active_page = 'dashboard' %}
-
+{% set active_page = "dashboard" %}
 {% block title %}Dashboard{% endblock %}
-
 {% block style %}
-.dashboard-admin > div:first-child {
-	display: flex;
+    .dashboard-admin > div:first-child {
+    display: flex;
     justify-content: space-between;
     align-items: center;
-}
-
-.admin-overview {
+    }
+    .admin-overview {
     padding: 40px 0;
-}
-
-table {
+    }
+    table {
     border-collapse: collapse;
-}
-
-caption {
+    }
+    caption {
     text-align: left;
     padding: 10px;
     font-size: 20px;
     font-weight: 600;
     margin-bottom: 10px;
-}
-
-thead > tr {
+    }
+    thead > tr {
     background: #005248;
     color: white;
-}
-
-tbody > tr:nth-child(even) {
+    }
+    tbody > tr:nth-child(even) {
     background: #eeeeee;
-}
-
-th:last-child, td:last-child {
+    }
+    th:last-child, td:last-child {
     min-width: fit-content;
     text-align: center;
-}
-
-tr:last-child > td {
-	margin-bottom: 10px; 
-}
-
-th:first-child, td:first-child {
-	padding-left: 10px;
-}
-
-th, td {
+    }
+    tr:last-child > td {
+    margin-bottom: 10px;
+    }
+    th:first-child, td:first-child {
+    padding-left: 10px;
+    }
+    th, td {
     padding: 10px 20px;
     text-align: left;
     width: 30vw;
     min-width: 200px;
     font-family: 'Open Sans', sans-serif;
-}
-
-td {
-	font-size: 0.9rem;
-}
-
-.table-wrapper {
-	overflow-x: auto;
-}
-
-.store-item {
+    }
+    td {
+    font-size: 0.9rem;
+    }
+    .table-wrapper {
+    overflow-x: auto;
+    }
+    .store-item {
     display: flex;
     align-items: center;
     justify-content: space-between;
-}
-
-a.material-symbols-outlined {
+    }
+    a.material-symbols-outlined {
     text-decoration: none;
     color: #777777;
-}
-
-a.material-symbols-outlined:hover {
+    }
+    a.material-symbols-outlined:hover {
     color: black;
-}
-
-@media only screen and (max-width: 480px) {
-	.button-text {
-		display:none;
-	}
-
-	.button > a {
-		border-radius: 50%;
-		padding: 5px;
-	}
-
-	.material-symbols-outlined {
-		font-size: 20px;
-	}
-}
+    }
+    @media only screen and (max-width: 480px) {
+    .button-text {
+    display:none;
+    }
+    .button > a {
+    border-radius: 50%;
+    padding: 5px;
+    }
+    .material-symbols-outlined {
+    font-size: 20px;
+    }
+    }
 {% endblock %}
-
+{% block horizontal_nav %}
+    <div class="my-auto ml-auto flex">
+        <div class="my-auto uppercase font-bold text-sm mr-1 hidden sm:flex">
+            <div>
+                <a href="{{ url_for("dashboard") }}"
+                   class="hover:bg-teal-900 hover:text-white border-teal-900 rounded-md ml-2 px-3 py-[6px]">Overview</a>
+            </div>
+            <div>
+                <a href="{{ url_for("settings") }}"
+                   class="hover:bg-teal-900 hover:text-white border-teal-900 rounded-md ml-2 px-3 py-[6px]">Settings</a>
+            </div>
+            <div>
+                <a href="{{ url_for("logout") }}"
+                   class="hover:bg-teal-900 border-4 hover:text-white border-teal-900 rounded-md ml-2 px-3 py-[6px]">Logout</a>
+            </div>
+        </div>
+        <div class="sm:hidden select-none cursor-pointer" id="navbar-menu">{{ macros.svg('menu', size=32) }}</div>
+    </div>
+{% endblock %}
+{% block vertical_nav %}
+    <div class="sm:hidden navbar-wrapper grid">
+        <div class="navbar-vertical bg-amber-400 w-full px-6 overflow-hidden uppercase font-bold flex-col">
+            <div class="py-2 hover:text-teal-900 flex gap-2 cursor-pointer">
+                {{ macros.svg("dashboard") }}
+                <a href="{{ url_for("dashboard") }}" class="my-auto select-none">Dashboard</a>
+            </div>
+            <div class="py-2 hover:text-teal-900 flex gap-2">
+                {{ macros.svg("settings") }}
+                <a href="{{ url_for("settings") }}" class="mb-0 select-none">Settings</a>
+            </div>
+            <div class="py-2 hover:text-teal-900 flex gap-2 cursor-pointer">
+                {{ macros.svg("logout") }}
+                <a href="{{ url_for("logout") }}" class="mb-0 select-none">Logout</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}
 {% block content %}
-<div class="section dashboard-admin">
-	<div>
-		<h2>Welcome, {{ current_user.username }}</h2>
-		<div class="button">
-			<a href="{{ url_for('addstore') }}">
-				<span class="button-text">Add Store</span>
-				<span class="material-symbols-outlined icon-right">add</span>
-			</a>
-		</div>
-	</div>
-	{% if stores is defined and stores|length > 0 %}
-	<div class="admin-overview">
-		<div class="table-wrapper">
-			<table class="store-list">
-				<caption>Overview</caption>
-				<thead><tr>
-					<th>Store Name</th>
-					<th>Address</th>
-					<th>Phone Number</th>
-					<th>Action</th>
-				</tr></thead>
-				<tbody>
-				{% for store in stores %}
-				<tr>
-					<td>{{ store.name }}</td>
-					<td>{{ store.address }}</td>
-					<td>{{ store.phone_number }}</td>
-					<td>
-						<a href="{{ url_for('delstore', store_id=store.id) }}" class="material-symbols-outlined">delete</a>
-					</td>
-				</tr>
-				{% endfor %}
-				</tbody>
-			</table>
-		</div>
-	</div>
-	{% endif %}
-</div>
+    <div class="section dashboard-admin">
+        <div>
+            <h2>Welcome, {{ current_user.username }}</h2>
+            <div class="button">
+                <a href="{{ url_for("addstore") }}">
+                    <span class="button-text">Add Store</span>
+                    <span class="material-symbols-outlined icon-right">add</span>
+                </a>
+            </div>
+        </div>
+        {% if stores is defined and stores|length > 0 %}
+            <div class="admin-overview">
+                <div class="table-wrapper">
+                    <table class="store-list">
+                        <caption>Overview</caption>
+                        <thead>
+                            <tr>
+                                <th>Store Name</th>
+                                <th>Address</th>
+                                <th>Phone Number</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for store in stores %}
+                                <tr>
+                                    <td>{{ store.name }}</td>
+                                    <td>{{ store.address }}</td>
+                                    <td>{{ store.phone_number }}</td>
+                                    <td>
+                                        <a href="{{ url_for('delstore', store_id=store.id) }}"
+                                           class="material-symbols-outlined">delete</a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        {% endif %}
+    </div>
 {% endblock %}
