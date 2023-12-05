@@ -82,7 +82,7 @@ def dashboard():
             for review in store.reviews:
                 data[review.customer.id] = review.updates.count()
             return render_template(
-                "dashboard.html", store=current_user.stores[0], data=data
+                "dashboard-analytics.html", store=current_user.stores[0], data=data
             )
     return redirect(url_for("login"))
 

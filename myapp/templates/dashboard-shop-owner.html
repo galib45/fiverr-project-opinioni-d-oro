@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head translate="no">
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="description"
+              content="GoldenOpinions: Empower your business with honest reviews. Collect and display genuine customer feedback to boost trust, enhance your reputation, and reward loyal patrons. Revolutionize your business success today.">
+        <title>
+            {% block title %}{% endblock %}
+        - Golden Opinions</title>
+        <meta name="viewport"
+              content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Poppins&family=Open+Sans&display=swap"
+              rel="stylesheet">
+        <link rel="stylesheet"
+              href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" />
+        <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
+        <link href="{{ url_for('static', filename='output.css') }}"
+              rel="stylesheet">
+        <style>{% block style %}{% endblock %}</style>
+    </head>
+    <body>
+        {% import 'macros.html' as macros %}
+        <div class="mycontainer">
+            <div class="bg-slate-950 h-screen w-[200px] fixed hidden sm:block px-6 text-gray-400 flex-col"
+                 id="dashboard-navbar">
+                <div class="text-lg text-amber-400 py-4 font-bold select-none cursor-pointer">Golden Opinions</div>
+                <a href="{{ url_for("dashboard") }}">
+                    <div class="w-full my-1 px-4 py-2 rounded-lg text-sm flex items-center gap-2 hover:bg-slate-800 select-none cursor-pointer {{ 'active' if active_page=='dashboard'}}">
+                        <span>{{ macros.svg("monitoring", size=20, class='fill-gray-400') }}</span><span>Analytics</span>
+                    </div>
+                </a>
+                <a href="{{ url_for("dashboard_customers") }}">
+                    <div class="w-full my-1 px-4 py-2 rounded-lg text-sm flex items-center gap-2 hover:bg-slate-800 select-none cursor-pointer {{ 'active' if active_page=='customers'}}">
+                        <span>{{ macros.svg("groups", size=20, class='fill-gray-400') }}</span><span>Customers</span>
+                    </div>
+                </a>
+                <a href="{{ url_for("dashboard_campaigns") }}">
+                    <div class="w-full my-1 px-4 py-2 rounded-lg text-sm flex items-center gap-2 hover:bg-slate-800 select-none cursor-pointer {{ 'active' if active_page=='campaigns'}}">
+                        <span>{{ macros.svg("campaign", size=20, class='fill-gray-400') }}</span><span>Campaigns</span>
+                    </div>
+                </a>
+                <a href="{{ url_for("dashboard_qrcode") }}">
+                    <div class="w-full my-1 px-4 py-2 rounded-lg text-sm flex items-center gap-2 hover:bg-slate-800 select-none cursor-pointer {{ 'active' if active_page=='qrcode'}}">
+                        <span>{{ macros.svg("qrcode", size=20, class='fill-gray-400') }}</span><span>QR Code</span>
+                    </div>
+                </a>
+                <a href="{{ url_for("settings") }}">
+                    <div class="w-full my-1 px-4 py-2 rounded-lg text-sm flex items-center gap-2 hover:bg-slate-800 select-none cursor-pointer {{ 'active' if active_page=='settings'}}">
+                        <span>{{ macros.svg("settings", size=20, class='fill-gray-400') }}</span><span>Settings</span>
+                    </div>
+                </a>
+                <a href="{{ url_for("logout") }}">
+                    <div class="w-full my-1 px-4 py-2 rounded-lg text-sm flex items-center gap-2 hover:bg-slate-800 select-none cursor-pointer">
+                        <span>{{ macros.svg("logout", size=20, class='fill-gray-400') }}</span><span>Logout</span>
+                    </div>
+                </a>
+            </div>
+            <div class="h-screen ml-0 sm:ml-[200px]">
+                <div class="w-full p-4 shadow shadow-md select-none flex items-center gap-2">
+                    <div class="sm:hidden cursor-pointer" id='dashboard-navmenu'>{{ macros.svg('menu', size=28) }}</div>
+                    <div class="text-lg text-slate-950 font-bold">{{ current_user.stores[0].name }}</div>
+                </div>
+                <div id="main">
+                    {% block content %}{% endblock %}
+                </div>
+            </div>
+            <div class='h-screen w-full ml-[200px] fixed opacity-70 bg-gray-500 hidden'
+                 id="dashboard-overlay"></div>
+        </div>
+        <script>
+          const navbar = document.getElementById('dashboard-navbar');
+          const overlay = document.getElementById('dashboard-overlay');
+          const navmenu = document.getElementById('dashboard-navmenu');
+          navmenu.onclick = () => {
+            console.log('navmenu click'); 
+            navbar.classList.remove('hidden');
+            overlay.classList.remove('hidden');
+          };
+          overlay.onclick = () => {
+            console.log('overlay click');
+            navbar.classList.add('hidden');
+            overlay.classList.add('hidden');
+          };
+        </script>
+        {% block script %}
+        {% endblock %}
+    </body>
+</html>

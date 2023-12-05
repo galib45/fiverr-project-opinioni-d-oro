@@ -16,22 +16,13 @@ document.addEventListener("DOMContentLoaded", () => {
   const navbarVerticalEl = document.querySelector('.navbar-vertical');
   
   document.getElementById('navbar-menu').onclick = () => {
-    if(navbarWapperEl.style.display === 'grid') {
-      if(navbarWapperEl.style.gridTemplateRows !== '1fr') {
-        navbarWapperEl.style.gridTemplateRows = '1fr';
-        navbarVerticalEl.style.paddingBottom = '1.25rem';
-      }
-      else {
-        navbarWapperEl.style.gridTemplateRows = '0fr';
-        navbarVerticalEl.style.paddingBottom = '0';
-      }
-    } else {
-      if(navbarVerticalEl.style.height !== '260px') {
-        navbarVerticalEl.style.height = '260px';
-      }
-      else {
-        navbarVerticalEl.style.height = '0px';    
-      }
+    if(navbarWapperEl.style.gridTemplateRows !== '1fr') {
+      navbarWapperEl.style.gridTemplateRows = '1fr';
+      navbarVerticalEl.style.paddingBottom = '1.25rem';
+    }
+    else {
+      navbarWapperEl.style.gridTemplateRows = '0fr';
+      navbarVerticalEl.style.paddingBottom = '0';
     }
   };
 

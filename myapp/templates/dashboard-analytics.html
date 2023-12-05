@@ -1,0 +1,39 @@
+{% extends 'dashboard-shop-owner.html' %}
+{% set active_page = "dashboard" %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+    {% set num_customers = store.customers|length %}
+    {% set num_review_updates = data['updates'].values()|sum %}
+    {% set num_coupons = store.coupons.count() %}
+    <div class="px-6 py-4">
+        <div class="my-10 grid grid-cols-2 grid-rows-2 min-[880px]:grid-cols-4 min-[880px]:grid-rows-1 justify-items-center gap-5">
+            <div class="w-full flex-col rounded-lg bg-gradient-to-tr from-pink-300 to-red-300 p-3 text-center shadow-md shadow-gray-300">
+                <div class="mb-2 text-4xl font-bold">{{ num_customers }}</div>
+                <div class="px-4 text-sm font-bold uppercase text-gray-800">registered customers</div>
+            </div>
+            <div class="w-full flex-col rounded-lg bg-gradient-to-tr from-yellow-200 to-orange-300 p-3 text-center shadow-md shadow-gray-300">
+                <div class="mb-2 text-4xl font-bold">{{ num_review_updates }}</div>
+                <div class="mx-4 text-sm font-bold uppercase text-gray-800">review updates</div>
+            </div>
+            <div class="w-full flex-col rounded-lg bg-gradient-to-tr from-green-300 to-cyan-300 p-3 text-center shadow-md shadow-gray-300">
+                <div class="mb-2 text-4xl font-bold">{{ num_coupons }}</div>
+                <div class="mx-4 text-sm font-bold uppercase text-gray-800">coupons generated</div>
+            </div>
+            <div class="w-full flex-col rounded-lg bg-gradient-to-tr from-slate-300 to-blue-300 p-3 text-center shadow-md shadow-gray-300">
+                <div class="mb-2 text-4xl font-bold">{{ data['num_redeems'] }}</div>
+                <div class="text-sm font-bold uppercase text-gray-800">coupons redeemed</div>
+            </div>
+        </div>
+    </div>
+    <div class="section statistics my-10">
+        <div class="text-xl font-bold my-4">Average Rating</div>
+        <div class="bg-orange-50 shadow shadow-md max-w-lg">
+            <canvas id="chart"></canvas>
+        </div>
+    </div>
+{% endblock %}
+{% block script %}
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.js'></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js'></script>
+    <script src='{{url_for('static', filename='dashboard.js')}}'></script>
+{% endblock %}
