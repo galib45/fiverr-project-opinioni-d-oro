@@ -8,7 +8,7 @@
 	- [ ] Account settings - reset password, change phone number, change email
 	- [ ] Store settings - change coupon offer
 - [ ] Customers page
-	- [ ] styling
+	- [x] styling
 	- [ ] search for customers
 - [ ] Campaigns page
 	- [ ] create new campaign
