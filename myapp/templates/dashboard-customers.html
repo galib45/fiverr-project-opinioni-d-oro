@@ -1,45 +1,72 @@
 {% extends 'dashboard-shop-owner.html' %}
 {% set active_page = "customers" %}
+{% block title %}Customers{% endblock %}
+{% block style %}
+    th, td, .grid div {
+    font-family: 'Open Sans', sans-serif;
+    }
+{% endblock %}
 {% block content %}
-    <div class="section customers">
-        {% if store is defined and store.customers|length > 0 %}
-            <div class="general-overview">
-                <div class="table-wrapper">
-                    <table>
-                        <caption>Overview</caption>
-                        <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Email Address</th>
-                                <th>Updates</th>
-                                <th>Coupon Codes</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for customer in store.customers %}
-                                <tr>
-                                    <td>{{ customer.name }}</td>
-                                    <td>{{ customer.email }}</td>
-                                    <td>{{ data[customer.id] }}</td>
-                                    <td class="coupon">
-                                        {% for coupon in customer.coupons %}
-                                            {% if coupon.store_id == store.id %}
-                                                <div>
-                                                    <span><b>{{ coupon.code }}</b></span>
-                                                    <div>
-                                                        Expires at: <span class="datetime">{{ coupon.expire_date.isoformat() }}</span>
-                                                    </div>
-                                                </div>
-                                            {% endif %}
-                                        {% endfor %}
-                                    </td>
-                                </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
+    {% if store is defined and store.customers|length > 0 %}
+        <div class="m-4 overflow-auto rounded-lg shadow hidden md:block">
+            <table class="w-full">
+                <thead class="bg-gray-100 border-b-2 border-gray-200">
+                    <tr>
+                        <th class="p-3 text-sm font-semibold tracking-wide text-left">Name</th>
+                        <th class="p-3 text-sm font-semibold tracking-wide text-left">Email Address</th>
+                        <th class="p-3 text-sm font-semibold tracking-wide text-left">Phone Number</th>
+                        <th class="p-3 text-sm font-semibold tracking-wide text-center">Review Updates</th>
+                        <th class="p-3 text-sm font-semibold tracking-wide text-center">Coupon Codes</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for customer in store.customers %}
+                        <tr class="{{ loop.cycle('bg-gray-50', 'bg-gray-100') }}">
+                            <td class="p-3 text-sm text-gray-700">{{ customer.name }}</td>
+                            <td class="p-3 text-sm text-gray-700">{{ customer.email }}</td>
+                            <td class="p-3 text-sm text-gray-700">{{ customer.phone_number }}</td>
+                            <td class="px-6 py-3 text-sm text-gray-700 text-right">{{ data[customer.id] or 0 }}</td>
+                            <td class="p-3 text-sm text-gray-700 text-center coupon">
+                                {% if customer.coupons.count() == 0 %}No Coupons{% endif %}
+                                {% for coupon in customer.coupons %}
+                                    {% if coupon.store_id == store.id %}
+                                        <span class="font-semibold font-mono">{{ coupon.code }}</span>
+                                        <div class="hidden">
+                                            Expires at: <span class="datetime">{{ coupon.expire_date.isoformat() }}</span>
+                                        </div>
+                                    {% else %}
+                                        No Coupons
+                                    {% endif %}
+                                {% endfor %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="m-4 grid grid-cols-1 gap-4 md:hidden">
+            {% for customer in store.customers %}
+                <div class="bg-gray-50 rounded-lg shadow p-4 text-sm text-gray-700 space-y-1">
+                    <div class="text-base text-black font-semibold">{{ customer.name }}</div>
+                    <div>{{ customer.email }}</div>
+                    <div>{{ customer.phone_number }}</div>
+                    <div>Review Updates: {{ data[customer.id] or 0 }}</div>
+                    <div class="coupon">
+                        {% if customer.coupons.count() == 0 %}No Coupons{% endif %}
+                        {% for coupon in customer.coupons %}
+                            {% if coupon.store_id == store.id %}
+                                <span class="font-semibold font-mono">{{ coupon.code }}</span>
+                                <div class="hidden">
+                                    Expires at: <span class="datetime">{{ coupon.expire_date.isoformat() }}</span>
+                                </div>
+                            {% else %}
+                                No Coupons
+                            {% endif %}
+                        {% endfor %}
+                    </div>
                 </div>
-            </div>
-        {% endif %}
-    </div>
+            {% endfor %}
+        </div>
+    {% endif %}
 {% endblock %}
 {% block script %}<script></script>{% endblock %}
