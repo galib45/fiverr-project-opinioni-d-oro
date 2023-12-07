@@ -61,7 +61,23 @@
             <div class="h-screen ml-0 sm:ml-[200px]">
                 <div class="w-full p-4 shadow shadow-md select-none flex items-center gap-2">
                     <div class="sm:hidden cursor-pointer" id='dashboard-navmenu'>{{ macros.svg('menu', size=28) }}</div>
-                    <div class="text-lg text-slate-950 font-bold">{{ current_user.stores[0].name }}</div>
+                    <div class="flex gap-1 items-center font-bold text-gray-500 text-base sm:text-lg">
+                        <div class="">{{ current_user.stores[0].name }}</div>
+                        <div class="text-sm sm:text-base">-</div>
+                        <div class="text-slate-950">
+                            {% if active_page == 'dashboard' %}
+                                Analytics
+                            {% elif active_page == 'customers' %}
+                                Customers
+                            {% elif active_page == 'campaigns' %}
+                                Campaigns
+                            {% elif active_page == 'qrcode' %}
+                                QR Code
+                            {% elif active_page == 'settings' %}
+                                Settings
+                            {% endif %}
+                        </div>
+                    </div>
                 </div>
                 <div id="main">
                     {% block content %}{% endblock %}

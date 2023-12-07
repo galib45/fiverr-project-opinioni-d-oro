@@ -105,7 +105,7 @@ def dashboard_customers():
 def dashboard_campaigns():
     if current_user.is_authenticated:
         if current_user.username != "admin":
-            return "campaigns page"
+            return render_template("dashboard-campaigns.html")
         return redirect(url_for("dashboard"))
     else:
         return redirect(url_for("login"))

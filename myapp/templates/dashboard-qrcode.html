@@ -8,23 +8,41 @@
 {% endblock %}
 {% block content %}
     <div>
-        <div class="m-4 flex flex-col items-center sm:w-fit">
-            <div id="preload" class="flex gap-4">
-                <div class="text-xl font-semibold">Generating Poster ...</div>
-                <div class="loader"></div>
+        <div id="preload" class="m-4 flex gap-4">
+            <div class="text-xl font-semibold">Generating Posters ...</div>
+            <div class="loader"></div>
+        </div>
+        <div class="m-4 flex flex-col space-y-12 sm:space-y-0 sm:flex-row sm:flex-wrap sm:gap-4">
+            <div class="flex flex-col items-center sm:w-fit">
+                <button class="hidden bg-sky-600 hover:bg-sky-700 text-white font-bold my-2 px-4 py-2 rounded-lg border-2 border-black shadow-md shadow-gray-300">
+                    Download
+                </button>
             </div>
-            <button id="download"
-                    class="hidden bg-sky-600 hover:bg-sky-700 text-white font-bold px-4 py-2 rounded-lg border-2 border-black shadow-md shadow-gray-300">
-                Download
-            </button>
+            <div class="flex flex-col items-center sm:w-fit">
+                <button class="hidden bg-sky-600 hover:bg-sky-700 text-white font-bold my-2 px-4 py-2 rounded-lg border-2 border-black shadow-md shadow-gray-300">
+                    Download
+                </button>
+            </div>
         </div>
         <div id="poster-source"
              class="absolute left-[-500px] px-6 py-4 flex flex-col items-center w-fit">
             <div class="text-2xl font-semibold">I Want Your Opinions!</div>
             <div class="pt-4 mb-8 text-4xl font-black">SCAN ME</div>
-            <div id="qrcode"></div>
+            <div class="qrcode"></div>
             <div class="text-xl font-semibold mt-6">Leave Your Honest Review</div>
             <div class="text-xl font-semibold mb-6">And Get Your Discount</div>
+        </div>
+        <div id="folded-poster-source"
+             class="absolute left-[-500px] px-6 py-4 flex flex-col items-center w-fit">
+            <div class="qrcode"></div>
+            <div class="mt-20 mb-6">
+                <ul class="text-2xl font-semibold space-y-2">
+                    <li>Scan</li>
+                    <li>Register</li>
+                    <li>Leave A Review</li>
+                    <li class="text-rose-800">Get Your Coupon</li>
+                </ul>
+            </div>
         </div>
     </div>
 {% endblock %}
@@ -42,7 +60,7 @@
       url = new URL(document.URL)
       qrcodeData = url.origin + '/store/{{ current_user.stores[0].id }}/review'
       
-      const qrCode = new QRCodeStyling({
+      options =  {
         width: 150,
         height: 150,
         type: "svg",
@@ -64,9 +82,12 @@
         qrOptions: {
           errorCorrectionLevel: 'H'
         }
-      });
+      };
 
-      qrCode.append(document.getElementById("qrcode")); 
+      document.querySelectorAll('.qrcode').forEach((element) => {
+        qrCode = new QRCodeStyling(options);
+        qrCode.append(element);
+      }); 
       
       /* 
       qrcode = new QRCode(document.getElementById("qrcode"), {
@@ -78,22 +99,33 @@
         correctLevel : QRCode.CorrectLevel.H
       }); */
 
-      const downloadButton = document.getElementById('download');
+      const downloadButtons = document.querySelectorAll('button');
+      
       html2canvas(document.querySelector("#poster-source")).then(canvas => {
+        downloadButton = downloadButtons[0];
         downloadButton.parentElement.insertBefore(canvas, downloadButton);
         downloadButton.classList.remove('hidden');
-        document.querySelector('#preload').remove();
-      }); 
 
-      downloadButton.addEventListener('click', function() {
-        const canvas = document.querySelector('canvas');
-        let canvasUrl = canvas.toDataURL("image/jpeg", 1);
-        console.log(canvasUrl);
-        const createEl = document.createElement('a');
-        createEl.href = canvasUrl;
-        createEl.download = "poster.jpg";
-        createEl.click();
-        createEl.remove();      
+        html2canvas(document.querySelector("#folded-poster-source")).then(canvas => {
+          downloadButton = downloadButtons[1];
+          downloadButton.parentElement.insertBefore(canvas, downloadButton);
+          downloadButton.classList.remove('hidden');
+          document.querySelector('#preload').remove();
+        }); 
+      });
+
+      
+      downloadButtons.forEach((button) => {
+        button.onclick = (event) => {
+          const canvas = event.target.parentElement.querySelector('canvas');
+          let canvasUrl = canvas.toDataURL("image/jpeg", 1);
+          console.log(canvasUrl);
+          const createEl = document.createElement('a');
+          createEl.href = canvasUrl;
+          createEl.download = "poster.jpg";
+          createEl.click();
+          createEl.remove();
+        }
       });
     </script>
 {% endblock %}
