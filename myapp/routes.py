@@ -96,9 +96,9 @@ def dashboard_customers():
             for review in store.reviews:
                 data[review.customer.id] = review.updates.count()
             return render_template("dashboard-customers.html", store=store, data=data)
-        return redirect(url_for(dashboard))
+        return redirect(url_for("dashboard"))
     else:
-        return redirect(url_for(login))
+        return redirect(url_for("login"))
 
 
 @app.route("/dashboard/campaigns")
@@ -106,9 +106,9 @@ def dashboard_campaigns():
     if current_user.is_authenticated:
         if current_user.username != "admin":
             return "campaigns page"
-        return redirect(url_for(dashboard))
+        return redirect(url_for("dashboard"))
     else:
-        return redirect(url_for(login))
+        return redirect(url_for("login"))
 
 
 @app.route("/dashboard/qrcode")
@@ -116,9 +116,9 @@ def dashboard_qrcode():
     if current_user.is_authenticated:
         if current_user.username != "admin":
             return render_template("dashboard-qrcode.html")
-        return redirect(url_for(dashboard))
+        return redirect(url_for("dashboard"))
     else:
-        return redirect(url_for(login))
+        return redirect(url_for("login"))
 
 
 @app.route("/chartdata")

@@ -1,43 +1,99 @@
 {% extends "dashboard-shop-owner.html" %}
-{% set active_page = "dashboard" %}
+{% set active_page = "qrcode" %}
 {% block title %}QR Code{% endblock %}
+{% block style %}
+    .poster {
+    font-family: 'Open Sans', sans-serif;
+    }
+{% endblock %}
 {% block content %}
-    <div class="section flex justify-center gap-10">
-        <div class="my-auto flex-col text-center">
-            <div class="text-xl font-bold mb-2">QR Code</div>
+    <div>
+        <div class="m-4 flex flex-col items-center sm:w-fit">
+            <div id="preload" class="flex gap-4">
+                <div class="text-xl font-semibold">Generating Poster ...</div>
+                <div class="loader"></div>
+            </div>
             <button id="download"
-                    class="bg-sky-600 hover:bg-sky-700 text-white font-bold px-4 py-2 rounded-lg border-2 border-black shadow-md shadow-gray-300">
+                    class="hidden bg-sky-600 hover:bg-sky-700 text-white font-bold px-4 py-2 rounded-lg border-2 border-black shadow-md shadow-gray-300">
                 Download
             </button>
         </div>
-        <div id="qrcode"></div>
+        <div id="poster-source"
+             class="absolute left-[-500px] px-6 py-4 flex flex-col items-center w-fit">
+            <div class="text-2xl font-semibold">I Want Your Opinions!</div>
+            <div class="pt-4 mb-8 text-4xl font-black">SCAN ME</div>
+            <div id="qrcode"></div>
+            <div class="text-xl font-semibold mt-6">Leave Your Honest Review</div>
+            <div class="text-xl font-semibold mb-6">And Get Your Discount</div>
+        </div>
     </div>
 {% endblock %}
 {% block script %}
     <script src="{{ url_for('static', filename='qrcode.min.js') }}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src=" https://cdn.jsdelivr.net/npm/qr-code-styling@1.6.0-rc.1/lib/qr-code-styling.min.js "></script>
     <script>
       dateTimeElements = document.querySelectorAll('.datetime');
       dateTimeElements.forEach( element => {
         dt = new Date(element.textContent + 'Z')
         element.textContent = dt.toDateString() + ', ' + dt.toLocaleTimeString()
       });
-    
+
       url = new URL(document.URL)
+      qrcodeData = url.origin + '/store/{{ current_user.stores[0].id }}/review'
+      
+      const qrCode = new QRCodeStyling({
+        width: 150,
+        height: 150,
+        type: "svg",
+        data: qrcodeData,
+        dotsOptions: {
+            color: "#be123c",
+            type: "extra-rounded"
+        },
+        cornersSquareOptions: {
+          type: "extra-rounded",
+        },
+        backgroundOptions: {
+            color: "#fff",
+        },
+        imageOptions: {
+            crossOrigin: "anonymous",
+            margin: 20
+        },
+        qrOptions: {
+          errorCorrectionLevel: 'H'
+        }
+      });
+
+      qrCode.append(document.getElementById("qrcode")); 
+      
+      /* 
       qrcode = new QRCode(document.getElementById("qrcode"), {
-        text: url.origin + '/store/{{ current_user.stores[0].id }}/review',
+        text: qrcodeData,
         width: 128,
         height: 128,
         colorDark : "#000000",
         colorLight : "#ffffff",
         correctLevel : QRCode.CorrectLevel.H
-      });
-    
-      document.getElementById('download').addEventListener('click', function() {
-        var img = document.querySelector('#qrcode img');
-        var downloadLink = document.createElement('a');
-      downloadLink.download = 'qrcode.jpg';
-        downloadLink.href = img.src;
-        downloadLink.click();
+      }); */
+
+      const downloadButton = document.getElementById('download');
+      html2canvas(document.querySelector("#poster-source")).then(canvas => {
+        downloadButton.parentElement.insertBefore(canvas, downloadButton);
+        downloadButton.classList.remove('hidden');
+        document.querySelector('#preload').remove();
+      }); 
+
+      downloadButton.addEventListener('click', function() {
+        const canvas = document.querySelector('canvas');
+        let canvasUrl = canvas.toDataURL("image/jpeg", 1);
+        console.log(canvasUrl);
+        const createEl = document.createElement('a');
+        createEl.href = canvasUrl;
+        createEl.download = "poster.jpg";
+        createEl.click();
+        createEl.remove();      
       });
     </script>
 {% endblock %}
