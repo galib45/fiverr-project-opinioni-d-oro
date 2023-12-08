@@ -47,7 +47,6 @@
     </div>
 {% endblock %}
 {% block script %}
-    <script src="{{ url_for('static', filename='qrcode.min.js') }}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src=" https://cdn.jsdelivr.net/npm/qr-code-styling@1.6.0-rc.1/lib/qr-code-styling.min.js "></script>
     <script>
@@ -89,16 +88,7 @@
         qrCode.append(element);
       }); 
       
-      /* 
-      qrcode = new QRCode(document.getElementById("qrcode"), {
-        text: qrcodeData,
-        width: 128,
-        height: 128,
-        colorDark : "#000000",
-        colorLight : "#ffffff",
-        correctLevel : QRCode.CorrectLevel.H
-      }); */
-
+      
       const downloadButtons = document.querySelectorAll('button');
       
       html2canvas(document.querySelector("#poster-source")).then(canvas => {

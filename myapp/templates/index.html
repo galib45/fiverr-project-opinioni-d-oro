@@ -11,9 +11,9 @@
                 Join us today for a prosperous and trustworthy partnership in business success.
             </p>
             <div class="button-holder">
-                <div class="button">
+                <div class="button group">
                     <a href="{{ url_for("contact") }}">
-                        Get Started <span>{{ macros.svg("arrow-right", class="fill-teal-900") }}</span>
+                        Get Started <span>{{ macros.svg("arrow-right", class="fill-teal-900 group-hover:fill-white") }}</span>
                     </a>
                 </div>
             </div>
@@ -45,7 +45,7 @@
                     </p>
                 </div>
                 <div>
-                    <img src="{{ url_for('static', filename='trust.webp') }}" alt="trust">
+                    <img src="{{ url_for('static', filename='img/trust.webp') }}" alt="trust">
                 </div>
             </div>
             <div>
@@ -57,7 +57,7 @@
                     </p>
                 </div>
                 <div>
-                    <img src="{{ url_for('static', filename='reputation.webp') }}"
+                    <img src="{{ url_for('static', filename='img/reputation.webp') }}"
                          alt="reputation">
                 </div>
             </div>
@@ -70,7 +70,8 @@
                     </p>
                 </div>
                 <div>
-                    <img src="{{ url_for('static', filename='loyalty.webp') }}" alt="loyalty">
+                    <img src="{{ url_for('static', filename='img/loyalty.webp') }}"
+                         alt="loyalty">
                 </div>
             </div>
         </div>

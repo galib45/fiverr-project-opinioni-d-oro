@@ -1,38 +1,5 @@
-{% extends "dashboard-base.html" %}
-{% set active_page = "dashboard" %}
+{% extends "dashboard-admin.html" %}
+{% set active_page = "settings" %}
 {% block title %}Dashboard{% endblock %}
-{% block content %}
-    <div class="container-inner">
-        <div class="section settings">
-            <div class="flex gap-5">
-                <div class="tab py-1 px-2 select-none cursor-pointer">Account Settings</div>
-            </div>
-            <div id="indicator" class="absolute h-1 rounded bg-emerald-700"></div>
-        </div>
-    </div>
-{% endblock %}
-{% block script %}
-    <script>
-      function setIndicator(item, indicator) {
-        item.classList.add("font-bold");
-        item.classList.add("text-emerald-700");
-        indicator.style.width = `${checkedItem.offsetWidth}px`;
-        indicator.style.left = `${checkedItem.offsetLeft}px`;
-      }
-      const tabs = document.querySelectorAll('.tab');
-      const indicator = document.getElementById('indicator');
-      indicator.style.transition = 'left 300ms'
-      let checkedItem = tabs[0];
-      setIndicator(checkedItem, indicator);
-      tabs.forEach((item) => {
-      item.addEventListener('click', (e) => {
-          checkedItem = e.target;
-          tabs.forEach((item) => {
-            item.classList.remove("font-bold");
-            item.classList.remove("text-emerald-700");
-          });
-          setIndicator(checkedItem, indicator);
-        });
-      });
-    </script>
-{% endblock %}
+{% block content %}Settings Admin{% endblock %}
+{% block script %}{% endblock %}

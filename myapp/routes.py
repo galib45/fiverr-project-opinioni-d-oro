@@ -70,7 +70,7 @@ def dashboard():
     if current_user.is_authenticated:
         if current_user.username == "admin":
             stores = db.session.scalars(db.select(Store)).all()
-            return render_template("dashboard-admin.html", stores=stores)
+            return render_template("dashboard-admin-overview.html", stores=stores)
         else:
             store = current_user.stores[0]
             customers = store.customers

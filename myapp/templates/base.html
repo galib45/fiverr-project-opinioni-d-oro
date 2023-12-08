@@ -14,11 +14,10 @@
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Poppins&family=Open+Sans&display=swap"
               rel="stylesheet">
-        <link rel="stylesheet"
-              href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" />
-        <link href="{{ url_for('static', filename='output.css') }}"
+        <link href="{{ url_for('static', filename='css/output.css') }}"
               rel="stylesheet">
-        <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
+        <link href="{{ url_for('static', filename='css/style.css') }}"
+              rel="stylesheet">
         <link rel="shortcut icon"
               href="{{ url_for('static', filename='favicon.ico') }}"></link>
     <style>{% block style %}{% endblock %}</style>
@@ -32,7 +31,7 @@
                 <a href="{{ url_for("index") }}" class="flex">
                     <img width="64"
                          height="64"
-                         src="{{ url_for('static', filename='logo.webp') }}"
+                         src="{{ url_for('static', filename='img/logo.webp') }}"
                          alt="logo">
                     <div class="text-lg md:text-2xl font-bold my-auto ml-2">Golden Opinions</div>
                 </a>
@@ -63,22 +62,22 @@
             </div>
             <div class="sm:hidden navbar-wrapper grid">
                 <div class="navbar-vertical bg-amber-400 w-full px-6 overflow-hidden uppercase font-bold flex-col">
-                    <div class="py-2 hover:text-teal-900 flex gap-2">
-                        {{ macros.svg("home") }}
+                    <div class="py-2 hover:text-teal-900 group flex gap-2">
+                        {{ macros.svg("home", class="group-hover:fill-teal-900") }}
                         <a href="{{ url_for("index") }}" class="mb-0 select-none">Home</a>
                     </div>
-                    <div class="py-2 hover:text-teal-900 flex gap-2">
-                        {{ macros.svg("contact") }}
+                    <div class="py-2 hover:text-teal-900 group flex gap-2">
+                        {{ macros.svg("contact", class="group-hover:fill-teal-900") }}
                         <a href="{{ url_for("contact") }}" class="mb-0 select-none">Contact</a>
                     </div>
                     {% if current_user.is_anonymous %}
-                        <div class="py-2 hover:text-teal-900 flex gap-2 cursor-pointer">
-                            {{ macros.svg("login") }}
+                        <div class="py-2 hover:text-teal-900 group flex gap-2 cursor-pointer">
+                            {{ macros.svg("login", class="group-hover:fill-teal-900") }}
                             <a href="{{ url_for("login") }}" class="mb-0 select-none">Login</a>
                         </div>
                     {% else %}
-                        <div class="py-2 hover:text-rose-900 flex gap-2 cursor-pointer">
-                            {{ macros.svg("dashboard") }}
+                        <div class="py-2 hover:text-rose-900 group flex gap-2 cursor-pointer">
+                            {{ macros.svg("dashboard", class="group-hover:fill-teal-900") }}
                             <a href="{{ url_for("dashboard") }}" class="my-auto select-none">Dashboard</a>
                         </div>
                     {% endif %}
@@ -96,11 +95,11 @@
             {% block content %}{% endblock %}
         </div>
         <div class="section copyright">
-            <span class="material-symbols-outlined">copyright</span>
+            {{ macros.svg("copyright") }}
             <p>2023 Golden Opinions. All Rights Reserved.</p>
         </div>
     </div>
-    <script src="{{ url_for('static', filename='index.js') }}" defer></script>
-    <script>{% block script %}{% endblock %}</script>
+    <script src="{{ url_for('static', filename='js/index.js') }}" defer></script>
+    {% block script %}{% endblock %}
 </body>
 </html>
