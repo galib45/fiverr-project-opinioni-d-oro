@@ -1,0 +1,22 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .mycontainer {
+    min-height: 100dvh;
+    @apply flex flex-col;
+  }
+  .active {
+    @apply bg-slate-800 text-amber-400;
+  }
+
+  .active svg {
+    @apply fill-amber-400;
+  }
+  
+  input[type='text'], input[type='password'] {
+    @apply w-full rounded-md border-2 border-gray-300 px-3 py-2 outline-none hover:border-gray-400 focus:border-gray-600;
+  }
+
+}
