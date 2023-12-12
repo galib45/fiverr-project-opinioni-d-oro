@@ -1,7 +1,7 @@
 ## Golden Opinions
 
 ### To Be Done
-- [x] Overview page
+- [ ] Overview page
 	- [x] average rating chart
 	- [ ] validate coupon
 - [ ] Settings page
@@ -11,7 +11,7 @@
 	- [x] styling
 	- [ ] search for customers
 - [ ] Campaigns page
-	- [ ] create new campaign
-	- [ ] show list of active campaigns
+	- [x] create new campaign
+	- [x] show list of active campaigns
 	- [ ] campaign analytics
 - [ ] policies page
