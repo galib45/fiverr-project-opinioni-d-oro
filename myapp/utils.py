@@ -8,9 +8,18 @@ from sys import stderr
 from urllib.parse import urlencode, urlparse, urlunparse
 
 import requests
+
 from myapp import app
 
 request_count = 0
+
+
+def short_form(name):
+    return "".join([word[0] for word in name.split() if word[0].isalpha()]).upper()
+
+
+def generate_campaign_code(store_name, campaign_name):
+    return f"{short_form(store_name)}{short_form(campaign_name)}"
 
 
 def generate_random_code(length=8):

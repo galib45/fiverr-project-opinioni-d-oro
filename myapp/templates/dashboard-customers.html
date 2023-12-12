@@ -2,9 +2,11 @@
 {% set active_page = "customers" %}
 {% block title %}Customers{% endblock %}
 {% block style %}
-    th, td, .grid div {
-    font-family: 'Open Sans', sans-serif;
-    }
+    <style>
+      th, td, .grid div {
+        font-family: 'Open Sans', sans-serif;
+      }
+    </style>
 {% endblock %}
 {% block content %}
     {% if store is defined and store.customers|length > 0 %}

@@ -14,11 +14,9 @@
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Poppins&family=Open+Sans&display=swap"
               rel="stylesheet">
-        <link href="{{ url_for('static', filename='css/style.css') }}"
-              rel="stylesheet">
         <link href="{{ url_for('static', filename='css/output.css') }}"
               rel="stylesheet">
-        <style>{% block style %}{% endblock %}</style>
+        {% block style %}{% endblock %}
     </head>
     <body>
         {% import 'macros.html' as macros %}
@@ -37,10 +35,24 @@
                     </div>
                 </a>
                 <a href="{{ url_for("dashboard_campaigns") }}">
-                    <div class="w-full my-1 px-4 py-2 rounded-lg text-sm flex items-center gap-2 hover:bg-slate-800 select-none cursor-pointer {{ 'active' if active_page=='campaigns'}}">
+                    <div class="w-full my-1 px-4 py-2 rounded-lg text-sm flex items-center gap-2 hover:bg-slate-800 select-none cursor-pointer">
                         <span>{{ macros.svg("campaign", size=20, class='fill-gray-400') }}</span><span>Campaigns</span>
                     </div>
                 </a>
+                {% if active_page == 'campaigns' or active_page == 'campaigns_add' %}
+                    <div class="pl-6">
+                        <a href="{{ url_for("dashboard_campaigns") }}">
+                            <div class="w-full my-1 px-4 py-2 rounded-lg text-sm flex items-center gap-2 hover:bg-slate-800 select-none cursor-pointer {{ 'active' if active_page=='campaigns'}}">
+                                <span>{{ macros.svg("campaign", size=20, class='fill-gray-400') }}</span><span>Overview</span>
+                            </div>
+                        </a>
+                        <a href="{{ url_for("dashboard_campaigns_add") }}">
+                            <div class="w-full my-1 px-4 py-2 rounded-lg text-sm flex items-center gap-2 hover:bg-slate-800 select-none cursor-pointer {{ 'active' if active_page=='campaigns_add'}}">
+                                <span>{{ macros.svg("add", size=20, class='fill-gray-400') }}</span><span>New</span>
+                            </div>
+                        </a>
+                    </div>
+                {% endif %}
                 <a href="{{ url_for("dashboard_qrcode") }}">
                     <div class="w-full my-1 px-4 py-2 rounded-lg text-sm flex items-center gap-2 hover:bg-slate-800 select-none cursor-pointer {{ 'active' if active_page=='qrcode'}}">
                         <span>{{ macros.svg("qrcode", size=20, class='fill-gray-400') }}</span><span>QR Code</span>
@@ -69,7 +81,9 @@
                             {% elif active_page == 'customers' %}
                                 Customers
                             {% elif active_page == 'campaigns' %}
-                                Campaigns
+                                All Campaigns
+                            {% elif active_page == 'campaigns_add' %}
+                                New Campaign
                             {% elif active_page == 'qrcode' %}
                                 QR Code
                             {% elif active_page == 'settings' %}
@@ -79,6 +93,13 @@
                     </div>
                 </div>
                 <div id="main">
+                    {% with messages = get_flashed_messages() %}
+                        {% if messages %}
+                            <div class="flashed_messages">
+                                {% for message in messages %}<div>{{ message }}</div>{% endfor %}
+                            </div>
+                        {% endif %}
+                    {% endwith %}
                     {% block content %}{% endblock %}
                 </div>
             </div>

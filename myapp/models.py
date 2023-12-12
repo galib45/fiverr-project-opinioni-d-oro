@@ -71,7 +71,7 @@ class Campaign(db.Model):
     )
 
     def __repr__(self):
-        return f"Campaign(name='{self.name}', offer='{self.offer}', code='{self.code}')"
+        return f"Campaign(name='{self.name}', offer='{self.offer}', code='{self.code}', expire_date='{self.expire_date}')"
 
 
 class Customer(db.Model):

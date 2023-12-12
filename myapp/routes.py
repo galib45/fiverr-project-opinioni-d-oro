@@ -6,7 +6,7 @@ from flask_login import current_user, login_required, login_user, logout_user
 from flask_mail import Message
 from werkzeug.exceptions import HTTPException
 
-from myapp import app, cli_commands, customer_routes, db, login, mail
+from myapp import app, campaign_routes, cli_commands, customer_routes, db, login, mail
 from myapp.forms import AddStoreForm, LoginForm
 from myapp.models import *
 from myapp.utils import get_id_from_url, log_error, log_info
@@ -96,16 +96,6 @@ def dashboard_customers():
             for review in store.reviews:
                 data[review.customer.id] = review.updates.count()
             return render_template("dashboard-customers.html", store=store, data=data)
-        return redirect(url_for("dashboard"))
-    else:
-        return redirect(url_for("login"))
-
-
-@app.route("/dashboard/campaigns")
-def dashboard_campaigns():
-    if current_user.is_authenticated:
-        if current_user.username != "admin":
-            return render_template("dashboard-campaigns.html")
         return redirect(url_for("dashboard"))
     else:
         return redirect(url_for("login"))

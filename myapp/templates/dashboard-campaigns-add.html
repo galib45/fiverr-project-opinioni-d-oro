@@ -1,0 +1,48 @@
+{% extends "dashboard-shop-owner.html" %}
+{% set active_page = "campaigns_add" %}
+{% block title %}Campaigns{% endblock %}
+{% block style %}
+    <link rel="stylesheet"
+          type=""
+          href="{{ url_for('static', filename='css/air-datepicker.css') }}">
+{% endblock %}
+{% block content %}
+    <div class="border-sky-600 border-rose-600 hidden"></div>
+    <div class="form mb-8 p-4 max-w-[400px] mx-auto sm:mx-4">
+        <form action=""
+              method="post"
+              id="newcampaign-form"
+              class="flex flex-col gap-4"
+              novalidate>
+            <div class="form-title text-2xl font-bold my-4">New Campaign</div>
+            {{ form.hidden_tag() }}
+            <div class="flex flex-col gap-1">
+                {{ form.name.label }}
+                {{ form.name(placeholder="Enter name") }}
+                <span class="form-error" style="display:none;" id="name-error"></span>
+            </div>
+            <div class="flex flex-col gap-1">
+                {{ form.description.label }}
+                {{ form.description(placeholder="Enter short description", class="resize-none max-h-80") }}
+                <span class="form-error" style="display:none;" id="description-error"></span>
+            </div>
+            <div class="flex flex-col gap-1">
+                {{ form.offer.label }}
+                {{ form.offer(placeholder="Enter campaign offer") }}
+                <span class="form-error" style="display:none;" id="offer-error"></span>
+            </div>
+            <div class="flex flex-col gap-1">
+                {{ form.expire_date.label }}
+                {{ form.expire_date(placeholder="Choose Date") }}
+                <span class="form-error" style="display:none;" id="expire-date-error"></span>
+            </div>
+            <div class="mx-auto my-2 bg-orange-200 px-4 py-2 w-fit border-[3px] border-teal-950 rounded-md font-bold hover:bg-teal-950 hover:text-white select-none">
+                {{ form.submit() }}
+            </div>
+        </form>
+    </div>
+{% endblock %}
+{% block script %}
+    <script src="{{ url_for('static', filename='js/air-datepicker.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/newcampaign.js') }}"></script>
+{% endblock %}

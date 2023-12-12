@@ -1,4 +1,63 @@
 {% extends "dashboard-shop-owner.html" %}
 {% set active_page = "campaigns" %}
 {% block title %}Campaigns{% endblock %}
-{% block content %}<div class="m-4">Not Implemented Yet</div>{% endblock %}
+{% block style %}
+    <style>
+      th, td, .grid div {
+        font-family: 'Open Sans', sans-serif;
+      }
+    </style>
+{% endblock %}
+{% block content %}
+    {% set store = current_user.stores[0] %}
+    {% if store.campaigns.count() > 0 %}
+        <div class="m-4 overflow-auto rounded-lg shadow hidden md:block">
+            <table class="w-full">
+                <thead class="bg-gray-100 border-b-2 border-gray-200">
+                    <tr>
+                        <th class="p-3 text-sm font-semibold tracking-wide text-left">Name</th>
+                        <th class="p-3 text-sm font-semibold tracking-wide text-left">Offer</th>
+                        <th class="p-3 text-sm font-semibold tracking-wide text-center">Expire Date</th>
+                        <th class="p-3 text-sm font-semibold tracking-wide text-center">Customers</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for campaign in store.campaigns %}
+                        <tr class="{{ loop.cycle('bg-gray-50', 'bg-gray-100') }}">
+                            <td class="p-3 text-sm text-gray-700">{{ campaign.name }}</td>
+                            <td class="p-3 text-sm text-gray-700">{{ campaign.offer }}</td>
+                            <td class="p-3 text-sm text-gray-700 text-center">
+                                <span class="expire-date">{{ campaign.expire_date }}</span>
+                            </td>
+                            <td class="p-3 text-sm text-gray-700 text-center">{{ campaign.customers | length }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="m-4 grid grid-cols-1 gap-4 md:hidden">
+            {% for campaign in store.campaigns %}
+                <div class="bg-gray-50 rounded-lg shadow p-4 text-sm text-gray-700 space-y-1">
+                    <div class="text-base text-black font-semibold">{{ campaign.name }}</div>
+                    <div class="text-base text-black">{{ campaign.offer }}</div>
+                    <div class="text-base text-black">{{ campaign.customers | length }} customers</div>
+                    <div class="text-base text-black">
+                        <span class="font-semibold">Valid Upto:</span>
+                        <br>
+                        <span class="expire-date">{{ campaign.expire_date }}</span>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endblock %}
+{% block script %}
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js'></script>
+    <script>
+      document.querySelectorAll('.expire-date').forEach((expireDate) => {
+        expireDate.innerHTML = moment(expireDate.textContent)
+          .add(1, 'hour').subtract(1, 'second')
+          .format('MMMM DD, YYYY <br>hh:mm:ss A') + ' CET';
+      });
+    </script>
+{% endblock %}

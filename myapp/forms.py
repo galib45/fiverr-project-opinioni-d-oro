@@ -1,13 +1,22 @@
 from flask_wtf import FlaskForm
+from wtforms import BooleanField, PasswordField, StringField, SubmitField, TextAreaField
+from wtforms.validators import ValidationError
+
 from myapp import db
 from myapp.models import User
-from wtforms import BooleanField, PasswordField, StringField, SubmitField
-from wtforms.validators import ValidationError
 
 
 def check_if_username_exists(form, field):
     if db.session.scalar(db.select(User).filter_by(username=form.username.data)):
         raise ValidationError("A store with this username already exists!")
+
+
+class NewCampaignForm(FlaskForm):
+    name = StringField("Name of the Campaign")
+    description = TextAreaField("Short Description")
+    offer = StringField("Campaign Offer")
+    expire_date = StringField("Expire Date")
+    submit = SubmitField("Create Campaign")
 
 
 class AddStoreForm(FlaskForm):

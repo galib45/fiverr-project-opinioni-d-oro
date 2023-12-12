@@ -15,8 +15,48 @@
     @apply fill-amber-400;
   }
   
-  input[type='text'], input[type='password'] {
+  input[type='text'], input[type='password'], textarea {
     @apply w-full rounded-md border-2 border-gray-300 px-3 py-2 outline-none hover:border-gray-400 focus:border-gray-600;
   }
 
+  .invalid-input {
+    border: 2px solid #f44336 !important;
+  }
+  
+  .valid-input {
+    border: 2px solid #2196f3 !important;
+  }
+  
+  .form-error {
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    text-align: right;
+    color: rgb(225 29 72)
+  }
+
+  .loader {
+    border: 4px solid #ddd;
+    border-top: 4px solid #005248;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  
+  .flashed_messages {
+    padding: 10px;
+    width: 90%;
+    margin: 10px auto;
+    text-align: center;
+    color: #d50000;
+  }
+  
+  .flashed_messages > li {
+    list-style: none;
+  }
 }
