@@ -25,6 +25,8 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String(50), unique=True)
     password_hash = db.Column(db.String(255))
     email_verified = db.Column(db.Boolean, default=False)
+    role = db.Column(db.String(10), default="shop_owner")
+    state = db.Column(db.String(10), default="active")
     stores = db.relationship("Store", backref="owner", lazy="dynamic")
 
     def set_password(self, password):
@@ -49,6 +51,7 @@ class Store(db.Model):
     upto_timestamp = db.Column(db.DateTime())
     settings = db.Column(db.String)
     owner_id = db.Column(db.Integer, db.ForeignKey("user.id"))
+    package_id = db.Column(db.Integer)
     customers = db.relationship("Customer", secondary="store_customer", backref="store")
     campaigns = db.relationship("Campaign", backref="store", lazy="dynamic")
     coupons = db.relationship("Coupon", backref="store", lazy="dynamic")
@@ -58,6 +61,16 @@ class Store(db.Model):
         return f"Store(name='{self.name}', address='{self.address}', phone_number='{self.phone_number}')"
 
 
+class Package(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String)
+    quota = db.Column(db.Integer)
+    unlimited = db.Column(db.Boolean, default=False)
+
+    def __repr__(self):
+        return f"Package(name='{self.name}', unlimited={self.unlimited})"
+
+
 class Campaign(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String)
@@ -65,6 +78,8 @@ class Campaign(db.Model):
     offer = db.Column(db.String)
     code = db.Column(db.String(10))
     expire_date = db.Column(db.DateTime())
+    category = db.Column(db.String(10))
+    state = db.Column(db.String(10), default="pending")
     store_id = db.Column(db.Integer, db.ForeignKey("store.id"))
     customers = db.relationship(
         "Customer", secondary="campaign_customer", backref="campaign"
