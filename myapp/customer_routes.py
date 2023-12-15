@@ -8,6 +8,8 @@ import google_auth_oauthlib.flow
 import requests
 from flask import abort, redirect, render_template, request, session, url_for
 from google.oauth2 import id_token
+from slugify import slugify
+
 from myapp import app, db
 from myapp.forms import RegisterCustomerForm
 from myapp.models import Customer, Store
@@ -42,7 +44,13 @@ def google_login():
     if "store_id" not in session:
         abort(403)
     if "customer_google_account_id" in session:
-        return redirect(url_for("give_review", store_id=session["store_id"]))
+        store_id = session["store_id"]
+        store = db.session.get(Store, store_id)
+        if store:
+            store_slug = f"{store_id}-{slugify(store.name)}"
+            return redirect(url_for("give_review", store_slug=store_slug))
+        else:
+            abort(404)
     else:
         authorization_url, state = flow.authorization_url()
         session["state"] = state
@@ -73,7 +81,13 @@ def google_callback():
     session["customer_google_account_id"] = id_info.get("sub")
     session["customer_name"] = id_info.get("name")
     session["customer_email"] = id_info.get("email")
-    return redirect(url_for("give_review", store_id=session["store_id"]))
+    store_id = session["store_id"]
+    store = db.session.get(Store, store_id)
+    if store:
+        store_slug = f"{store_id}-{slugify(store.name)}"
+        return redirect(url_for("give_review", store_slug=store_slug))
+    else:
+        abort(404)
 
 
 # Logout page
@@ -87,18 +101,26 @@ def google_logout():
     return redirect(url_for("google_login"))
 
 
-@app.route("/store/<store_id>/review")
-def give_review(store_id):
+@app.route("/store/<slug>/review")
+def give_review(slug):
+    store_id, store_slug = slug.split("-", 1)
     store = db.session.get(Store, store_id)
     session["store_id"] = store_id
     if store:
+        if slugify(store_slug) != slugify(store.name):
+            abort(404)
+        if store_slug != slugify(store_slug):
+            abort(404)
         if "customer_google_account_id" in session and "customer_email" in session:
             customer = db.session.scalar(
                 db.select(Customer).filter_by(email=session["customer_email"])
             )
             if customer:
                 return render_template(
-                    "give_review.html", customer=customer, store=store
+                    "give_review.html",
+                    customer=customer,
+                    store=store,
+                    store_slug=slug,
                 )
             else:
                 return redirect(url_for("registercustomer", store_id=store_id))
@@ -108,7 +130,7 @@ def give_review(store_id):
         abort(404)
 
 
-@app.route("/store/<store_id>/register", methods=["GET", "POST"])
+@app.route("/stores/<store_id>/register", methods=["GET", "POST"])
 def registercustomer(store_id):
     store = db.session.get(Store, store_id)
     if store:
@@ -117,7 +139,8 @@ def registercustomer(store_id):
                 db.select(Customer).filter_by(email=session["customer_email"])
             )
             if customer:
-                return redirect(url_for("give_review", store_id=store_id))
+                store_slug = f"{store_id}-{slugify(store.name)}"
+                return redirect(url_for("give_review", store_slug=store_slug))
             else:
                 form = RegisterCustomerForm()
                 if form.validate_on_submit():
@@ -130,7 +153,8 @@ def registercustomer(store_id):
                     db.session.add(customer)
                     store.customers.append(customer)
                     db.session.commit()
-                    return redirect(url_for("give_review", store_id=store_id))
+                    store_slug = f"{store_id}-{slugify(store.name)}"
+                    return redirect(url_for("give_review", store_slug=store_slug))
                 return render_template(
                     "registercustomer.html", store=store, session=session, form=form
                 )
@@ -140,10 +164,15 @@ def registercustomer(store_id):
         abort(404)
 
 
-@app.route("/review_url/<store_id>")
-def review_url(store_id):
+@app.route("/review_url/<store_slug>")
+def review_url(store_slug):
+    store_id, store_slug = store_slug.split("-", 1)
     store = db.session.get(Store, store_id)
     if store:
+        if slugify(store_slug) != slugify(store.name):
+            abort(404)
+        if store_slug != slugify(store_slug):
+            abort(404)
         url = f"https://search.google.com/local/writereview?placeid={store.place_id}"
         return redirect(url)
     else:

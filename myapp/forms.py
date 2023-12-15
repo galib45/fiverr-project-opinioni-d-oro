@@ -33,6 +33,16 @@ class AddStoreForm(FlaskForm):
     submit = SubmitField("Add Store")
 
 
+class EditStoreForm(FlaskForm):
+    name = StringField("Store Name")
+    phone_number = StringField("Phone Number")
+    address = StringField("Address")
+    google_map_url = StringField("Google Map URL")
+    place_id = StringField("Place ID")
+    hex_id = StringField("Hex ID")
+    submit = SubmitField("Save")
+
+
 class LoginForm(FlaskForm):
     username = StringField("Username")
     password = PasswordField("Password")

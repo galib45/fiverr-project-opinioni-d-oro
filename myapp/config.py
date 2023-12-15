@@ -11,3 +11,4 @@ class Config:
     MAIL_USE_TLS = env.get("MAIL_USE_TLS")
     MAIL_USERNAME = env.get("MAIL_USERNAME")
     MAIL_PASSWORD = env.get("MAIL_PASSWORD")
+    ADMINS = ["yamisukehirobulls@gmail.com"]

@@ -1,5 +1,6 @@
 {% extends 'dashboard-admin.html' %}
 {% set active_page = "dashboard" %}
+{% block title %}Overview{% endblock %}
 {% block content %}
     {% if stores is defined and stores|length > 0 %}
         <div class="m-4 overflow-auto rounded-lg shadow hidden md:block">
@@ -19,7 +20,7 @@
                             <td class="p-3 text-sm text-gray-700">{{ store.address }}</td>
                             <td class="p-3 text-sm text-gray-700">{{ store.phone_number }}</td>
                             <td class="p-3 text-sm text-gray-700 flex justify-center">
-                                <a href="{{ url_for('delstore', store_id=store.id) }}">{{ macros.svg("delete", class="fill-gray-500 hover:fill-black") }}</a>
+                                <a href="{{ url_for('editstore', store_id=store.id) }}">{{ macros.svg("edit", class="fill-gray-500 hover:fill-black") }}</a>
                             </td>
                         </tr>
                     {% endfor %}
@@ -33,8 +34,8 @@
                     <div>{{ store.address }}</div>
                     <div>{{ store.phone_number }}</div>
                     <div>
-                        <a href="{{ url_for('delstore', store_id=store.id) }}"
-                           class="text-blue-700 hover:text-purple-700 font-semibold">Delete Store</a>
+                        <a href="{{ url_for('editstore', store_id=store.id) }}"
+                           class="text-blue-700 hover:text-purple-700 font-semibold">Edit Store</a>
                     </div>
                 </div>
             {% endfor %}

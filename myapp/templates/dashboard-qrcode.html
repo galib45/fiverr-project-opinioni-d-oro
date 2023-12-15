@@ -52,14 +52,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src=" https://cdn.jsdelivr.net/npm/qr-code-styling@1.6.0-rc.1/lib/qr-code-styling.min.js "></script>
     <script>
-      dateTimeElements = document.querySelectorAll('.datetime');
-      dateTimeElements.forEach( element => {
-        dt = new Date(element.textContent + 'Z')
-        element.textContent = dt.toDateString() + ', ' + dt.toLocaleTimeString()
-      });
-
       url = new URL(document.URL)
-      qrcodeData = url.origin + '/store/{{ current_user.stores[0].id }}/review'
+      qrcodeData = url.origin + '/store/{{ store_slug }}/review'
       
       options =  {
         width: 150,

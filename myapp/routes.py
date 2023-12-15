@@ -1,25 +1,25 @@
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timedelta
 
 from flask import abort, flash, redirect, render_template, request, send_file, url_for
 from flask.json import dumps, jsonify, loads
-from flask_login import current_user, login_required, login_user, logout_user
+from flask_login import current_user, login_user, logout_user
 from flask_mail import Message
-from werkzeug.exceptions import HTTPException
+from slugify import slugify
 
-from myapp import app, campaign_routes, cli_commands, customer_routes, db, login, mail
-from myapp.forms import AddStoreForm, LoginForm
+from myapp import (
+    app,
+    campaign_routes,
+    cli_commands,
+    customer_routes,
+    db,
+    decorators,
+    errorhandlers,
+    login,
+    mail,
+)
+from myapp.forms import AddStoreForm, EditStoreForm, LoginForm
 from myapp.models import *
 from myapp.utils import get_id_from_url, log_error, log_info
-
-
-@app.errorhandler(HTTPException)
-def handle_exception(e):
-    response = e.get_response()
-    return f"""<div style="display: flex;flex-direction: column;align-items: center;font-family:sans-serif;">
-    <h1 style="font-size: 5em;margin: 0;">{e.code}</h1>
-    <h3 style="font-size: 1.5em;margin: 0;">{e.name}</h3>
-    <div style="max-width: 300px;text-align: center;">{e.description}</div>
-    </div>"""
 
 
 @app.route("/")
@@ -105,7 +105,9 @@ def dashboard_customers():
 def dashboard_qrcode():
     if current_user.is_authenticated:
         if current_user.username != "admin":
-            return render_template("dashboard-qrcode.html")
+            store = current_user.stores[0]
+            store_slug = f"{store.id}-{slugify(store.name)}"
+            return render_template("dashboard-qrcode.html", store_slug=store_slug)
         return redirect(url_for("dashboard"))
     else:
         return redirect(url_for("login"))
@@ -130,60 +132,65 @@ def chartdata():
 
 
 @app.route("/addstore", methods=["GET", "POST"])
+@decorators.admin_required
 def addstore():
-    if current_user.is_authenticated and current_user.username == "admin":
-        form = AddStoreForm()
-        if form.validate_on_submit():
-            user = User(username=form.username.data, email=form.email.data)
-            user.set_password(form.password.data)
-            db.session.add(user)
-            timestamp_now = datetime.utcnow()
+    form = AddStoreForm()
+    if form.validate_on_submit():
+        user = User(username=form.username.data, email=form.email.data)
+        user.set_password(form.password.data)
+        db.session.add(user)
+        timestamp_now = datetime.utcnow()
 
-            store = Store(
-                name=form.name.data,
-                address=form.address.data,
-                phone_number=form.phone_number.data,
-                google_map_url=form.google_map_url.data,
-                place_id=form.place_id.data,
-                hex_id=form.hex_id.data,
-                date_created=timestamp_now,
-                upto_timestamp=timestamp_now - timedelta(days=1),
-                owner=user,
-            )
-            db.session.add(store)
-            db.session.commit()
-            return redirect(url_for("dashboard"))
-        return render_template("addstore.html", form=form)
-    else:
-        return redirect(url_for("index"))
+        store = Store(
+            name=form.name.data,
+            address=form.address.data,
+            phone_number=form.phone_number.data,
+            google_map_url=form.google_map_url.data,
+            place_id=form.place_id.data,
+            hex_id=form.hex_id.data,
+            date_created=timestamp_now,
+            upto_timestamp=timestamp_now - timedelta(days=1),
+            owner=user,
+        )
+        db.session.add(store)
+        db.session.commit()
+        return redirect(url_for("dashboard"))
+    return render_template("addstore.html", form=form)
 
 
 @app.route("/delstore/<store_id>")
+@decorators.admin_required
 def delstore(store_id):
-    if current_user.is_authenticated:
-        if current_user.username == "admin":
-            store = db.session.get(Store, store_id)
-            if store:
-                owner = store.owner
-                store_count = owner.stores.count()
-                if store_count <= 1:
-                    db.session.delete(owner)
-                    flash(f"Removed user [{owner.username}] successfully")
-                db.session.delete(store)
-                flash(f"Removed store [{store.name}] successfully")
-                db.session.commit()
-            return redirect(url_for("dashboard"))
-        else:
-            flash("Only admin can access the page you requested")
-            return redirect(url_for("dashboard"))
+    store = db.session.get(Store, store_id)
+    if store:
+        owner = store.owner
+        store_count = owner.stores.count()
+        if store_count <= 1:
+            db.session.delete(owner)
+            flash(f"Removed user [{owner.username}] successfully")
+        db.session.delete(store)
+        flash(f"Removed store [{store.name}] successfully")
+        db.session.commit()
+    return redirect(url_for("dashboard"))
+
+
+@app.route("/editstore/<store_id>", methods=["GET", "POST"])
+@decorators.admin_required
+def editstore(store_id):
+    store = db.session.get(Store, store_id)
+    if store:
+        form = EditStoreForm()
+        if form.validate_on_submit():
+            return "selrim d2"
+        return render_template("editstore.html", store=store, form=form)
     else:
-        return redirect(url_for("login"))
+        abort(404)
 
 
 @app.route("/logout")
 def logout():
     logout_user()
-    return redirect(url_for("index"))
+    return redirect(url_for("login"))
 
 
 @app.route("/getid/<google_map_url_id>")

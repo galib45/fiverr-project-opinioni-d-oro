@@ -16,10 +16,13 @@
               rel="stylesheet">
         <link href="{{ url_for('static', filename='css/style.css') }}"
               rel="stylesheet">
+        <link href="{{ url_for('static', filename='css/output.css') }}"
+              rel="stylesheet">
         <style>{% block style %}{% endblock %}</style>
     </head>
     <body>
-        <div class="container">
+        {% import 'macros.html' as macros %}
+        <div class="mycontainer">
             <!-- Navigation Bar -->
             <nav>
                 <div class="navbar">
@@ -30,7 +33,7 @@
                 {% block content %}{% endblock %}
             </div>
             <div class="section copyright">
-                <span class="material-symbols-outlined">copyright</span>
+                <span>{{ macros.svg("copyright") }}</span>
                 <p>2023 Golden Opinions. All Rights Reserved.</p>
             </div>
         </div>
