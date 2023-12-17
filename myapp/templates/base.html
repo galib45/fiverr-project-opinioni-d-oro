@@ -20,7 +20,7 @@
               rel="stylesheet">
         <link rel="shortcut icon"
               href="{{ url_for('static', filename='favicon.ico') }}"></link>
-    <style>{% block style %}{% endblock %}</style>
+    <style nonce="golden">{% block style %}{% endblock %}</style>
 </head>
 <body>
     {% import 'macros.html' as macros %}

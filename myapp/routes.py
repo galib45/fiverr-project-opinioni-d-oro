@@ -22,6 +22,17 @@ from myapp.models import *
 from myapp.utils import get_id_from_url, log_error, log_info
 
 
+@app.after_request
+def after_request(response):
+    response.headers["Content-Security-Policy"] = (
+        ""
+        + "font-src https://fonts.googleapis.com/ https://fonts.gstatic.com;"
+        + "style-src-elem 'self' https://fonts.googleapis.com/ 'nonce-golden';"
+        + "script-src-elem 'self' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net 'nonce-golden'"
+    )
+    return response
+
+
 @app.route("/")
 def index():
     return render_template("index.html")

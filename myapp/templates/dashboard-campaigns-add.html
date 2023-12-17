@@ -19,22 +19,22 @@
             <div class="flex flex-col gap-1">
                 {{ form.name.label }}
                 {{ form.name(placeholder="Enter name") }}
-                <span class="form-error" style="display:none;" id="name-error"></span>
+                <span class="form-error" id="name-error"></span>
             </div>
             <div class="flex flex-col gap-1">
                 {{ form.description.label }}
                 {{ form.description(placeholder="Enter short description", class="resize-none max-h-80") }}
-                <span class="form-error" style="display:none;" id="description-error"></span>
+                <span class="form-error" id="description-error"></span>
             </div>
             <div class="flex flex-col gap-1">
                 {{ form.offer.label }}
                 {{ form.offer(placeholder="Enter campaign offer") }}
-                <span class="form-error" style="display:none;" id="offer-error"></span>
+                <span class="form-error" id="offer-error"></span>
             </div>
             <div class="flex flex-col gap-1">
                 {{ form.expire_date.label }}
                 {{ form.expire_date(placeholder="Choose Date") }}
-                <span class="form-error" style="display:none;" id="expire-date-error"></span>
+                <span class="form-error" id="expire-date-error"></span>
             </div>
             <div class="mx-auto my-2 bg-orange-200 px-4 py-2 w-fit border-[3px] border-teal-950 rounded-md font-bold hover:bg-teal-950 hover:text-white select-none">
                 {{ form.submit() }}

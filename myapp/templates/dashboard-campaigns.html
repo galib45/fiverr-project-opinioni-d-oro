@@ -2,7 +2,7 @@
 {% set active_page = "campaigns" %}
 {% block title %}Campaigns{% endblock %}
 {% block style %}
-    <style>
+    <style nonce="golden">
       th, td, .grid div {
         font-family: 'Open Sans', sans-serif;
       }
@@ -53,7 +53,7 @@
 {% endblock %}
 {% block script %}
     <script src='https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js'></script>
-    <script>
+    <script nonce="golden">
       document.querySelectorAll('.expire-date').forEach((expireDate) => {
         expireDate.innerHTML = moment(expireDate.textContent)
           .add(1, 'hour').subtract(1, 'second')

@@ -18,7 +18,7 @@
               rel="stylesheet">
         <link rel="shortcut icon"
               href="{{ url_for('static', filename='favicon.ico') }}"></link>
-    <style>{% block style %}{% endblock %}</style>
+    <style nonce="golden">{% block style %}{% endblock %}</style>
 </head>
 <body>
     {% import 'macros.html' as macros %}
@@ -80,22 +80,7 @@
         <div class='h-screen w-full ml-[200px] fixed opacity-70 bg-gray-500 hidden'
              id="dashboard-overlay"></div>
     </div>
-    <script>
-    const navbar = document.getElementById('dashboard-navbar');
-    const overlay = document.getElementById('dashboard-overlay');
-    const navmenu = document.getElementById('dashboard-navmenu');
-    navmenu.onclick = () => {
-      console.log('navmenu click'); 
-      navbar.classList.remove('hidden');
-      overlay.classList.remove('hidden');
-    };
-    overlay.onclick = () => {
-      console.log('overlay click');
-      navbar.classList.add('hidden');
-      overlay.classList.add('hidden');
-    };
-    </script>
-    {% block script %}
-    {% endblock %}
+    <script src="{{ url_for('static', filename='js/dashboard.navbar.js') }}"></script>
+    {% block script %}{% endblock %}
 </body>
 </html>

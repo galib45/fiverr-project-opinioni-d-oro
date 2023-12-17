@@ -14,13 +14,13 @@
             <div class="flex flex-col gap-1">
                 {{ form.username.label }}
                 {{ form.username(placeholder="Enter username") }}
-                <span class="form-error" style="display:none;" id="username-error"></span>
+                <span class="form-error" id="username-error"></span>
                 {% for error in form.username.errors %}<span class="form-error">{{ error }}</span>{% endfor %}
             </div>
             <div class="flex flex-col gap-1">
                 {{ form.email.label }}
                 {{ form.email(placeholder="Enter email") }}
-                <span class="form-error" style="display:none;" id="email-error"></span>
+                <span class="form-error" id="email-error"></span>
             </div>
             <div class="flex flex-col gap-1">
                 {{ form.password.label }}
@@ -29,7 +29,7 @@
                     <span class="ml-[-36px]">{{ macros.svg("visibility_off", class="fill-gray-500 hover:fill-gray-700") }}</span>
                     <span class="hidden ml-[-36px]">{{ macros.svg("visibility", class="fill-gray-500 hobver:fill-gray-700") }}</span>
                 </div>
-                <span class="form-error" style="display:none;" id="password-error"></span>
+                <span class="form-error" id="password-error"></span>
             </div>
             <div class="flex flex-col gap-1">
                 {{ form.confirm_password.label }}
@@ -38,44 +38,44 @@
                     <span class="ml-[-36px]">{{ macros.svg("visibility_off", class="fill-gray-500 hover:fill-gray-700") }}</span>
                     <span class="hidden ml-[-36px]">{{ macros.svg("visibility", class="fill-gray-500 hobver:fill-gray-700") }}</span>
                 </div>
-                <span class="form-error" style="display:none;" id="confirm-password-error"></span>
+                <span class="form-error" id="confirm-password-error"></span>
             </div>
             <div class="flex flex-col gap-1">
                 {{ form.name.label }}
                 {{ form.name(placeholder="Enter name of the Store") }}
-                <span class="form-error" style="display:none;" id="name-error"></span>
+                <span class="form-error" id="name-error"></span>
             </div>
             <div class="flex flex-col gap-1">
                 {{ form.phone_number.label }}
                 {{ form.phone_number(placeholder="Enter phone number of store owner") }}
-                <span class="form-error" style="display:none;" id="phone-number-error"></span>
+                <span class="form-error" id="phone-number-error"></span>
             </div>
             <div>
                 {{ form.address.label }}
                 {{ form.address(placeholder="Enter store address") }}
-                <span class="form-error" style="display:none;" id="address-error"></span>
+                <span class="form-error" id="address-error"></span>
             </div>
             <div class="flex flex-col gap-1">
                 {{ form.google_map_url.label }}
                 {{ form.google_map_url(placeholder="Enter google map link of the store") }}
-                <span class="form-error" style="display:none;" id="google-map-url-error"></span>
-                <div style="display:flex;align-items: center;gap: 20px;">
+                <span class="form-error" id="google-map-url-error"></span>
+                <div class="flex items-center gap-5">
                     <div class="mx-auto my-2 bg-orange-200 px-4 py-2 w-fit border-[3px] border-teal-950 rounded-md font-bold hover:bg-teal-950 hover:text-white select-none"
                          id="generate-id-button">
                         <a>Generate ID</a>
                     </div>
-                    <div class="loader" style="display:none;"></div>
+                    <div class="loader hidden"></div>
                 </div>
             </div>
             <div class="flex flex-col gap-1">
                 {{ form.place_id.label }}
                 {{ form.place_id(placeholder="Enter place id") }}
-                <span class="form-error" style="display:none;" id="place-id-error"></span>
+                <span class="form-error" id="place-id-error"></span>
             </div>
             <div class="flex flex-col gap-1">
                 {{ form.hex_id.label }}
                 {{ form.hex_id(placeholder="Enter hex id") }}
-                <span class="form-error" style="display:none;" id="hex-id-error"></span>
+                <span class="form-error" id="hex-id-error"></span>
             </div>
             <div class="mx-auto my-2 bg-orange-200 px-4 py-2 w-fit border-[3px] border-teal-950 rounded-md font-bold hover:bg-teal-950 hover:text-white select-none">
                 {{ form.submit() }}
