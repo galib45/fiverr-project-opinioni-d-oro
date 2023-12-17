@@ -534,40 +534,6 @@ video {
   --tw-backdrop-sepia:  ;
 }
 
-.container {
-  width: 100%;
-}
-
-@media (min-width: 640px) {
-  .container {
-    max-width: 640px;
-  }
-}
-
-@media (min-width: 768px) {
-  .container {
-    max-width: 768px;
-  }
-}
-
-@media (min-width: 1024px) {
-  .container {
-    max-width: 1024px;
-  }
-}
-
-@media (min-width: 1280px) {
-  .container {
-    max-width: 1280px;
-  }
-}
-
-@media (min-width: 1536px) {
-  .container {
-    max-width: 1536px;
-  }
-}
-
 .mycontainer {
   min-height: 100dvh;
   display: flex;
@@ -615,6 +581,10 @@ input[type='text']:focus, input[type='password']:focus, textarea:focus {
 
 .valid-input {
   border: 2px solid #2196f3 !important;
+}
+
+.form-error a {
+  color: #003399;
 }
 
 .form-error {
@@ -684,6 +654,11 @@ input[type='text']:focus, input[type='password']:focus, textarea:focus {
   margin-right: 1rem;
 }
 
+.mx-8 {
+  margin-left: 2rem;
+  margin-right: 2rem;
+}
+
 .mx-auto {
   margin-left: auto;
   margin-right: auto;
@@ -709,29 +684,19 @@ input[type='text']:focus, input[type='password']:focus, textarea:focus {
   margin-bottom: 1rem;
 }
 
-.my-auto {
-  margin-top: auto;
-  margin-bottom: auto;
-}
-
-.mx-12 {
-  margin-left: 3rem;
-  margin-right: 3rem;
-}
-
 .my-6 {
   margin-top: 1.5rem;
   margin-bottom: 1.5rem;
 }
 
-.mx-8 {
-  margin-left: 2rem;
-  margin-right: 2rem;
-}
-
 .my-8 {
   margin-top: 2rem;
   margin-bottom: 2rem;
+}
+
+.my-auto {
+  margin-top: auto;
+  margin-bottom: auto;
 }
 
 .mb-0 {
@@ -786,12 +751,20 @@ input[type='text']:focus, input[type='password']:focus, textarea:focus {
   margin-top: 5rem;
 }
 
+.mt-4 {
+  margin-top: 1rem;
+}
+
 .mt-6 {
   margin-top: 1.5rem;
 }
 
-.mt-4 {
-  margin-top: 1rem;
+.mb-12 {
+  margin-bottom: 3rem;
+}
+
+.mt-2 {
+  margin-top: 0.5rem;
 }
 
 .block {
@@ -826,6 +799,10 @@ input[type='text']:focus, input[type='password']:focus, textarea:focus {
   height: 100vh;
 }
 
+.h-full {
+  height: 100%;
+}
+
 .max-h-80 {
   max-height: 20rem;
 }
@@ -849,14 +826,6 @@ input[type='text']:focus, input[type='password']:focus, textarea:focus {
 
 .max-w-lg {
   max-width: 32rem;
-}
-
-.max-w-\[500px\] {
-  max-width: 500px;
-}
-
-.max-w-\[300px\] {
-  max-width: 300px;
 }
 
 .transform {
@@ -901,6 +870,10 @@ input[type='text']:focus, input[type='password']:focus, textarea:focus {
   justify-content: center;
 }
 
+.justify-between {
+  justify-content: space-between;
+}
+
 .justify-items-center {
   justify-items: center;
 }
@@ -919,6 +892,10 @@ input[type='text']:focus, input[type='password']:focus, textarea:focus {
 
 .gap-5 {
   gap: 1.25rem;
+}
+
+.gap-3 {
+  gap: 0.75rem;
 }
 
 .space-y-1 > :not([hidden]) ~ :not([hidden]) {
@@ -983,10 +960,6 @@ input[type='text']:focus, input[type='password']:focus, textarea:focus {
   border-width: 3px;
 }
 
-.border {
-  border-width: 1px;
-}
-
 .border-b-2 {
   border-bottom-width: 2px;
 }
@@ -999,6 +972,11 @@ input[type='text']:focus, input[type='password']:focus, textarea:focus {
 .border-gray-200 {
   --tw-border-opacity: 1;
   border-color: rgb(229 231 235 / var(--tw-border-opacity));
+}
+
+.border-gray-300 {
+  --tw-border-opacity: 1;
+  border-color: rgb(209 213 219 / var(--tw-border-opacity));
 }
 
 .border-rose-600 {
@@ -1023,11 +1001,6 @@ input[type='text']:focus, input[type='password']:focus, textarea:focus {
 
 .border-transparent {
   border-color: transparent;
-}
-
-.border-gray-300 {
-  --tw-border-opacity: 1;
-  border-color: rgb(209 213 219 / var(--tw-border-opacity));
 }
 
 .bg-amber-400 {
@@ -1145,6 +1118,10 @@ input[type='text']:focus, input[type='password']:focus, textarea:focus {
   fill: #134e4a;
 }
 
+.p-2 {
+  padding: 0.5rem;
+}
+
 .p-3 {
   padding: 0.75rem;
 }
@@ -1153,25 +1130,18 @@ input[type='text']:focus, input[type='password']:focus, textarea:focus {
   padding: 1rem;
 }
 
-.p-1 {
-  padding: 0.25rem;
-}
-
 .p-6 {
   padding: 1.5rem;
-}
-
-.p-8 {
-  padding: 2rem;
-}
-
-.p-2 {
-  padding: 0.5rem;
 }
 
 .px-2 {
   padding-left: 0.5rem;
   padding-right: 0.5rem;
+}
+
+.px-3 {
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
 }
 
 .px-4 {
@@ -1209,21 +1179,12 @@ input[type='text']:focus, input[type='password']:focus, textarea:focus {
   padding-bottom: 6px;
 }
 
-.px-3 {
-  padding-left: 0.75rem;
-  padding-right: 0.75rem;
-}
-
 .pl-6 {
   padding-left: 1.5rem;
 }
 
 .pt-4 {
   padding-top: 1rem;
-}
-
-.pb-8 {
-  padding-bottom: 2rem;
 }
 
 .text-left {
@@ -1282,6 +1243,11 @@ input[type='text']:focus, input[type='password']:focus, textarea:focus {
   line-height: 1.75rem;
 }
 
+.text-xs {
+  font-size: 0.75rem;
+  line-height: 1rem;
+}
+
 .font-black {
   font-weight: 900;
 }
@@ -1304,6 +1270,10 @@ input[type='text']:focus, input[type='password']:focus, textarea:focus {
 
 .tracking-wide {
   letter-spacing: 0.025em;
+}
+
+.tracking-wider {
+  letter-spacing: 0.05em;
 }
 
 .text-amber-400 {
@@ -1377,12 +1347,6 @@ input[type='text']:focus, input[type='password']:focus, textarea:focus {
   box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
 }
 
-.shadow-sm {
-  --tw-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-  --tw-shadow-colored: 0 1px 2px 0 var(--tw-shadow-color);
-  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
-}
-
 .shadow-gray-300 {
   --tw-shadow-color: #d1d5db;
   --tw-shadow: var(--tw-shadow-colored);
@@ -1390,11 +1354,6 @@ input[type='text']:focus, input[type='password']:focus, textarea:focus {
 
 .shadow-teal-950 {
   --tw-shadow-color: #042f2e;
-  --tw-shadow: var(--tw-shadow-colored);
-}
-
-.shadow-gray-100 {
-  --tw-shadow-color: #f3f4f6;
   --tw-shadow: var(--tw-shadow-colored);
 }
 
@@ -1411,14 +1370,14 @@ input[type='text']:focus, input[type='password']:focus, textarea:focus {
   transition-duration: 150ms;
 }
 
-.hover\:border-teal-900:hover {
-  --tw-border-opacity: 1;
-  border-color: rgb(19 78 74 / var(--tw-border-opacity));
-}
-
 .hover\:border-gray-400:hover {
   --tw-border-opacity: 1;
   border-color: rgb(156 163 175 / var(--tw-border-opacity));
+}
+
+.hover\:border-teal-900:hover {
+  --tw-border-opacity: 1;
+  border-color: rgb(19 78 74 / var(--tw-border-opacity));
 }
 
 .hover\:bg-sky-700:hover {
@@ -1497,6 +1456,10 @@ input[type='text']:focus, input[type='password']:focus, textarea:focus {
     margin-left: 200px;
   }
 
+  .sm\:mt-6 {
+    margin-top: 1.5rem;
+  }
+
   .sm\:block {
     display: block;
   }
@@ -1560,6 +1523,11 @@ input[type='text']:focus, input[type='password']:focus, textarea:focus {
   .md\:text-base {
     font-size: 1rem;
     line-height: 1.5rem;
+  }
+
+  .md\:text-sm {
+    font-size: 0.875rem;
+    line-height: 1.25rem;
   }
 }
 

@@ -10,14 +10,17 @@
                 <label for="account_state">Account State</label>
                 <select name="account_state"
                         id="account_state"
-                        class="my-1 p-2 bg-white rounded-md border-2 border-gray-300 px-3 py-2 outline-none hover:border-gray-400 focus:border-gray-600"
-                        value="{{ store.owner.state }}">
-                    <option value="active">Active</option>
-                    <option value="blocked">Blocked</option>
+                        class="my-1 p-2 bg-white rounded-md border-2 border-gray-300 px-3 py-2 outline-none hover:border-gray-400 focus:border-gray-600">
+                    <option value="active" {{ 'selected' if store.owner.state == 'active' }}>Active
+                    </option>
+                    <option value="blocked" {{ 'selected' if store.owner.state == 'blocked' }}>Blocked
+                    </option>
                 </select>
             </div>
-            <div class="w-fit ml-auto mt-4 mb-2">
-                <button class="w-fit rounded-lg bg-teal-800 px-4 py-2 font-bold text-white shadow shadow-teal-950 hover:bg-teal-950 active:bg-teal-950">
+            <div class="w-fit ml-auto mt-4 mb-2 flex gap-4">
+                <div class="loader hidden"></div>
+                <button id="save-state"
+                        class="w-fit rounded-lg bg-teal-800 px-4 py-2 font-bold text-white shadow shadow-teal-950 hover:bg-teal-950 active:bg-teal-950">
                     Save
                 </button>
             </div>
@@ -29,12 +32,20 @@
                 <select name="account_state"
                         id="account_state"
                         class="my-1 p-2 bg-white rounded-md border-2 border-gray-300 px-3 py-2 outline-none hover:border-gray-400 focus:border-gray-600">
-                    <option value="basic">Basic</option>
-                    <option value="5star">5 Star</option>
+                    <option value="basic" {{ 'selected' if store.package == 'basic' }}>Basic
+                    </option>
+                    <option value="5star" {{ 'selected' if store.package == '5star' }}>5 Star
+                    </option>
+                    <option value="basic-unlimited" {{ 'selected' if store.package == 'basic-unlimited' }}>Basic + Unlimited
+                    </option>
+                    <option value="5star-unlimited" {{ 'selected' if store.package == '5star-unlimited' }}>5 Star + Unlimited
+                    </option>
                 </select>
             </div>
-            <div class="w-fit ml-auto mt-4 mb-2">
-                <button class="w-fit rounded-lg bg-teal-800 px-4 py-2 font-bold text-white shadow shadow-teal-950 hover:bg-teal-950 active:bg-teal-950">
+            <div class="w-fit ml-auto mt-4 mb-2 flex gap-4">
+                <div class="loader hidden"></div>
+                <button id="save-package"
+                        class="w-fit rounded-lg bg-teal-800 px-4 py-2 font-bold text-white shadow shadow-teal-950 hover:bg-teal-950 active:bg-teal-950">
                     Save
                 </button>
             </div>
@@ -42,7 +53,7 @@
         <div class="form mx-auto max-w-[400px] sm:mx-4">
             <form action=""
                   method="post"
-                  id="addstore-form"
+                  id="editstore-form"
                   class="flex flex-col gap-4"
                   novalidate>
                 <div class="text-2xl font-bold my-4">Store Information</div>
@@ -71,7 +82,7 @@
                              id="generate-id-button">
                             <a>Generate ID</a>
                         </div>
-                        <div class="loader" style="display:none;"></div>
+                        <div class="loader hidden"></div>
                     </div>
                 </div>
                 <div class="flex flex-col gap-1">
@@ -91,4 +102,4 @@
         </div>
     </div>
 {% endblock %}
-{% block script %}<script src="{{ url_for('static', filename='js/addstore.js') }}"></script>{% endblock %}
+{% block script %}<script src="{{ url_for('static', filename='js/editstore.js') }}"></script>{% endblock %}

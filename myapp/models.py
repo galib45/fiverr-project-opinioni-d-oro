@@ -51,7 +51,7 @@ class Store(db.Model):
     upto_timestamp = db.Column(db.DateTime())
     settings = db.Column(db.String)
     owner_id = db.Column(db.Integer, db.ForeignKey("user.id"))
-    package_id = db.Column(db.Integer)
+    package = db.Column(db.String, default="basic")
     customers = db.relationship("Customer", secondary="store_customer", backref="store")
     campaigns = db.relationship("Campaign", backref="store", lazy="dynamic")
     coupons = db.relationship("Coupon", backref="store", lazy="dynamic")
@@ -59,16 +59,6 @@ class Store(db.Model):
 
     def __repr__(self):
         return f"Store(name='{self.name}', address='{self.address}', phone_number='{self.phone_number}')"
-
-
-class Package(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String)
-    quota = db.Column(db.Integer)
-    unlimited = db.Column(db.Boolean, default=False)
-
-    def __repr__(self):
-        return f"Package(name='{self.name}', unlimited={self.unlimited})"
 
 
 class Campaign(db.Model):

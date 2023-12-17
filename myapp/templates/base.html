@@ -36,24 +36,28 @@
                     <div class="text-lg md:text-2xl font-bold my-auto ml-2">Golden Opinions</div>
                 </a>
                 <div class="my-auto ml-auto flex">
-                    <div class="my-auto uppercase font-bold text-sm md:text-base mr-1 hidden sm:flex">
+                    <div class="my-auto uppercase font-bold md:text-base mr-1 hidden sm:flex">
                         <div>
                             <a href="{{ url_for("index") }}"
-                               class="hover:bg-teal-900 border-4 border-transparent hover:border-teal-900 hover:text-white rounded-md px-4 py-[6px]">Home</a>
+                               class="hover:bg-teal-900 border-4 text-sm tracking-wide border-transparent hover:text-white rounded-md px-3 py-2">Home</a>
                         </div>
                         <div>
                             <a href="{{ url_for("contact") }}"
-                               class="hover:bg-teal-900 border-4 border-transparent hover:border-teal-900 hover:text-white rounded-md ml-3 px-4 py-[6px]">Contact</a>
+                               class="hover:bg-teal-900 border-4 text-sm tracking-wide border-transparent hover:text-white rounded-md px-3 py-2">Contact</a>
                         </div>
                         {% if current_user.is_anonymous %}
                             <div>
                                 <a href="{{ url_for("login") }}"
-                                   class="hover:bg-teal-900 border-4 hover:text-white border-teal-900 rounded-md ml-3 px-4 py-[6px]">Login</a>
+                                   class="hover:bg-teal-900 border-4 text-sm tracking-wide hover:text-white border-teal-900 rounded-md ml-2 px-3 py-2">Login</a>
                             </div>
                         {% else %}
                             <div>
                                 <a href="{{ url_for("dashboard") }}"
-                                   class="hover:bg-teal-900 border-4 hover:text-white border-teal-900 rounded-md ml-3 px-4 py-[6px]">Dashboard</a>
+                                   class="hover:bg-teal-900 border-4 text-sm tracking-wide border-transparent hover:text-white rounded-md px-3 py-2">Dashboard</a>
+                            </div>
+                            <div>
+                                <a href="{{ url_for("logout") }}"
+                                   class="hover:bg-teal-900 border-4 text-sm tracking-wide border-transparent hover:text-white rounded-md px-3 py-2">Logout</a>
                             </div>
                         {% endif %}
                     </div>
@@ -79,6 +83,10 @@
                         <div class="py-2 hover:text-rose-900 group flex gap-2 cursor-pointer">
                             {{ macros.svg("dashboard", class="group-hover:fill-teal-900") }}
                             <a href="{{ url_for("dashboard") }}" class="my-auto select-none">Dashboard</a>
+                        </div>
+                        <div class="py-2 hover:text-rose-900 group flex gap-2 cursor-pointer">
+                            {{ macros.svg("logout", class="group-hover:fill-teal-900") }}
+                            <a href="{{ url_for("logout") }}" class="my-auto select-none">Log Out</a>
                         </div>
                     {% endif %}
                 </div>

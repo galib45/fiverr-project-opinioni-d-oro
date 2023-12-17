@@ -68,26 +68,30 @@ def login():
 @app.route("/dashboard")
 def dashboard():
     if current_user.is_authenticated:
-        if current_user.username == "admin":
+        if current_user.role == "admin":
             stores = db.session.scalars(db.select(Store)).all()
             return render_template("dashboard-admin-overview.html", stores=stores)
         else:
-            store = current_user.stores[0]
-            customers = store.customers
-            data = {}
-            data["updates"] = {customer.id: 0 for customer in customers}
-            data["num_redeems"] = [coupon.redeemed for coupon in store.coupons].count(
-                True
-            )
-            for review in store.reviews:
-                data[review.customer.id] = review.updates.count()
-            return render_template(
-                "dashboard-analytics.html", store=current_user.stores[0], data=data
-            )
+            if current_user.state == "active":
+                store = current_user.stores[0]
+                customers = store.customers
+                data = {}
+                data["updates"] = {customer.id: 0 for customer in customers}
+                data["num_redeems"] = [
+                    coupon.redeemed for coupon in store.coupons
+                ].count(True)
+                for review in store.reviews:
+                    data[review.customer.id] = review.updates.count()
+                return render_template(
+                    "dashboard-analytics.html", store=current_user.stores[0], data=data
+                )
+            flash("Your account is not active, please contact the admin")
+            return redirect(url_for("contact"))
     return redirect(url_for("login"))
 
 
 @app.route("/dashboard/customers")
+@decorators.shop_owner_required
 def dashboard_customers():
     if current_user.is_authenticated:
         if current_user.username != "admin":
@@ -102,6 +106,7 @@ def dashboard_customers():
 
 
 @app.route("/dashboard/qrcode")
+@decorators.shop_owner_required
 def dashboard_qrcode():
     if current_user.is_authenticated:
         if current_user.username != "admin":
@@ -114,6 +119,7 @@ def dashboard_qrcode():
 
 
 @app.route("/chartdata")
+@decorators.shop_owner_required
 def chartdata():
     if current_user.is_authenticated and current_user.username != "admin":
         store = current_user.stores[0]
@@ -181,10 +187,38 @@ def editstore(store_id):
     if store:
         form = EditStoreForm()
         if form.validate_on_submit():
-            return "selrim d2"
+            store.name = form.name.data
+            store.phone_number = form.phone_number.data
+            store.address = form.address.data
+            store.google_map_url = form.google_map_url.data
+            store.place_id = form.place_id.data
+            store.hex_id = form.hex_id.data
+            try:
+                db.session.commit()
+            except Exception as e:
+                flash(f"Error occurred - {e}")
+            return redirect(url_for("dashboard"))
         return render_template("editstore.html", store=store, form=form)
     else:
         abort(404)
+
+
+@app.route("/editstore/<store_id>/extras", methods=["POST"])
+@decorators.admin_required
+def editstore_extras(store_id):
+    data = request.json
+    store = db.session.get(Store, store_id)
+    if not store:
+        abort(404)
+    if "state" in data:
+        store.owner.state = data["state"]
+    if "package" in data:
+        store.package = data["package"]
+    try:
+        db.session.commit()
+    except:
+        return jsonify(status="error")
+    return jsonify(status="success")
 
 
 @app.route("/logout")
