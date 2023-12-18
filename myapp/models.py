@@ -128,6 +128,13 @@ class Update(db.Model):
         return f"Update(rating='{self.rating}', 'text='{self.text}', timestamp='{self.timestamp}')"
 
 
+class Article(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String)
+    content = db.Column(db.String)
+    updated_at = db.Column(db.DateTime())
+
+
 class Photo(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     url = db.Column(db.String)

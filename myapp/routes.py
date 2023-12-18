@@ -17,7 +17,7 @@ from myapp import (
     login,
     mail,
 )
-from myapp.forms import AddStoreForm, EditStoreForm, LoginForm
+from myapp.forms import AddArticleForm, AddStoreForm, EditStoreForm, LoginForm
 from myapp.models import *
 from myapp.utils import get_id_from_url, log_error, log_info
 
@@ -27,8 +27,8 @@ def after_request(response):
     response.headers["Content-Security-Policy"] = (
         ""
         + "font-src https://fonts.googleapis.com/ https://fonts.gstatic.com;"
-        + "style-src-elem 'self' https://fonts.googleapis.com/ 'nonce-golden';"
-        + "script-src-elem 'self' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net 'nonce-golden'"
+        + "style-src-elem 'self' https://fonts.googleapis.com/ https://cdn.quilljs.com 'nonce-golden';"
+        + "script-src-elem 'self' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://cdn.quilljs.com 'nonce-golden'"
     )
     return response
 
@@ -230,6 +230,48 @@ def editstore_extras(store_id):
     except:
         return jsonify(status="error")
     return jsonify(status="success")
+
+
+@app.route("/help")
+def helpcenter():
+    return render_template("helpcenter.html")
+
+
+@app.route("/articles")
+@decorators.admin_required
+def articles():
+    return render_template("articles.html")
+
+
+@app.route("/articles/add", methods=["GET", "POST"])
+@decorators.admin_required
+def add_article():
+    form = AddArticleForm()
+    if form.validate_on_submit():
+        article = Article(
+            title=form.title.data,
+            content=form.content.data,
+            updated_at=datetime.utcnow(),
+        )
+        db.session.add(article)
+        db.session.commit()
+        flash("new article created successfully")
+    return render_template("add-article.html", form=form)
+
+
+@app.route("/articles/<id>/edit", methods=["GET", "POST"])
+@decorators.admin_required
+def edit_article(id):
+    article = db.session.get(Article, id)
+    form = AddArticleForm()
+    if form.validate_on_submit():
+        article.title = form.title.data
+        article.content = form.content.data
+        article.updated_at = datetime.utcnow()
+        db.session.commit()
+        flash("article updated successfully")
+        return redirect(url_for("articles"))
+    return render_template("edit-article.html", form=form)
 
 
 @app.route("/logout")

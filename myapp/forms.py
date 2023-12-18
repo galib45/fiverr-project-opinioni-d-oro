@@ -19,6 +19,12 @@ class NewCampaignForm(FlaskForm):
     submit = SubmitField("Create Campaign")
 
 
+class AddArticleForm(FlaskForm):
+    title = StringField("Title of the Article")
+    content = StringField("Content")
+    submit = SubmitField("Add Article")
+
+
 class AddStoreForm(FlaskForm):
     username = StringField("Username", validators=[check_if_username_exists])
     email = StringField("Email")
