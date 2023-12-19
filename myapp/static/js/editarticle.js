@@ -20,6 +20,7 @@ toolbar = document.querySelector('.ql-toolbar');
 editor.style.borderWidth = '2px';
 toolbar.style.borderWidth = '2px';
 validationError = false;
+editor.querySelector('.ql-editor').innerHTML = document.getElementById('content').value;
 
 // Get all the elements
 const titleErrorEl = document.getElementById("title-error");
@@ -80,7 +81,7 @@ quill.on('text-change', ()=>{
   }
 });
 
-const form = document.getElementById("addarticle-form")
+const form = document.getElementById("editarticle-form")
 form.addEventListener("submit", function(event) {
   // Revalidate all inputs
   validationError = false;

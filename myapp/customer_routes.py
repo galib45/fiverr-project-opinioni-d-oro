@@ -103,7 +103,10 @@ def google_logout():
 
 @app.route("/store/<slug>/review")
 def give_review(slug):
-    store_id, store_slug = slug.split("-", 1)
+    try:
+        store_id, store_slug = slug.split("-", 1)
+    except:
+        abort(404)
     store = db.session.get(Store, store_id)
     session["store_id"] = store_id
     if store:
@@ -166,7 +169,10 @@ def registercustomer(store_id):
 
 @app.route("/review_url/<store_slug>")
 def review_url(store_slug):
-    store_id, store_slug = store_slug.split("-", 1)
+    try:
+        store_id, store_slug = store_slug.split("-", 1)
+    except:
+        abort(404)
     store = db.session.get(Store, store_id)
     if store:
         if slugify(store_slug) != slugify(store.name):

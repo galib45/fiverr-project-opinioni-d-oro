@@ -63,4 +63,24 @@
   .flashed_messages > li {
     list-style: none;
   }
+
+  button.primary {
+    @apply my-2 rounded bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white shadow shadow-gray-500 hover:bg-blue-800 focus:outline-none;
+  }
+
+  input[type='submit'] {
+    @apply my-2 rounded bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white shadow shadow-gray-500 hover:bg-blue-800 focus:outline-none;
+  }
+
+  .article {
+    h2 {
+      @apply font-bold text-2xl mt-6 mb-1;
+    }
+    p {
+      @apply my-3;
+    }
+    li {
+      @apply list-disc list-inside ml-10 indent-[-24px];
+    }
+  }
 }

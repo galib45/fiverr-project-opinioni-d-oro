@@ -4,7 +4,7 @@
 {% block content %}
     <div class="border-sky-600 border-rose-600 hidden"></div>
     <div class="space-y-8 p-6">
-        <div class="mx-auto max-w-[400px] sm:mx-4">
+        <div class="mx-auto max-w-[400px] space-y-3 sm:mx-4">
             <div class="mb-4 text-2xl font-bold">Account Information</div>
             <div class="flex flex-col gap-1">
                 <label for="account_state">Account State</label>
@@ -17,20 +17,10 @@
                     </option>
                 </select>
             </div>
-            <div class="w-fit ml-auto mt-4 mb-2 flex gap-4">
-                <div class="loader hidden"></div>
-                <button id="save-state"
-                        class="w-fit rounded-lg bg-teal-800 px-4 py-2 font-bold text-white shadow shadow-teal-950 hover:bg-teal-950 active:bg-teal-950">
-                    Save
-                </button>
-            </div>
-        </div>
-        <div class="mx-auto max-w-[400px] sm:mx-4">
-            <div class="mb-4 text-2xl font-bold">Package Information</div>
             <div class="flex flex-col gap-1">
                 <label for="package">Package</label>
-                <select name="account_state"
-                        id="account_state"
+                <select name="package"
+                        id="package"
                         class="my-1 p-2 bg-white rounded-md border-2 border-gray-300 px-3 py-2 outline-none hover:border-gray-400 focus:border-gray-600">
                     <option value="basic" {{ 'selected' if store.package == 'basic' }}>Basic
                     </option>
@@ -44,10 +34,7 @@
             </div>
             <div class="w-fit ml-auto mt-4 mb-2 flex gap-4">
                 <div class="loader hidden"></div>
-                <button id="save-package"
-                        class="w-fit rounded-lg bg-teal-800 px-4 py-2 font-bold text-white shadow shadow-teal-950 hover:bg-teal-950 active:bg-teal-950">
-                    Save
-                </button>
+                <button id="save-extra" class="primary">Save</button>
             </div>
         </div>
         <div class="form mx-auto max-w-[400px] sm:mx-4">
@@ -78,10 +65,9 @@
                     {{ form.google_map_url(placeholder="Enter google map link of the store", value=store.google_map_url) }}
                     <span class="form-error" style="display:none;" id="google-map-url-error"></span>
                     <div style="display:flex;align-items: center;gap: 20px;">
-                        <div class="mx-auto my-2 bg-orange-200 px-4 py-2 w-fit border-[3px] border-teal-950 rounded-md font-bold hover:bg-teal-950 hover:text-white select-none"
-                             id="generate-id-button">
+                        <button class="mx-auto primary" id="generate-id-button">
                             <a>Generate ID</a>
-                        </div>
+                        </button>
                         <div class="loader hidden"></div>
                     </div>
                 </div>
@@ -95,9 +81,7 @@
                     {{ form.hex_id(placeholder="Enter hex id", value=store.hex_id) }}
                     <span class="form-error" style="display:none;" id="hex-id-error"></span>
                 </div>
-                <div class="mx-auto my-2 bg-orange-200 px-4 py-2 w-fit border-[3px] border-teal-950 rounded-md font-bold hover:bg-teal-950 hover:text-white select-none">
-                    {{ form.submit() }}
-                </div>
+                <div class="mx-auto">{{ form.submit() }}</div>
             </form>
         </div>
     </div>

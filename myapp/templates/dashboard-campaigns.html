@@ -51,13 +51,4 @@
         </div>
     {% endif %}
 {% endblock %}
-{% block script %}
-    <script src='https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js'></script>
-    <script nonce="golden">
-      document.querySelectorAll('.expire-date').forEach((expireDate) => {
-        expireDate.innerHTML = moment(expireDate.textContent)
-          .add(1, 'hour').subtract(1, 'second')
-          .format('MMMM DD, YYYY <br>hh:mm:ss A') + ' CET';
-      });
-    </script>
-{% endblock %}
+{% block script %}{% endblock %}

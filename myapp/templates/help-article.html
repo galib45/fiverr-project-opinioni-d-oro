@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Help Center{% endblock %}
+{% block content %}
+    <div class="p-8 max-w-[800px] mx-auto">
+        <div class="font-bold text-4xl tracking-wide my-2">{{ article.title }}</div>
+        <div class="text-sm">
+            <span class="font-semibold">Last Updated:</span>
+            <span class="datetime">{{ article.updated_at }}</span>
+        </div>
+        <div class="w-full h-[1px] bg-gray-300 my-4"></div>
+        <div class="article mt-4">{{ article.content | safe }}</div>
+    </div>
+    <button type="button"
+            id="scroll-to-top"
+            class="hidden fixed mb-2 rounded bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white shadow shadow-gray-500 hover:bg-blue-800 focus:outline-none right-4 bottom-4">
+        Back to top
+    </button>
+{% endblock %}
+{% block script %}<script src="{{ url_for('static', filename='js/help.article.js') }}"></script>{% endblock %}

@@ -23,7 +23,9 @@
         <div class="mycontainer">
             <div class="bg-slate-950 h-screen w-[200px] fixed hidden sm:block px-6 text-gray-400 flex-col"
                  id="dashboard-navbar">
-                <div class="text-lg text-amber-400 py-4 font-bold select-none cursor-pointer">Golden Opinions</div>
+                <div class="text-lg text-amber-400 py-4 font-bold select-none cursor-pointer">
+                    <a href="{{ url_for("index") }}">Golden Opinions</a>
+                </div>
                 <a href="{{ url_for("dashboard") }}">
                     <div class="w-full my-1 px-4 py-2 rounded-lg text-sm flex items-center gap-2 hover:bg-slate-800 select-none cursor-pointer {{ 'active' if active_page=='dashboard'}}">
                         <span>{{ macros.svg("monitoring", size=20, class='fill-gray-400') }}</span><span>Analytics</span>
@@ -106,7 +108,8 @@
             <div class='h-screen w-full ml-[200px] fixed opacity-70 bg-gray-500 hidden'
                  id="dashboard-overlay"></div>
         </div>
-        <script src="{{ url_for('static', filename='js/dashboard.navbar.js') }}"></script>
+        <script src='https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js'></script>
+        <script src="{{ url_for('static', filename='js/dashboard.common.js') }}"></script>
         {% block script %}{% endblock %}
     </body>
 </html>

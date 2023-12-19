@@ -2,51 +2,34 @@ const generateIdButton = document.getElementById("generate-id-button");
 const googleMapURLElement = document.getElementById("google_map_url");
 const placeIdElement = document.getElementById("place_id");
 const hexIdElement = document.getElementById("hex_id");
-const saveStateButton = document.getElementById("save-state");
-const savePackageButton = document.getElementById("save-package");
+const saveExtraButton = document.getElementById("save-extra");
+const accountState = document.getElementById("account_state");
+const package = document.getElementById("package");
 
 const generateIdLoader = generateIdButton.parentElement.querySelector('.loader'); 
-const saveStateLoader = saveStateButton.parentElement.querySelector('.loader'); 
-const savePackageLoader = savePackageButton.parentElement.querySelector('.loader'); 
+const saveExtraLoader = saveExtraButton.parentElement.querySelector('.loader'); 
 
-saveStateButton.onclick = (event) => {
-  saveStateLoader.classList.remove('hidden'); 
-  state = saveStateButton.parentElement.parentElement.querySelector('select').value;
+saveExtraButton.onclick = (event) => {
+  saveExtraLoader.classList.remove('hidden'); 
+  
   fetch(window.location.href + '/extras', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({
-      state: state
+      state: accountState.value,
+      package: package.value
     })
   }).then(resp => resp.json()).then(
       (json) => {
         if (json.status == 'success'){
-          saveStateLoader.classList.add('hidden');
+          saveExtraLoader.classList.add('hidden');
         }      
       }
     );
 }; 
-savePackageButton.onclick = (event) => {
-  savePackageLoader.classList.remove('hidden'); 
-  package = savePackageButton.parentElement.parentElement.querySelector('select').value;
-  fetch(window.location.href + '/extras', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      package: package
-    })
-  }).then(resp => resp.json()).then(
-      (json) => {
-        if (json.status == 'success'){
-          savePackageLoader.classList.add('hidden');
-        }      
-      }
-    );
-}; 
+
 validationError = false;
 
 // Get all the elements

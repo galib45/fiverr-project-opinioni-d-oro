@@ -33,10 +33,10 @@
                          height="64"
                          src="{{ url_for('static', filename='img/logo.webp') }}"
                          alt="logo">
-                    <div class="text-lg md:text-2xl font-bold my-auto ml-2">Golden Opinions</div>
+                    <div class="text-lg lg:text-2xl font-bold my-auto ml-2">Golden Opinions</div>
                 </a>
                 <div class="my-auto ml-auto flex">
-                    <div class="my-auto uppercase font-bold md:text-base mr-1 hidden sm:flex">
+                    <div class="my-auto uppercase font-bold md:text-base mr-1 hidden md:flex">
                         <div>
                             <a href="{{ url_for("index") }}"
                                class="hover:bg-teal-900 border-4 text-sm tracking-wide border-transparent hover:text-white rounded-md px-3 py-2">Home</a>
@@ -44,6 +44,10 @@
                         <div>
                             <a href="{{ url_for("contact") }}"
                                class="hover:bg-teal-900 border-4 text-sm tracking-wide border-transparent hover:text-white rounded-md px-3 py-2">Contact</a>
+                        </div>
+                        <div>
+                            <a href="{{ url_for("helpcenter") }}"
+                               class="hover:bg-teal-900 border-4 text-sm tracking-wide border-transparent hover:text-white rounded-md px-3 py-2">Help</a>
                         </div>
                         {% if current_user.is_anonymous %}
                             <div>
@@ -61,10 +65,10 @@
                             </div>
                         {% endif %}
                     </div>
-                    <div class="sm:hidden select-none cursor-pointer" id="navbar-menu">{{ macros.svg("menu", size=32) }}</div>
+                    <div class="md:hidden select-none cursor-pointer" id="navbar-menu">{{ macros.svg("menu", size=32) }}</div>
                 </div>
             </div>
-            <div class="sm:hidden navbar-wrapper grid">
+            <div class="md:hidden navbar-wrapper grid">
                 <div class="navbar-vertical bg-amber-400 w-full px-6 overflow-hidden uppercase font-bold flex-col">
                     <div class="py-2 hover:text-teal-900 group flex gap-2">
                         {{ macros.svg("home", class="group-hover:fill-teal-900") }}
@@ -73,6 +77,10 @@
                     <div class="py-2 hover:text-teal-900 group flex gap-2">
                         {{ macros.svg("contact", class="group-hover:fill-teal-900") }}
                         <a href="{{ url_for("contact") }}" class="mb-0 select-none">Contact</a>
+                    </div>
+                    <div class="py-2 hover:text-teal-900 group flex gap-2">
+                        {{ macros.svg("help_center", class="group-hover:fill-teal-900") }}
+                        <a href="{{ url_for("helpcenter") }}" class="mb-0 select-none">Help</a>
                     </div>
                     {% if current_user.is_anonymous %}
                         <div class="py-2 hover:text-teal-900 group flex gap-2 cursor-pointer">
@@ -107,6 +115,7 @@
             <p>2023 Golden Opinions. All Rights Reserved.</p>
         </div>
     </div>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js'></script>
     <script src="{{ url_for('static', filename='js/index.js') }}" defer></script>
     {% block script %}{% endblock %}
 </body>

@@ -24,4 +24,9 @@ document.addEventListener("DOMContentLoaded", () => {
       icon.classList.remove("fill-white");
     };
   });
+
+  // datetime utc to cet 
+  document.querySelectorAll('span.datetime').forEach((span)=> {
+    span.innerHTML = moment(span.textContent).add(1, 'hours').format('MMMM DD, YYYY hh:mm:ss A') + ' CET';
+  });
 });

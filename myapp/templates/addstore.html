@@ -60,10 +60,9 @@
                 {{ form.google_map_url(placeholder="Enter google map link of the store") }}
                 <span class="form-error" id="google-map-url-error"></span>
                 <div class="flex items-center gap-5">
-                    <div class="mx-auto my-2 bg-orange-200 px-4 py-2 w-fit border-[3px] border-teal-950 rounded-md font-bold hover:bg-teal-950 hover:text-white select-none"
-                         id="generate-id-button">
+                    <button type="button" class="primary mx-auto" id="generate-id-button">
                         <a>Generate ID</a>
-                    </div>
+                    </button>
                     <div class="loader hidden"></div>
                 </div>
             </div>
@@ -77,9 +76,7 @@
                 {{ form.hex_id(placeholder="Enter hex id") }}
                 <span class="form-error" id="hex-id-error"></span>
             </div>
-            <div class="mx-auto my-2 bg-orange-200 px-4 py-2 w-fit border-[3px] border-teal-950 rounded-md font-bold hover:bg-teal-950 hover:text-white select-none">
-                {{ form.submit() }}
-            </div>
+            <div class="mx-auto">{{ form.submit() }}</div>
         </form>
     </div>
 {% endblock %}

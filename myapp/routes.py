@@ -28,7 +28,7 @@ def after_request(response):
         ""
         + "font-src https://fonts.googleapis.com/ https://fonts.gstatic.com;"
         + "style-src-elem 'self' https://fonts.googleapis.com/ https://cdn.quilljs.com 'nonce-golden';"
-        + "script-src-elem 'self' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://cdn.quilljs.com 'nonce-golden'"
+        + "script-src-elem 'self' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://cdn.quilljs.com https://esm.sh 'nonce-golden'"
     )
     return response
 
@@ -234,13 +234,31 @@ def editstore_extras(store_id):
 
 @app.route("/help")
 def helpcenter():
-    return render_template("helpcenter.html")
+    articles = db.session.scalars(db.select(Article)).all()
+    return render_template("helpcenter.html", articles=articles, slugify=slugify)
+
+
+@app.route("/help/<slug>")
+def help_article(slug):
+    try:
+        id, title = slug.split("-", 1)
+    except:
+        abort(404)
+    article = db.session.get(Article, id)
+    if not article:
+        abort(404)
+    if slugify(title) != slugify(article.title):
+        abort(404)
+    if title != slugify(title):
+        abort(404)
+    return render_template("help-article.html", article=article)
 
 
 @app.route("/articles")
 @decorators.admin_required
 def articles():
-    return render_template("articles.html")
+    articles = db.session.scalars(db.select(Article)).all()
+    return render_template("articles.html", articles=articles)
 
 
 @app.route("/articles/add", methods=["GET", "POST"])
@@ -271,7 +289,7 @@ def edit_article(id):
         db.session.commit()
         flash("article updated successfully")
         return redirect(url_for("articles"))
-    return render_template("edit-article.html", form=form)
+    return render_template("edit-article.html", form=form, article=article)
 
 
 @app.route("/logout")
