@@ -3,13 +3,12 @@
 {% block title %}Add Store{% endblock %}
 {% block content %}
     <div class="border-sky-600 border-rose-600 hidden"></div>
-    <div class="form mb-8 p-4 max-w-[400px] mx-auto sm:mx-4">
+    <div class="mb-8 p-4 max-w-[400px] mx-auto sm:mx-4">
         <form action=""
               method="post"
               id="addstore-form"
               class="flex flex-col gap-4"
               novalidate>
-            <div class="form-title text-2xl font-bold my-4">Add Store</div>
             {{ form.hidden_tag() }}
             <div class="flex flex-col gap-1">
                 {{ form.username.label }}

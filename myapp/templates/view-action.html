@@ -1,0 +1,46 @@
+{% extends 'dashboard-admin.html' %}
+{% set active_page = action.category %}
+{% block title %}Overview{% endblock %}
+{% block content %}
+    {% if action.category == "campaign" %}
+        {% set campaign = data %}
+        <div class="max-w-[500px] space-y-12 mx-auto py-6">
+            <div>
+                <div class="mb-4 border-b-2 border-blue-600 py-2 text-xl font-bold text-blue-600">Store Information</div>
+                <div class="flex flex-col">
+                    <span class="text-lg font-semibold">Name</span>{{ campaign.store.name }}
+                </div>
+            </div>
+            <div>
+                <div class="mb-4 border-b-2 border-blue-600 py-2 text-xl font-bold text-blue-600">Campaign Information</div>
+                <div class="space-y-4">
+                    <div class="flex flex-col">
+                        <span class="text-lg font-semibold">Name</span>{{ campaign.name }}
+                    </div>
+                    <div class="flex flex-col">
+                        <span class="text-lg font-semibold">Description</span>{{ campaign.description }}
+                    </div>
+                    <div class="flex flex-col">
+                        <span class="text-lg font-semibold">Offer</span>{{ campaign.offer }}
+                    </div>
+                    <div class="flex flex-col">
+                        <span class="text-lg font-semibold">Category</span>
+                        {% if campaign.category == 'general' %}
+                            All Customers
+                        {% elif campaign.category == 'custom' %}
+                            Selected Customers
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="flex gap-4 mx-auto w-fit">
+                <a href="{{ url_for('complete_action', id=action.id, decision='approve') }}">
+                    <button class="primary uppercase">Approve</button>
+                </a>
+                <a href="{{ url_for('complete_action', id=action.id, decision='decline') }}">
+                    <button class="text-white bg-red-700 hover:bg-red-800 uppercase">Decline</button>
+                </a>
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}

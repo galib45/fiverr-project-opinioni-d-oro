@@ -54,15 +54,7 @@ inputs.forEach((inputObj) => {
   });
 });
 document.getElementById('login-form').addEventListener('submit', function(event) {
-  // Check if the password and confirm password match
-  if (passwordElement.value !== confirmPasswordElement.value) {
-    validationError = true;
-    confirmPasswordErrorEl.textContent = 'Passwords do not match';
-    confirmPasswordErrorEl.style.display = 'block';
-    confirmPasswordElement.classList.remove('valid-input');
-    confirmPasswordElement.classList.add('invalid-input');
-  }
-  // Revalidate all inputs
+    // Revalidate all inputs
   validationError = false;
   inputs.forEach((inputObj) => {
     const inputElement = inputObj.input;

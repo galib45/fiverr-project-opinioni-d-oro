@@ -1,15 +1,17 @@
+import json
 from datetime import datetime, timedelta
 
 from flask import flash, redirect, render_template, url_for
 from flask_login import current_user
 
-from myapp import app, db
+from myapp import app, db, decorators
 from myapp.forms import NewCampaignForm
-from myapp.models import Campaign
+from myapp.models import Action, Campaign
 from myapp.utils import generate_campaign_code
 
 
 @app.route("/dashboard/campaigns")
+@decorators.shop_owner_required
 def dashboard_campaigns():
     if current_user.is_authenticated:
         if current_user.username != "admin":
@@ -20,6 +22,7 @@ def dashboard_campaigns():
 
 
 @app.route("/dashboard/campaigns/add", methods=["GET", "POST"])
+@decorators.shop_owner_required
 def dashboard_campaigns_add():
     if current_user.is_anonymous:
         return redirect(url_for("login"))
@@ -45,5 +48,24 @@ def dashboard_campaigns_add():
             )
             store.campaigns.append(campaign)
             db.session.commit()
+            action = Action(
+                category="campaign",
+                data=str(campaign.id),
+                date_created=datetime.utcnow(),
+            )
+            db.session.add(action)
+            db.session.commit()
             return redirect(url_for("dashboard_campaigns"))
         return render_template("dashboard-campaigns-add.html", form=form)
+
+
+@app.route("/dashboard/campaigns/<id>/delete")
+@decorators.shop_owner_required
+def delete_campaign(id):
+    campaign = db.session.get(Campaign, id)
+    if campaign:
+        db.session.delete(campaign)
+        flash(f"Removed campaign successfully")
+        db.session.commit()
+        return redirect(url_for("dashboard_campaigns"))
+    abort(404)

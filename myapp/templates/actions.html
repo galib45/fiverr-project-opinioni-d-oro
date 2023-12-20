@@ -1,0 +1,24 @@
+{% extends 'dashboard-admin.html' %}
+{% set active_page = "actions" %}
+{% block title %}Overview{% endblock %}
+{% block content %}
+    {% if actions is defined and actions|length > 0 %}
+        <div class="m-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {% for action in actions %}
+                <div class="bg-gray-50 rounded-lg shadow shadow-gray-300 hover:bg-gray-100 hover:shadow-gray-400 p-4 text-sm text-gray-700 space-y-1">
+                    <div class="text-base text-black font-semibold">
+                        {% if action.category == 'campaign' %}Campaign Approval{% endif %}
+                    </div>
+                    <div>
+                        <span class="font-semibold">Created at:</span>
+                        <span class="datetime">{{ action.date_created }}</span>
+                    </div>
+                    <div class="ml-auto w-fit">
+                        <a href="{{ url_for('view_action', id=action.id) }}"
+                           class="text-blue-700 font-semibold">View</a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endblock %}

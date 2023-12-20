@@ -49,6 +49,11 @@
                     <span>{{ macros.svg("post_add", size=20, class='fill-gray-400') }}</span><span>Add Article</span>
                 </div>
             </a>
+            <a href="{{ url_for("action_center") }}">
+                <div class="w-full my-1 px-4 py-2 rounded-lg text-sm flex items-center gap-2 hover:bg-slate-800 select-none cursor-pointer {{ 'active' if active_page=='actions'}}">
+                    <span>{{ macros.svg("work", size=20, class='fill-gray-400') }}</span><span>Action Center</span>
+                </div>
+            </a>
             <a href="{{ url_for("settings") }}">
                 <div class="w-full my-1 px-4 py-2 rounded-lg text-sm flex items-center gap-2 hover:bg-slate-800 select-none cursor-pointer {{ 'active' if active_page=='settings'}}">
                     <span>{{ macros.svg("settings", size=20, class='fill-gray-400') }}</span><span>Settings</span>
@@ -81,6 +86,10 @@
                             Edit Article
                         {% elif active_page == 'articles' %}
                             All Articles
+                        {% elif active_page == 'actions' %}
+                            Action Center
+                        {% elif active_page == 'campaign' %}
+                            Campaign Approval
                         {% endif %}
                     </div>
                 </div>

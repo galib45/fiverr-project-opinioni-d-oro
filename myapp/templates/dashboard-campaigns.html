@@ -16,20 +16,37 @@
                 <thead class="bg-gray-100 border-b-2 border-gray-200">
                     <tr>
                         <th class="p-3 text-sm font-semibold tracking-wide text-left">Name</th>
-                        <th class="p-3 text-sm font-semibold tracking-wide text-left">Offer</th>
                         <th class="p-3 text-sm font-semibold tracking-wide text-center">Expire Date</th>
                         <th class="p-3 text-sm font-semibold tracking-wide text-center">Customers</th>
+                        <th class="p-3 text-sm font-semibold tracking-wide text-center w-[100px]">Status</th>
+                        <th class="p-3 text-sm font-semibold tracking-wide text-center w-[100px]">Action</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for campaign in store.campaigns %}
                         <tr class="{{ loop.cycle('bg-gray-50', 'bg-gray-100') }}">
                             <td class="p-3 text-sm text-gray-700">{{ campaign.name }}</td>
-                            <td class="p-3 text-sm text-gray-700">{{ campaign.offer }}</td>
                             <td class="p-3 text-sm text-gray-700 text-center">
-                                <span class="expire-date">{{ campaign.expire_date }}</span>
+                                <span class="datetime">{{ campaign.expire_date }}</span>
                             </td>
                             <td class="p-3 text-sm text-gray-700 text-center">{{ campaign.customers | length }}</td>
+                            <td>
+                                <div class="flex justify-center items-center">
+                                    {% if campaign.status == 'pending' %}
+                                        <span class="bg-yellow-100 text-yellow-800 text-xs font-medium px-2.5 py-0.5 rounded">Pending</span>
+                                    {% elif campaign.status == 'approved' %}
+                                        <span class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded">Approved</span>
+                                    {% elif campaign.status == 'declined' %}
+                                        <span class="bg-red-100 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded">Declined</span>
+                                    {% endif %}
+                                </div>
+                            </td>
+                            <td class="p-3 text-sm text-gray-700">
+                                <div class="flex justify-center items-center">
+                                    <a href="">{{ macros.svg("visibility", class="fill-gray-500 hover:fill-gray-800") }}</a>
+                                    <a href="{{ url_for('delete_campaign', id=campaign.id) }}">{{ macros.svg("delete", class="fill-red-400 hover:fill-red-700") }}</a>
+                                </div>
+                            </td>
                         </tr>
                     {% endfor %}
                 </tbody>

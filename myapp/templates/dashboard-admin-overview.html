@@ -19,8 +19,11 @@
                             <td class="p-3 text-sm text-gray-700">{{ store.name }}</td>
                             <td class="p-3 text-sm text-gray-700">{{ store.address }}</td>
                             <td class="p-3 text-sm text-gray-700">{{ store.phone_number }}</td>
-                            <td class="p-3 text-sm text-gray-700 flex justify-center">
-                                <a href="{{ url_for('editstore', store_id=store.id) }}">{{ macros.svg("edit", class="fill-gray-500 hover:fill-black") }}</a>
+                            <td class="p-3 text-sm text-gray-700">
+                                <div class="flex justify-center items-center">
+                                    <a href="{{ url_for('editstore', store_id=store.id) }}">{{ macros.svg("edit", class="fill-gray-500 hover:fill-gray-800") }}</a>
+                                    <a href="{{ url_for('delstore', store_id=store.id) }}">{{ macros.svg("delete", class="fill-red-400 hover:fill-red-700") }}</a>
+                                </div>
                             </td>
                         </tr>
                     {% endfor %}
@@ -33,9 +36,11 @@
                     <div class="text-base text-black font-semibold">{{ store.name }}</div>
                     <div>{{ store.address }}</div>
                     <div>{{ store.phone_number }}</div>
-                    <div>
+                    <div class="flex gap-2">
                         <a href="{{ url_for('editstore', store_id=store.id) }}"
-                           class="text-blue-700 hover:text-purple-700 font-semibold">Edit Store</a>
+                           class="text-blue-700 font-semibold">Edit Store</a>
+                        <a href="{{ url_for('delstore', store_id=store.id) }}"
+                           class="text-red-700 font-semibold">Delete Store</a>
                     </div>
                 </div>
             {% endfor %}

@@ -10,13 +10,14 @@
                 Enhance your reputation, trust, and growth by monitoring reviews and identifying trends.
                 Join us today for a prosperous and trustworthy partnership in business success.
             </p>
-            <div class="button-holder">
-                <div class="button group">
-                    <a href="{{ url_for("contact") }}">
-                        Get Started <span>{{ macros.svg("arrow-right", class="fill-teal-900 group-hover:fill-white") }}</span>
-                    </a>
-                </div>
-            </div>
+            <button type="button"
+                    class="bg-teal-800 text-white text-base hover:bg-teal-950">
+                <a href="{{ url_for("contact") }}"
+                   class="inline-flex items-center gap-2">
+                    Get Started
+                    <span>{{ macros.svg("arrow-right", class="fill-white") }}</span>
+                </a>
+            </button>
         </div>
         <div class="section how-it-works">
             <div>

@@ -1,47 +1,32 @@
 {% extends "base.html" %}
 {% set active_page = "login" %}
 {% block title %}Login{% endblock %}
-{% block style %}
-    .password-input-container {
-    position: relative;
-    }
-    .password-input-container > input {
-    width: 100%;
-    }
-    .password-input-container > span {
-    position: absolute;
-    right: 10px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: #777777;
-    cursor: pointer;
-    }
-    .password-input-container > span:hover {
-    color: black;
-    }
-{% endblock %}
 {% block content %}
-    <div class="form">
-        <form action="" method="post" id="login-form" novalidate>
-            <div class="form-title">Sign In</div>
+    <div class="mt-8 p-4 max-w-[400px] mx-auto">
+        <form action=""
+              method="post"
+              id="login-form"
+              class="flex flex-col gap-4"
+              novalidate>
+            <div class="form-title text-4xl mb-6 mx-auto font-bold">Login</div>
             {{ form.hidden_tag() }}
-            <div>
+            <div class="flex flex-col gap-1">
                 {{ form.username.label }}
-                {{ form.username(placeholder="Enter your username") }}
+                {{ form.username(placeholder="Enter username") }}
                 <span class="form-error" id="username-error"></span>
                 {% for error in form.username.errors %}<span class="form-error">{{ error }}</span>{% endfor %}
             </div>
-            <div>
+            <div class="flex flex-col gap-1">
                 {{ form.password.label }}
-                <div class="password-input-container">
-                    {{ form.password(placeholder="Enter your password") }}
-                    <span>{{ macros.svg("visibility_off", class="fill-gray-500 hover:fill-gray-700") }}</span>
-                    <span class="hidden">{{ macros.svg("visibility", class="fill-gray-500 hobver:fill-gray-700") }}</span>
+                <div class="password-input-container flex items-center">
+                    {{ form.password(placeholder="Enter password") }}
+                    <span class="ml-[-36px]">{{ macros.svg("visibility_off", class="fill-gray-500 hover:fill-gray-700") }}</span>
+                    <span class="hidden ml-[-36px]">{{ macros.svg("visibility", class="fill-gray-500 hobver:fill-gray-700") }}</span>
                 </div>
                 <span class="form-error" id="password-error"></span>
                 {% for error in form.password.errors %}<span class="form-error">{{ error }}</span>{% endfor %}
             </div>
-            <div>{{ form.submit() }}</div>
+            <div class="mx-auto">{{ form.submit(class="text-base uppercase") }}</div>
         </form>
     </div>
 {% endblock %}

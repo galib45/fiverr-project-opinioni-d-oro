@@ -188,7 +188,8 @@ def delstore(store_id):
         db.session.delete(store)
         flash(f"Removed store [{store.name}] successfully")
         db.session.commit()
-    return redirect(url_for("dashboard"))
+        return redirect(url_for("dashboard"))
+    abort(404)
 
 
 @app.route("/editstore/<store_id>", methods=["GET", "POST"])
@@ -290,6 +291,65 @@ def edit_article(id):
         flash("article updated successfully")
         return redirect(url_for("articles"))
     return render_template("edit-article.html", form=form, article=article)
+
+
+@app.route("/articles/<id>/delete")
+@decorators.admin_required
+def delete_article(id):
+    article = db.session.get(Article, id)
+    if article:
+        db.session.delete(article)
+        flash(f"Article removed successfully")
+        db.session.commit()
+        return redirect(url_for("articles"))
+    abort(404)
+
+
+@app.route("/actions")
+@decorators.admin_required
+def action_center():
+    actions = db.session.scalars(db.select(Action)).all()
+    return render_template("actions.html", actions=actions)
+
+
+@app.route("/actions/<id>")
+@decorators.admin_required
+def view_action(id):
+    action = db.session.get(Action, id)
+    if action:
+        if action.category == "campaign":
+            campaign_id = int(action.data)
+            campaign = db.session.get(Campaign, id)
+            if not campaign:
+                abort(404)
+            return render_template("view-action.html", action=action, data=campaign)
+        return f"Action-{action.id}\nCategory: {action.category}\nData: {action.data}"
+    abort(404)
+
+
+@app.route("/actions/<id>/complete")
+@decorators.admin_required
+def complete_action(id):
+    action = db.session.get(Action, id)
+    decision = request.args.get("decision")
+    if action and decision:
+        if action.category == "campaign":
+            campaign = db.session.get(Campaign, int(action.data))
+            if not campaign:
+                abort(404)
+            if decision == "approve":
+                campaign.status = "approved"
+                db.session.delete(action)
+            elif decision == "decline":
+                campaign.status = "declined"
+                db.session.delete(action)
+            else:
+                flash(f"Unknown decision <{decision}>")
+            db.session.commit()
+        else:
+            flash(f"Unknown action category {action.category}")
+        return redirect(url_for("action_center"))
+    abort(404)
 
 
 @app.route("/logout")

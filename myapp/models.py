@@ -68,8 +68,8 @@ class Campaign(db.Model):
     offer = db.Column(db.String)
     code = db.Column(db.String(10))
     expire_date = db.Column(db.DateTime())
-    category = db.Column(db.String(10))
-    state = db.Column(db.String(10), default="pending")
+    category = db.Column(db.String(10), default="general")
+    status = db.Column(db.String(10), default="pending")
     store_id = db.Column(db.Integer, db.ForeignKey("store.id"))
     customers = db.relationship(
         "Customer", secondary="campaign_customer", backref="campaign"
@@ -77,6 +77,16 @@ class Campaign(db.Model):
 
     def __repr__(self):
         return f"Campaign(name='{self.name}', offer='{self.offer}', code='{self.code}', expire_date='{self.expire_date}')"
+
+
+class Action(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    category = db.Column(db.String)
+    data = db.Column(db.String)
+    date_created = db.Column(db.DateTime())
+
+    def __repr__(self):
+        return f"Action(category='{self.category}')"
 
 
 class Customer(db.Model):
