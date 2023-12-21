@@ -4,19 +4,6 @@ const placeIdElement = document.getElementById("place_id");
 const hexIdElement = document.getElementById("hex_id");
 const loaderElement = document.querySelector(".loader");
 
-document.querySelectorAll('.password-input-container > span').forEach((icon) => {
-  icon.addEventListener('click', (event) => {
-    toggleElement = event.target;
-    parentDiv = toggleElement.closest('div');
-    inputElement = parentDiv.querySelector('input');
-    if (inputElement.type === 'password') inputElement.type = 'text';
-    else inputElement.type = 'password';
-    parentDiv.querySelectorAll('span').forEach((span) => {
-      span.classList.toggle('hidden');
-    });
-  });
-});
-
 validationError = false;
 
 // Get all the elements

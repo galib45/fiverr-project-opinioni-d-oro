@@ -55,6 +55,17 @@ class LoginForm(FlaskForm):
     submit = SubmitField("Login")
 
 
+class ResetPasswordForm(FlaskForm):
+    password = PasswordField("New Password")
+    confirm_password = PasswordField("Confirm New Password")
+    submit = SubmitField("Submit")
+
+
+class ResetPasswordRequestForm(FlaskForm):
+    email = StringField("Email")
+    submit = SubmitField("Submit")
+
+
 class RegisterCustomerForm(FlaskForm):
     email = StringField("Email")
     name = StringField("Name")

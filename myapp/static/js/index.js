@@ -12,17 +12,19 @@ document.addEventListener("DOMContentLoaded", () => {
       navbarVerticalEl.style.paddingBottom = "0";
     }
   };
-
-  // hover effect for icons in buttons
-  icons = document.querySelectorAll('.button svg, input[type="submit"] svg');
-  icons.forEach((icon) => {
-    parent = icon.closest("div");
-    parent.onmouseover = () => {
-      icon.classList.add("fill-white");
-    };
-    parent.onmouseleave = () => {
-      icon.classList.remove("fill-white");
-    };
+  
+  // password visibility toggle
+  document.querySelectorAll('.password-input-container > span').forEach((icon) => {
+    icon.addEventListener('click', (event) => {
+      toggleElement = event.target;
+      parentDiv = toggleElement.closest('div');
+      inputElement = parentDiv.querySelector('input');
+      if (inputElement.type === 'password') inputElement.type = 'text';
+      else inputElement.type = 'password';
+      parentDiv.querySelectorAll('span').forEach((span) => {
+        span.classList.toggle('hidden');
+      });
+    });
   });
 
   // datetime utc to cet 

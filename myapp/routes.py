@@ -16,8 +16,9 @@ from myapp import (
     errorhandlers,
     login,
     mail,
+    user_routes,
 )
-from myapp.forms import AddArticleForm, AddStoreForm, EditStoreForm, LoginForm
+from myapp.forms import *
 from myapp.models import *
 from myapp.utils import get_id_from_url, log_error, log_info
 
@@ -56,24 +57,6 @@ def settings():
             settings = loads(store.settings)
             return render_template("settings.html", settings=settings)
     return redirect(url_for("login"))
-
-
-@app.route("/login", methods=["GET", "POST"])
-def login():
-    if current_user.is_authenticated:
-        return redirect(url_for("dashboard"))
-    form = LoginForm()
-    if form.validate_on_submit():
-        user = db.session.scalar(db.select(User).filter_by(username=form.username.data))
-        if user is None:
-            flash("Invalid username")
-            return redirect(url_for("login"))
-        elif not user.check_password(form.password.data):
-            flash("Wrong password")
-            return redirect(url_for("login"))
-        login_user(user, force=True)
-        return redirect(url_for("dashboard"))
-    return render_template("login.html", form=form)
 
 
 @app.route("/dashboard")
@@ -350,12 +333,6 @@ def complete_action(id):
             flash(f"Unknown action category {action.category}")
         return redirect(url_for("action_center"))
     abort(404)
-
-
-@app.route("/logout")
-def logout():
-    logout_user()
-    return redirect(url_for("login"))
 
 
 @app.route("/getid/<google_map_url_id>")

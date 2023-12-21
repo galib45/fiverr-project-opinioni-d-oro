@@ -95,11 +95,16 @@
                 </div>
             </div>
             <div id="main">
-                {% with messages = get_flashed_messages() %}
+                {% with messages = get_flashed_messages(True) %}
                     {% if messages %}
-                        <div class="flashed_messages">
-                            {% for message in messages %}<div>{{ message }}</div>{% endfor %}
-                        </div>
+                        {% for message in messages %}
+                            {% set alert_style = "text-green-800 bg-green-50 shadow-green-200" %}
+                            {% if message[0] == 'error' %}
+                                {% set alert_style = "text-red-800 bg-red-50 shadow-red-200" %}
+                            {% endif %}
+                            <div class="p-4 my-2 mx-auto max-w-[600px] text-sm rounded-md shadow {{ alert_style }}"
+                                 role="alert">{{ message[1] }}</div>
+                        {% endfor %}
                     {% endif %}
                 {% endwith %}
                 {% block content %}{% endblock %}

@@ -8,7 +8,7 @@
               id="login-form"
               class="flex flex-col gap-4"
               novalidate>
-            <div class="form-title text-4xl mb-6 mx-auto font-bold">Login</div>
+            <div class="form-title text-4xl mb-6 font-bold">Login</div>
             {{ form.hidden_tag() }}
             <div class="flex flex-col gap-1">
                 {{ form.username.label }}
@@ -26,7 +26,11 @@
                 <span class="form-error" id="password-error"></span>
                 {% for error in form.password.errors %}<span class="form-error">{{ error }}</span>{% endfor %}
             </div>
-            <div class="mx-auto">{{ form.submit(class="text-base uppercase") }}</div>
+            <div class="mx-auto mt-4 flex flex-col">
+                {{ form.submit(class="text-base uppercase") }}
+                <a href="{{ url_for("reset_password_request") }}"
+                   class="mx-auto my-1 cursor-pointer text-sm font-semibold text-blue-600 hover:underline">Forgot Password?</a>
+            </div>
         </form>
     </div>
 {% endblock %}
