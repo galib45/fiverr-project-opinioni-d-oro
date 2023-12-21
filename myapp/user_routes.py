@@ -1,3 +1,4 @@
+from threading import Thread
 from time import time
 
 import jwt
@@ -10,11 +11,16 @@ from myapp.forms import LoginForm, ResetPasswordForm, ResetPasswordRequestForm
 from myapp.models import User
 
 
+def send_async_email(app, msg):
+    with app.app_context():
+        mail.send(msg)
+
+
 def send_email(subject, recipients, text_body, html_body):
     msg = Message(subject, sender=app.config["MAIL_USERNAME"], recipients=recipients)
     msg.body = text_body
     msg.html = html_body
-    mail.send(msg)
+    Thread(target=send_async_email, args=(app, msg)).start()
 
 
 def get_reset_password_token(user_id, expires_in=600):
