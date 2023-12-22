@@ -43,10 +43,12 @@ def get_reset_password_token(user_id, expires_in=600):
 
 def verify_reset_password_token(token):
     payload = verify_jwt(token)
+    if not payload:
+        return
     id = payload.get("reset_password")
-    if id:
-        return db.session.get(User, id)
-    return None
+    if not id:
+        return
+    return db.session.get(User, id)
 
 
 def send_password_reset_email(user):
@@ -61,10 +63,12 @@ def send_password_reset_email(user):
 
 def verify_email_verify_token(token):
     payload = verify_jwt(token)
+    if not payload:
+        return
     id = payload.get("verify_email")
-    if id:
-        return db.session.get(User, id)
-    return None
+    if not id:
+        return
+    return db.session.get(User, id)
 
 
 def send_email_verify_email(user):
@@ -125,7 +129,7 @@ def verify_email_request():
 def verify_email(token):
     user = verify_email_verify_token(token)
     if not user:
-        flash("Invalid or expired token for password reset", category="error")
+        flash("Invalid or expired token for email verification", category="error")
         return redirect(url_for("dashboard"))
     user.email_verified = True
     db.session.commit()

@@ -49,7 +49,7 @@ class Store(db.Model):
     hex_id = db.Column(db.String(50))
     date_created = db.Column(db.DateTime())
     upto_timestamp = db.Column(db.DateTime())
-    settings = db.Column(db.String)
+    general_coupon_offer = db.Column(db.String)
     owner_id = db.Column(db.Integer, db.ForeignKey("user.id"))
     package = db.Column(db.String, default="basic")
     customers = db.relationship("Customer", secondary="store_customer", backref="store")

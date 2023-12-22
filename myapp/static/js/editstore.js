@@ -8,6 +8,9 @@ const package = document.getElementById("package");
 
 const generateIdLoader = generateIdButton.parentElement.querySelector('.loader'); 
 const saveExtraLoader = saveExtraButton.parentElement.querySelector('.loader'); 
+const messagesContainer = document.createElement('div');
+const main = document.getElementById('main');
+main.prepend(messagesContainer);
 
 saveExtraButton.onclick = (event) => {
   saveExtraLoader.classList.remove('hidden'); 
@@ -25,7 +28,21 @@ saveExtraButton.onclick = (event) => {
       (json) => {
         if (json.status == 'success'){
           saveExtraLoader.classList.add('hidden');
-        }      
+          if (json.updated_extras !== '') {
+            messageElem = document.createElement('div')
+            messageElem.innerText = json.updated_extras + ' has been updated';
+            messageElem.classList.add('alert-info');
+            messagesContainer.appendChild(messageElem);
+          }
+        } else {
+          messageElem = document.createElement('div')
+          messageElem.innerText = 'Server Error';
+          messageElem.classList.add('alert-error');
+          messagesContainer.appendChild(messageElem);
+        }
+        setTimeout(() => {
+          messagesContainer.innerHTML = '';
+        }, 3000);
       }
     );
 }; 

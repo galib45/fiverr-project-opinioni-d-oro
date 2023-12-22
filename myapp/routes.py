@@ -44,28 +44,39 @@ def contact():
     return render_template("contact.html")
 
 
-@app.route("/settings")
+@app.route("/settings", methods=["GET", "POST"])
 @decorators.login_required
 @decorators.verified_email_required
+@decorators.active_account_required
 def settings():
-    if current_user.is_authenticated:
-        if current_user.username == "admin":
-            return render_template("settings-admin.html")
-        else:
-            store = current_user.stores[0]
-            if not store.settings:
-                store.settings = '{"coupon_offer": ""}'
-                db.session.commit()
-            settings = loads(store.settings)
-            return render_template("settings.html", settings=settings)
-    return redirect(url_for("login"))
+    if current_user.role == "admin":
+        form = AdminSettingsForm()
+        if form.validate_on_submit():
+            email = form.email.data
+            user = db.session.scalar(db.select(User).where(User.email == email))
+            if user:
+                flash(
+                    f"User with {email} already exists",
+                    category="error",
+                )
+                return redirect(url_for("settings"))
+            current_user.email = email
+            current_user.email_verified = False
+            db.session.commit()
+            flash("Settings updated")
+            return redirect(url_for("dashboard"))
+        return render_template("settings-admin.html", form=form)
+    elif current_user.role == "shop_owner":
+        form = ShopOwnerSettingsForm()
+        if form.validate_on_submit():
+            pass
+        return render_template("settings-shop-owner.html")
 
 
 @app.route("/dashboard")
 @decorators.login_required
 @decorators.verified_email_required
 def dashboard():
-    print(current_user.email_verified)
     if current_user.role == "admin":
         stores = db.session.scalars(db.select(Store)).all()
         return render_template("dashboard-admin-overview.html", stores=stores)
@@ -215,15 +226,20 @@ def editstore_extras(store_id):
     store = db.session.get(Store, store_id)
     if not store:
         abort(404)
-    if "state" in data:
+    updated_extras = []
+    state = data.get("state")
+    package = data.get("package")
+    if state and store.owner.state != state:
         store.owner.state = data["state"]
-    if "package" in data:
+        updated_extras.append("Account State")
+    if package and store.package != package:
         store.package = data["package"]
+        updated_extras.append("Package")
     try:
         db.session.commit()
     except:
         return jsonify(status="error")
-    return jsonify(status="success")
+    return jsonify(status="success", updated_extras=" and ".join(updated_extras))
 
 
 @app.route("/help")

@@ -7,7 +7,7 @@
             {% if articles is defined and articles|length > 0 %}
                 {% for article in articles %}
                     <a href="{{ url_for('help_article', slug = article.id|string + '-' + slugify(article.title) ) }}"
-                       class="cursor-pointer text-sm font-semibold text-blue-600 hover:underline">{{ article.title }}</a>
+                       class="link">{{ article.title }}</a>
                 {% endfor %}
             {% endif %}
         </div>

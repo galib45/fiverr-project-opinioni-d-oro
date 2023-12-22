@@ -5,7 +5,7 @@
     <div class="border-sky-600 border-rose-600 hidden"></div>
     <div class="space-y-8 p-6">
         <div class="mx-auto max-w-[400px] space-y-3 sm:mx-4">
-            <div class="mb-4 text-2xl font-bold">Account Information</div>
+            <div class="mb-4 border-b-2 border-blue-600 py-2 text-2xl font-bold text-blue-600">Account Information</div>
             <div class="flex flex-col gap-1">
                 <label for="account_state">Account State</label>
                 <select name="account_state"
@@ -33,17 +33,18 @@
                 </select>
             </div>
             <div class="w-fit ml-auto mt-4 mb-2 flex gap-4">
+                <div class="" id="extras-status"></div>
                 <div class="loader hidden"></div>
                 <button id="save-extra" class="primary">Save</button>
             </div>
         </div>
-        <div class="form mx-auto max-w-[400px] sm:mx-4">
+        <div class="mx-auto max-w-[400px] sm:mx-4">
             <form action=""
                   method="post"
                   id="editstore-form"
                   class="flex flex-col gap-4"
                   novalidate>
-                <div class="text-2xl font-bold my-4">Store Information</div>
+                <div class="mb-4 border-b-2 border-blue-600 py-2 text-2xl font-bold text-blue-600">Store Information</div>
                 {{ form.hidden_tag() }}
                 <div class="flex flex-col gap-1">
                     {{ form.name.label }}

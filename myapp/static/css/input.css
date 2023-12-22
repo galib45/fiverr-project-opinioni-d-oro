@@ -55,6 +55,18 @@
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
   }
+
+  .alert-info {
+    @apply p-4 my-2 mx-auto w-fit max-w-[600px] text-sm rounded-md shadow text-green-800 bg-green-50 shadow-green-200;
+  }
+
+  .alert-error {
+    @apply p-4 my-2 mx-auto w-fit max-w-[600px] text-sm rounded-md shadow text-red-800 bg-red-50 shadow-red-200;
+  }
+
+  a.link {
+    @apply cursor-pointer text-sm font-semibold text-blue-600 hover:underline;
+  }
   
   .flashed_messages {
     padding: 10px;

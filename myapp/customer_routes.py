@@ -101,10 +101,10 @@ def google_logout():
     return redirect(url_for("google_login"))
 
 
-@app.route("/store/<slug>/review")
-def give_review(slug):
+@app.route("/store/<store_slug>/review")
+def give_review(store_slug):
     try:
-        store_id, store_slug = slug.split("-", 1)
+        store_id, store_slug = store_slug.split("-", 1)
     except:
         abort(404)
     store = db.session.get(Store, store_id)
@@ -119,6 +119,10 @@ def give_review(slug):
                 db.select(Customer).filter_by(email=session["customer_email"])
             )
             if customer:
+                if not customer in store.customers:
+                    store.customers.append(customer)
+                    db.session.commit()
+                slug = f"{store_id}-{store_slug}"
                 return render_template(
                     "give_review.html",
                     customer=customer,

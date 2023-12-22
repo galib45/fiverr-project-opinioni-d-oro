@@ -11,6 +11,11 @@ def check_if_username_exists(form, field):
         raise ValidationError("A store with this username already exists!")
 
 
+def check_if_email_exists(form, field):
+    if db.session.scalar(db.select(User).filter_by(email=form.email.data)):
+        raise ValidationError("A store with this email already exists!")
+
+
 class NewCampaignForm(FlaskForm):
     name = StringField("Name of the Campaign")
     description = TextAreaField("Short Description")
@@ -27,7 +32,7 @@ class AddArticleForm(FlaskForm):
 
 class AddStoreForm(FlaskForm):
     username = StringField("Username", validators=[check_if_username_exists])
-    email = StringField("Email")
+    email = StringField("Email", validators=[check_if_email_exists])
     password = PasswordField("Password")
     confirm_password = PasswordField("Confirm Password")
     name = StringField("Store Name")
@@ -46,6 +51,11 @@ class EditStoreForm(FlaskForm):
     google_map_url = StringField("Google Map URL")
     place_id = StringField("Place ID")
     hex_id = StringField("Hex ID")
+    submit = SubmitField("Save")
+
+
+class AdminSettingsForm(FlaskForm):
+    email = StringField("Email")
     submit = SubmitField("Save")
 
 
