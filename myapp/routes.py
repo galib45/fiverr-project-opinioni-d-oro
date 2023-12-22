@@ -45,6 +45,8 @@ def contact():
 
 
 @app.route("/settings")
+@decorators.login_required
+@decorators.verified_email_required
 def settings():
     if current_user.is_authenticated:
         if current_user.username == "admin":
@@ -60,32 +62,34 @@ def settings():
 
 
 @app.route("/dashboard")
+@decorators.login_required
+@decorators.verified_email_required
 def dashboard():
-    if current_user.is_authenticated:
-        if current_user.role == "admin":
-            stores = db.session.scalars(db.select(Store)).all()
-            return render_template("dashboard-admin-overview.html", stores=stores)
-        else:
-            if current_user.state == "active":
-                store = current_user.stores[0]
-                customers = store.customers
-                data = {}
-                data["updates"] = {customer.id: 0 for customer in customers}
-                data["num_redeems"] = [
-                    coupon.redeemed for coupon in store.coupons
-                ].count(True)
-                for review in store.reviews:
-                    data[review.customer.id] = review.updates.count()
-                return render_template(
-                    "dashboard-analytics.html", store=current_user.stores[0], data=data
-                )
-            flash("Your account is not active, please contact the admin")
-            return redirect(url_for("contact"))
-    return redirect(url_for("login"))
+    print(current_user.email_verified)
+    if current_user.role == "admin":
+        stores = db.session.scalars(db.select(Store)).all()
+        return render_template("dashboard-admin-overview.html", stores=stores)
+    else:
+        if current_user.state == "active":
+            store = current_user.stores[0]
+            customers = store.customers
+            data = {}
+            data["updates"] = {customer.id: 0 for customer in customers}
+            data["num_redeems"] = [coupon.redeemed for coupon in store.coupons].count(
+                True
+            )
+            for review in store.reviews:
+                data[review.customer.id] = review.updates.count()
+            return render_template(
+                "dashboard-analytics.html", store=current_user.stores[0], data=data
+            )
+        flash("Your account is not active, please contact the admin")
+        return redirect(url_for("contact"))
 
 
 @app.route("/dashboard/customers")
 @decorators.shop_owner_required
+@decorators.verified_email_required
 def dashboard_customers():
     if current_user.is_authenticated:
         if current_user.username != "admin":
@@ -101,6 +105,7 @@ def dashboard_customers():
 
 @app.route("/dashboard/qrcode")
 @decorators.shop_owner_required
+@decorators.verified_email_required
 def dashboard_qrcode():
     if current_user.is_authenticated:
         if current_user.username != "admin":
@@ -114,6 +119,7 @@ def dashboard_qrcode():
 
 @app.route("/chartdata")
 @decorators.shop_owner_required
+@decorators.verified_email_required
 def chartdata():
     if current_user.is_authenticated and current_user.username != "admin":
         store = current_user.stores[0]
@@ -133,6 +139,7 @@ def chartdata():
 
 @app.route("/addstore", methods=["GET", "POST"])
 @decorators.admin_required
+@decorators.verified_email_required
 def addstore():
     form = AddStoreForm()
     if form.validate_on_submit():
@@ -160,6 +167,7 @@ def addstore():
 
 @app.route("/delstore/<store_id>")
 @decorators.admin_required
+@decorators.verified_email_required
 def delstore(store_id):
     store = db.session.get(Store, store_id)
     if store:
@@ -177,6 +185,7 @@ def delstore(store_id):
 
 @app.route("/editstore/<store_id>", methods=["GET", "POST"])
 @decorators.admin_required
+@decorators.verified_email_required
 def editstore(store_id):
     store = db.session.get(Store, store_id)
     if store:
@@ -200,6 +209,7 @@ def editstore(store_id):
 
 @app.route("/editstore/<store_id>/extras", methods=["POST"])
 @decorators.admin_required
+@decorators.verified_email_required
 def editstore_extras(store_id):
     data = request.json
     store = db.session.get(Store, store_id)
@@ -240,6 +250,7 @@ def help_article(slug):
 
 @app.route("/articles")
 @decorators.admin_required
+@decorators.verified_email_required
 def articles():
     articles = db.session.scalars(db.select(Article)).all()
     return render_template("articles.html", articles=articles)
@@ -247,6 +258,7 @@ def articles():
 
 @app.route("/articles/add", methods=["GET", "POST"])
 @decorators.admin_required
+@decorators.verified_email_required
 def add_article():
     form = AddArticleForm()
     if form.validate_on_submit():
@@ -263,6 +275,7 @@ def add_article():
 
 @app.route("/articles/<id>/edit", methods=["GET", "POST"])
 @decorators.admin_required
+@decorators.verified_email_required
 def edit_article(id):
     article = db.session.get(Article, id)
     form = AddArticleForm()
@@ -278,6 +291,7 @@ def edit_article(id):
 
 @app.route("/articles/<id>/delete")
 @decorators.admin_required
+@decorators.verified_email_required
 def delete_article(id):
     article = db.session.get(Article, id)
     if article:
@@ -290,6 +304,7 @@ def delete_article(id):
 
 @app.route("/actions")
 @decorators.admin_required
+@decorators.verified_email_required
 def action_center():
     actions = db.session.scalars(db.select(Action)).all()
     return render_template("actions.html", actions=actions)
@@ -297,6 +312,7 @@ def action_center():
 
 @app.route("/actions/<id>")
 @decorators.admin_required
+@decorators.verified_email_required
 def view_action(id):
     action = db.session.get(Action, id)
     if action:
@@ -312,6 +328,7 @@ def view_action(id):
 
 @app.route("/actions/<id>/complete")
 @decorators.admin_required
+@decorators.verified_email_required
 def complete_action(id):
     action = db.session.get(Action, id)
     decision = request.args.get("decision")

@@ -1,0 +1,15 @@
+{% if current_user.role == "admin" %}
+    {% extends 'dashboard-admin.html' %}
+{% else %}
+    {% extends 'dashboard-shop-owner.html' %}
+{% endif %}
+{% set active_page = "verify_email" %}
+{% block title %}Overview{% endblock %}
+{% block content %}
+    <div class="p-4 space-y-4">
+        <div>Your email address has not been verified yet.</div>
+        <a href="{{ url_for("send_verification_email") }}">
+            <button class="primary">Get Verification Email</button>
+        </a>
+    </div>
+{% endblock %}

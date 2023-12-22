@@ -1,0 +1,8 @@
+Dear {{ user.username }},
+To verify your email address click on the following link:
+{{ url_for('verify_email', token=token, _external=True) }}
+
+If you have not requested a verification simply ignore this message.
+
+Sincerely,
+Golden Opinions Team

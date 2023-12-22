@@ -12,6 +12,7 @@ from myapp.utils import generate_campaign_code
 
 @app.route("/dashboard/campaigns")
 @decorators.shop_owner_required
+@decorators.verified_email_required
 def dashboard_campaigns():
     if current_user.is_authenticated:
         if current_user.username != "admin":
@@ -23,6 +24,7 @@ def dashboard_campaigns():
 
 @app.route("/dashboard/campaigns/add", methods=["GET", "POST"])
 @decorators.shop_owner_required
+@decorators.verified_email_required
 def dashboard_campaigns_add():
     if current_user.is_anonymous:
         return redirect(url_for("login"))
@@ -61,6 +63,7 @@ def dashboard_campaigns_add():
 
 @app.route("/dashboard/campaigns/<id>/delete")
 @decorators.shop_owner_required
+@decorators.verified_email_required
 def delete_campaign(id):
     campaign = db.session.get(Campaign, id)
     if campaign:

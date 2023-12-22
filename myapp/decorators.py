@@ -13,6 +13,19 @@ def login_required(view):
     return inner
 
 
+def verified_email_required(view):
+    def inner(*args, **kwargs):
+        if current_user.is_authenticated:
+            if current_user.email_verified:
+                return view(*args, **kwargs)
+            return redirect(url_for("verify_email_request"))
+        flash("You have to login first")
+        return redirect(url_for("login"))
+
+    inner.__name__ = view.__name__
+    return inner
+
+
 def admin_required(view):
     def inner(*args, **kwargs):
         if current_user.is_authenticated:

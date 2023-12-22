@@ -6,7 +6,7 @@ from flask import abort, flash, redirect, render_template, url_for
 from flask_login import current_user, login_user, logout_user
 from flask_mail import Message
 
-from myapp import app, db, mail
+from myapp import app, db, decorators, mail
 from myapp.forms import LoginForm, ResetPasswordForm, ResetPasswordRequestForm
 from myapp.models import User
 
@@ -23,22 +23,30 @@ def send_email(subject, recipients, text_body, html_body):
     Thread(target=send_async_email, args=(app, msg)).start()
 
 
+def generate_jwt(payload, expires_in=600):
+    payload.update({"exp": time() + expires_in})
+    return jwt.encode(payload, app.config["SECRET_KEY"], algorithm="HS256")
+
+
+def verify_jwt(token):
+    try:
+        payload = jwt.decode(token, app.config["SECRET_KEY"], algorithms=["HS256"])
+    except:
+        return None
+    return payload
+
+
 def get_reset_password_token(user_id, expires_in=600):
-    return jwt.encode(
-        {"reset_password": user_id, "exp": time() + expires_in},
-        app.config["SECRET_KEY"],
-        algorithm="HS256",
-    )
+    payload = {"reset_password": user_id}
+    return generate_jwt(payload)
 
 
 def verify_reset_password_token(token):
-    try:
-        id = jwt.decode(token, app.config["SECRET_KEY"], algorithms=["HS256"])[
-            "reset_password"
-        ]
-    except:
-        return
-    return db.session.get(User, id)
+    payload = verify_jwt(token)
+    id = payload.get("reset_password")
+    if id:
+        return db.session.get(User, id)
+    return None
 
 
 def send_password_reset_email(user):
@@ -48,6 +56,25 @@ def send_password_reset_email(user):
         recipients=[user.email],
         text_body=render_template("email/reset_password.txt", user=user, token=token),
         html_body=render_template("email/reset_password.html", user=user, token=token),
+    )
+
+
+def verify_email_verify_token(token):
+    payload = verify_jwt(token)
+    id = payload.get("verify_email")
+    if id:
+        return db.session.get(User, id)
+    return None
+
+
+def send_email_verify_email(user):
+    payload = {"verify_email": user.id}
+    token = generate_jwt(payload)
+    send_email(
+        "[Golden Opinions] Verify Your Email",
+        recipients=[user.email],
+        text_body=render_template("email/verify_email.txt", user=user, token=token),
+        html_body=render_template("email/verify_email.html", user=user, token=token),
     )
 
 
@@ -82,6 +109,36 @@ def reset_password(token):
         flash("Your password has been reset.")
         return redirect(url_for("login"))
     return render_template("reset-password.html", form=form)
+
+
+@decorators.login_required
+@app.route("/verify_email")
+def verify_email_request():
+    if current_user.email_verified:
+        flash("Your email address is already verified")
+        return redirect(url_for("dashboard"))
+    return render_template("verify_email_request.html")
+
+
+@decorators.login_required
+@app.route("/verify_email/<token>")
+def verify_email(token):
+    user = verify_email_verify_token(token)
+    if not user:
+        flash("Invalid or expired token for password reset", category="error")
+        return redirect(url_for("dashboard"))
+    user.email_verified = True
+    db.session.commit()
+    flash("Your email address has been verified successfully")
+    return redirect(url_for("dashboard"))
+
+
+@decorators.login_required
+@app.route("/verify_email/send")
+def send_verification_email():
+    send_email_verify_email(current_user)
+    flash("Check your email for the verification link")
+    return redirect(url_for("verify_email_request"))
 
 
 @app.route("/login", methods=["GET", "POST"])
