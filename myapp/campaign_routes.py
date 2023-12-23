@@ -31,9 +31,22 @@ def dashboard_campaigns_add():
     elif current_user.username == "admin":
         return redirect(url_for("dashboard"))
     else:
+        store = current_user.stores[0]
+        unlimited = False
+        print(store.package)
+        if store.package == 'basic': quota = 2
+        elif store.package == '5star': quota = 4
+        elif store.package == 'basic-unlimited' or store.package == '5star-unlimited': unlimited = True
+        else: abort(500)
+        campaigns_this_month = db.session.scalars(db.select(Campaign)
+            .where(Campaign.store==store)
+            .where(Campaign.date_created > datetime.utcnow() - timedelta(days=30))
+        ).all()
+        if not unlimited and len(campaigns_this_month) == quota: 
+            flash('Sorry! You have used up your monthly quota', category='error')
+            return redirect(url_for('dashboard_campaigns'))
         form = NewCampaignForm()
         if form.validate_on_submit():
-            store = current_user.stores[0]
             name = form.name.data
             description = form.description.data
             offer = form.offer.data
@@ -45,6 +58,7 @@ def dashboard_campaigns_add():
                 name=name,
                 description=description,
                 offer=offer,
+                date_created = datetime.utcnow(),
                 expire_date=expire_date,
                 code=campaign_code,
             )

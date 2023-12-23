@@ -53,24 +53,46 @@ def settings():
         form = AdminSettingsForm()
         if form.validate_on_submit():
             email = form.email.data
-            user = db.session.scalar(db.select(User).where(User.email == email))
-            if user:
-                flash(
-                    f"User with {email} already exists",
-                    category="error",
-                )
-                return redirect(url_for("settings"))
-            current_user.email = email
-            current_user.email_verified = False
+            if email != current_user.email:
+                user = db.session.scalar(db.select(User).where(User.email == email))
+                if user:
+                    flash(
+                        f"User with {email} already exists",
+                        category="error",
+                    )
+                    return redirect(url_for("settings"))
+                current_user.email = email
+                current_user.email_verified = False
             db.session.commit()
             flash("Settings updated")
             return redirect(url_for("dashboard"))
         return render_template("settings-admin.html", form=form)
     elif current_user.role == "shop_owner":
         form = ShopOwnerSettingsForm()
+        package = current_user.stores[0].package
+        if package == 'basic': package = 'Basic'
+        elif package == '5star': package = '5 Star'
+        elif package == 'basic-unlimited': package = 'Basic + Unlimited'
+        elif package == '5star-unlimited': package = '5 Star + Unlimited'
+        else: print(package); abort(500)
         if form.validate_on_submit():
-            pass
-        return render_template("settings-shop-owner.html")
+            email = form.email.data
+            general_coupon_offer = form.general_coupon_offer.data
+            if email != current_user.email:
+                user = db.session.scalar(db.select(User).where(User.email == email))
+                if user:
+                    flash(
+                        f"User with {email} already exists",
+                        category="error",
+                    )
+                    return redirect(url_for("settings"))
+                current_user.email = email
+                current_user.email_verified = False
+            current_user.stores[0].general_coupon_offer = general_coupon_offer
+            db.session.commit()
+            flash("Settings updated")
+            return redirect(url_for("dashboard"))
+        return render_template("settings-shop-owner.html", form=form, package=package)
 
 
 @app.route("/dashboard")

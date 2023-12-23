@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import BooleanField, PasswordField, StringField, SubmitField, TextAreaField
+from wtforms import BooleanField, PasswordField, StringField, SubmitField, TextAreaField, RadioField
 from wtforms.validators import ValidationError
 
 from myapp import db
@@ -21,6 +21,10 @@ class NewCampaignForm(FlaskForm):
     description = TextAreaField("Short Description")
     offer = StringField("Campaign Offer")
     expire_date = StringField("Expire Date")
+    category = RadioField('Target Audience', 
+        choices=[('general','All Customers'),('custom','A Few Selected Customers')], 
+        default='general'
+    )
     submit = SubmitField("Create Campaign")
 
 
@@ -58,6 +62,10 @@ class AdminSettingsForm(FlaskForm):
     email = StringField("Email")
     submit = SubmitField("Save")
 
+class ShopOwnerSettingsForm(FlaskForm):
+    email = StringField("Email")
+    general_coupon_offer = StringField("General Coupon Offer")
+    submit = SubmitField("Save")
 
 class LoginForm(FlaskForm):
     username = StringField("Username")

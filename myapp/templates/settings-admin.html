@@ -11,7 +11,7 @@
             {{ form.hidden_tag() }}
             <div class="flex flex-col gap-1">
                 {{ form.email.label }}
-                {{ form.email(placeholder="Enter name of the Store", value=current_user.email) }}
+                {{ form.email(placeholder="Enter email", value=current_user.email) }}
                 <span class="form-error" style="display:none;" id="name-error"></span>
             </div>
             <div class="text-sm">

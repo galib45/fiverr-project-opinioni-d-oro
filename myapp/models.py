@@ -67,6 +67,7 @@ class Campaign(db.Model):
     description = db.Column(db.String)
     offer = db.Column(db.String)
     code = db.Column(db.String(10))
+    date_created = db.Column(db.DateTime())
     expire_date = db.Column(db.DateTime())
     category = db.Column(db.String(10), default="general")
     status = db.Column(db.String(10), default="pending")

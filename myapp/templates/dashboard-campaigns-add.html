@@ -35,6 +35,14 @@
                 {{ form.expire_date(placeholder="Choose Date") }}
                 <span class="form-error" id="expire-date-error"></span>
             </div>
+            <div>
+                {% for field in form.category %}
+                <div class="flex items-center mb-2">
+                    {{ field(class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300") }}
+                    {{ field.label(class="ms-2 text-sm font-medium text-gray-900") }}
+                </div>
+            {% endfor %}    
+            </div>
             <div class="mx-auto">{{ form.submit() }}</div>
         </form>
     </div>
