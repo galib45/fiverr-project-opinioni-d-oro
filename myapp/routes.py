@@ -1,23 +1,14 @@
 from datetime import datetime, timedelta
 
-from flask import abort, flash, redirect, render_template, request, send_file, url_for
+from flask import (abort, flash, redirect, render_template, request, send_file,
+                   url_for)
 from flask.json import dumps, jsonify, loads
 from flask_login import current_user, login_user, logout_user
 from flask_mail import Message
 from slugify import slugify
 
-from myapp import (
-    app,
-    campaign_routes,
-    cli_commands,
-    customer_routes,
-    db,
-    decorators,
-    errorhandlers,
-    login,
-    mail,
-    user_routes,
-)
+from myapp import (app, campaign_routes, cli_commands, customer_routes, db,
+                   decorators, errorhandlers, login, mail, user_routes)
 from myapp.forms import *
 from myapp.models import *
 from myapp.utils import get_id_from_url, log_error, log_info
@@ -396,3 +387,22 @@ def getid(google_map_url_id):
     log_info(url)
     place_id, hex_id = get_id_from_url(url)
     return jsonify(place_id=place_id, hex_id=hex_id)
+
+@app.route("/check_if_policies_accepted")
+@decorators.login_required
+def check_if_policies_accepted():
+    return f"{current_user.policies_accepted}"
+
+@app.route("/accept_policies")
+@decorators.login_required
+def accept_policies():
+    current_user.policies_accepted = True
+    db.session.commit()
+    # read from db to confirm
+    user = db.session.get(User, current_user.id)
+    return f"{user.policies_accepted}"
+
+
+
+
+

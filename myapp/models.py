@@ -25,6 +25,7 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String(50), unique=True)
     password_hash = db.Column(db.String(255))
     email_verified = db.Column(db.Boolean, default=False)
+    policies_accepted = db.Column(db.Boolean, default=False)
     role = db.Column(db.String(10), default="shop_owner")
     state = db.Column(db.String(10), default="active")
     stores = db.relationship("Store", backref="owner", lazy="dynamic")
