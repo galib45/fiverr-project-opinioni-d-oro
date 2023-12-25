@@ -33,7 +33,6 @@ def dashboard_campaigns_add():
     else:
         store = current_user.stores[0]
         unlimited = False
-        print(store.package)
         if store.package == 'basic': quota = 2
         elif store.package == '5star': quota = 4
         elif store.package == 'basic-unlimited' or store.package == '5star-unlimited': unlimited = True
@@ -86,3 +85,8 @@ def delete_campaign(id):
         db.session.commit()
         return redirect(url_for("dashboard_campaigns"))
     abort(404)
+
+
+
+
+

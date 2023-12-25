@@ -46,6 +46,10 @@
                                class="hover:bg-teal-900 border-4 text-sm tracking-wide border-transparent hover:text-white rounded-md px-3 py-2">Contact</a>
                         </div>
                         <div>
+                            <a href="{{ url_for("packages") }}"
+                               class="hover:bg-teal-900 border-4 text-sm tracking-wide border-transparent hover:text-white rounded-md px-3 py-2">Packages</a>
+                        </div>
+                        <div>
                             <a href="{{ url_for("helpcenter") }}"
                                class="hover:bg-teal-900 border-4 text-sm tracking-wide border-transparent hover:text-white rounded-md px-3 py-2">Help</a>
                         </div>
@@ -77,6 +81,10 @@
                     <div class="py-2 hover:text-teal-900 group flex gap-2">
                         {{ macros.svg("contact", class="group-hover:fill-teal-900") }}
                         <a href="{{ url_for("contact") }}" class="mb-0 select-none">Contact</a>
+                    </div>
+                    <div class="py-2 hover:text-teal-900 group flex gap-2">
+                        {{ macros.svg("package", class="group-hover:fill-teal-900") }}
+                        <a href="{{ url_for("packages") }}" class="mb-0 select-none">Packages</a>
                     </div>
                     <div class="py-2 hover:text-teal-900 group flex gap-2">
                         {{ macros.svg("help_center", class="group-hover:fill-teal-900") }}

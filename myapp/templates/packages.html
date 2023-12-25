@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% set active_page = "packages" %}
+{% block title %}Packages{% endblock %}
+{% block content %}
+<div class="my-8">
+  <h1 class="mb-8 text-center text-3xl font-semibold">Our Packages</h1>
+  <div class="flex justify-center flex-wrap space-y-4 sm:space-y-0">
+    <!-- Basic Plan -->
+    <div class="w-full sm:w-[30%] rounded-md border-2 mx-8 sm:mx-2 p-8 shadow shadow-gray-200">
+      <h2 class="mb-4 text-xl font-semibold">Basic Plan</h2>
+      <ul class="text-gray-600 fill-gray-600 space-y-1">
+        <li class="flex gap-1">
+          {{ macros.svg('check') }}
+          Customer Login
+        </li>
+        <li class="flex gap-1">
+          {{ macros.svg('check') }}
+          QR Code
+        </li>
+        <li class="flex gap-1">
+          {{ macros.svg('check') }}
+          2 Campaigns
+        </li>
+        <!-- Add more features as needed -->
+      </ul>
+    </div>
+
+    <!-- 5-Star Plan -->
+    <div class="w-full sm:w-[30%] rounded-md border-2 mx-8 sm:mx-2 p-8 shadow shadow-gray-200">
+      <h2 class="mb-4 text-xl font-semibold">Five Star Plan</h2>
+      <ul class="text-gray-600 fill-gray-600 space-y-1">
+        <li class="flex gap-1">
+          {{ macros.svg('check') }}
+          Customer Login
+        </li>
+        <li class="flex gap-1">
+          {{ macros.svg('check') }}
+          Review Tracking
+        </li>
+        <li class="flex gap-1">
+          {{ macros.svg('check') }}
+          QR Code
+        </li>
+        <li class="flex gap-1">
+          {{ macros.svg('check') }}
+          4 Campaigns
+        </li>
+        <!-- Add more features as needed -->
+      </ul>
+    </div>
+
+    <!-- Unlimited Plan -->
+    <div class="w-full sm:w-[30%] rounded-md border-2 mx-8 sm:mx-2 p-8 shadow shadow-gray-200">
+      <h2 class="text-xl font-semibold">Unlimited Plan</h2>
+      <div class="mb-4 text-sm text-gray-400">This can be added to any of the above packages</div>
+      <ul class="text-gray-600 fill-gray-600 space-y-1">
+        <li class="flex gap-1">
+          {{ macros.svg('check') }}
+          Unlimited Campaigns
+        </li>
+        <!-- Add more features as needed -->
+      </ul>
+    </div>
+  </div>
+</div>
+{% endblock %}

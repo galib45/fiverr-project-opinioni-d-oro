@@ -35,6 +35,11 @@ def contact():
     return render_template("contact.html")
 
 
+@app.route("/packages")
+def packages():
+    return render_template("packages.html")
+
+
 @app.route("/settings", methods=["GET", "POST"])
 @decorators.login_required
 @decorators.verified_email_required
@@ -396,13 +401,10 @@ def check_if_policies_accepted():
 @app.route("/accept_policies")
 @decorators.login_required
 def accept_policies():
-    current_user.policies_accepted = True
-    db.session.commit()
-    # read from db to confirm
-    user = db.session.get(User, current_user.id)
-    return f"{user.policies_accepted}"
-
-
-
-
+    try:
+        current_user.policies_accepted = True
+        db.session.commit()
+        return f"{user.policies_accepted}"
+    except:
+        abort(500)
 
