@@ -147,6 +147,9 @@
         <div class='h-screen w-full ml-[200px] fixed opacity-70 bg-gray-500 hidden'
              id="dashboard-overlay"></div>
     </div>
+    <script nonce="golden">
+      let policies_accepted = "{{ current_user.policies_accepted }}";
+    </script>
     <script src='https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js'></script>
     <script src="{{ url_for('static', filename='js/dashboard.common.js') }}"></script>
     {% block script %}{% endblock %}

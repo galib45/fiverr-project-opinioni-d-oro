@@ -14,6 +14,7 @@ navmenu.onclick = () => {
   const qlContainer = document.querySelector('.ql-container');
   if (qlContainer) qlContainer.style.position = 'unset';
 };
+
 overlay.onclick = () => {
   console.log('overlay click');
   navbar.classList.add('hidden');
@@ -27,7 +28,6 @@ overlay.onclick = () => {
 document.querySelectorAll('span.datetime').forEach((span)=> {
   span.innerHTML = moment(span.textContent).add(1, 'hours').format('MMMM DD, YYYY hh:mm:ss A') + ' CET';
 });
-
 
 function showModal() {
   modalRoot.classList.remove('hidden');
@@ -47,12 +47,6 @@ function hideModal() {
   }, 200);
 }
 
-fetch('/check_if_policies_accepted')
-  .then(resp => resp.text())
-  .then((text) => {
-    if(text !== 'True') showModal();
-  });
-
 modalLeaveButton.onclick = () => {
   location.assign('/logout');
 }
@@ -64,3 +58,5 @@ modalAcceptButton.onclick = () => {
     if(text === 'True') hideModal();
   });
 }
+
+if(policies_accepted !== 'True') showModal();

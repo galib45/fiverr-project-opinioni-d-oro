@@ -6,8 +6,6 @@ function nextDate(date) {
   return new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1);
 }
 
-
-
 fetch('/chartdata').then(resp => resp.json()).then((data) => {
   store_created = moment.unix(data.store_created).utc();
   total_elapsed_days = moment.duration(moment().diff(store_created)).get('days');

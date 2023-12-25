@@ -393,18 +393,12 @@ def getid(google_map_url_id):
     place_id, hex_id = get_id_from_url(url)
     return jsonify(place_id=place_id, hex_id=hex_id)
 
-@app.route("/check_if_policies_accepted")
-@decorators.login_required
-def check_if_policies_accepted():
-    return f"{current_user.policies_accepted}"
-
 @app.route("/accept_policies")
 @decorators.login_required
 def accept_policies():
-    try:
-        current_user.policies_accepted = True
-        db.session.commit()
-        return f"{user.policies_accepted}"
-    except:
-        abort(500)
+    current_user.policies_accepted = True
+    db.session.commit()
+    return f"{user.policies_accepted}"
+
+
 
