@@ -892,6 +892,11 @@ input[type='submit']:focus {
   margin-right: 0px;
 }
 
+.mx-2 {
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
+}
+
 .mx-4 {
   margin-left: 1rem;
   margin-right: 1rem;
@@ -940,11 +945,6 @@ input[type='submit']:focus {
 .my-auto {
   margin-top: auto;
   margin-bottom: auto;
-}
-
-.mx-2 {
-  margin-left: 0.5rem;
-  margin-right: 0.5rem;
 }
 
 .mb-0 {
@@ -1107,6 +1107,10 @@ input[type='submit']:focus {
   height: 100vh;
 }
 
+.h-8 {
+  height: 2rem;
+}
+
 .max-h-80 {
   max-height: 20rem;
 }
@@ -1160,6 +1164,14 @@ input[type='submit']:focus {
   width: 100vw;
 }
 
+.w-8 {
+  width: 2rem;
+}
+
+.max-w-\[300px\] {
+  max-width: 300px;
+}
+
 .max-w-\[400px\] {
   max-width: 400px;
 }
@@ -1178,10 +1190,6 @@ input[type='submit']:focus {
 
 .max-w-lg {
   max-width: 32rem;
-}
-
-.max-w-\[300px\] {
-  max-width: 300px;
 }
 
 .flex-shrink {
@@ -1332,6 +1340,10 @@ input[type='submit']:focus {
 
 .gap-5 {
   gap: 1.25rem;
+}
+
+.gap-8 {
+  gap: 2rem;
 }
 
 .space-y-0 > :not([hidden]) ~ :not([hidden]) {
@@ -1614,6 +1626,10 @@ input[type='submit']:focus {
   fill: #6b7280;
 }
 
+.fill-gray-600 {
+  fill: #4b5563;
+}
+
 .fill-red-400 {
   fill: #f87171;
 }
@@ -1624,10 +1640,6 @@ input[type='submit']:focus {
 
 .fill-white {
   fill: #fff;
-}
-
-.fill-gray-600 {
-  fill: #4b5563;
 }
 
 .p-0 {
@@ -1998,6 +2010,11 @@ input[type='submit']:focus {
   box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
 }
 
+.shadow-gray-200 {
+  --tw-shadow-color: #e5e7eb;
+  --tw-shadow: var(--tw-shadow-colored);
+}
+
 .shadow-gray-300 {
   --tw-shadow-color: #d1d5db;
   --tw-shadow: var(--tw-shadow-colored);
@@ -2020,11 +2037,6 @@ input[type='submit']:focus {
 
 .shadow-teal-950 {
   --tw-shadow-color: #042f2e;
-  --tw-shadow: var(--tw-shadow-colored);
-}
-
-.shadow-gray-200 {
-  --tw-shadow-color: #e5e7eb;
   --tw-shadow: var(--tw-shadow-colored);
 }
 
@@ -2197,6 +2209,11 @@ input[type='submit']:focus {
     margin-right: 0px;
   }
 
+  .sm\:mx-2 {
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+  }
+
   .sm\:mx-4 {
     margin-left: 1rem;
     margin-right: 1rem;
@@ -2205,11 +2222,6 @@ input[type='submit']:focus {
   .sm\:my-8 {
     margin-top: 2rem;
     margin-bottom: 2rem;
-  }
-
-  .sm\:mx-2 {
-    margin-left: 0.5rem;
-    margin-right: 0.5rem;
   }
 
   .sm\:ml-4 {
@@ -2248,6 +2260,10 @@ input[type='submit']:focus {
     width: 2.5rem;
   }
 
+  .sm\:w-\[30\%\] {
+    width: 30%;
+  }
+
   .sm\:w-fit {
     width: -moz-fit-content;
     width: fit-content;
@@ -2255,10 +2271,6 @@ input[type='submit']:focus {
 
   .sm\:w-full {
     width: 100%;
-  }
-
-  .sm\:w-\[30\%\] {
-    width: 30%;
   }
 
   .sm\:max-w-lg {

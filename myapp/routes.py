@@ -400,5 +400,48 @@ def accept_policies():
     db.session.commit()
     return f"{user.policies_accepted}"
 
+@app.route("/search_coupon")
+@decorators.shop_owner_required
+@decorators.verified_email_required
+def search_coupon():
+    return render_template("search-coupon.html")
 
+@app.route("/search_coupon/<code>")
+@decorators.shop_owner_required
+@decorators.verified_email_required
+def search_coupon_by_code(code):
+    store_id = current_user.stores[0].id
+    coupon = db.session.scalar(
+      db.select(Coupon)
+        .where(Coupon.store_id == store_id)
+        .where(Coupon.code == code)
+    )
+    if coupon:
+        data = {}
+        data['code'] = coupon.code
+        data['expire_date'] = coupon.expire_date.isoformat()
+        data['email_sent'] = coupon.email_sent
+        data['sms_sent'] = coupon.sms_sent
+        data['offer'] = coupon.offer
+        data['redeemed'] = coupon.redeemed
+        return jsonify(coupon=data)
+    return jsonify(coupon=None)
 
+@app.route("/redeem/<code>")
+@decorators.shop_owner_required
+@decorators.verified_email_required
+def redeem_coupon(code):
+    store_id = current_user.stores[0].id
+    coupon = db.session.scalar(
+      db.select(Coupon)
+        .where(Coupon.store_id == store_id)
+        .where(Coupon.code == code)
+    )
+    if not coupon:
+        flash("This coupon does not belong to your store", category="error")
+    
+    db.session.delete(coupon)
+    print(f"deleting {coupon}")
+    print(f"sending email and sms to its owner {coupon.customer}")
+    flash(f"Coupon({code}) has been redeemed succesfully")
+    return redirect(url_for("search_coupon"))

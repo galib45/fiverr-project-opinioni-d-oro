@@ -31,6 +31,11 @@
                         <span>{{ macros.svg("monitoring", size=20, class='fill-gray-400') }}</span><span>Analytics</span>
                     </div>
                 </a>
+                <a href="{{ url_for("search_coupon") }}">
+                    <div class="w-full my-1 px-4 py-2 rounded-lg text-sm flex items-center gap-2 hover:bg-slate-800 select-none cursor-pointer {{ 'active' if active_page=='search_coupon'}}">
+                        <span>{{ macros.svg("search", size=20, class='fill-gray-400') }}</span><span>Coupon</span>
+                    </div>
+                </a>
                 <a href="{{ url_for("dashboard_customers") }}">
                     <div class="w-full my-1 px-4 py-2 rounded-lg text-sm flex items-center gap-2 hover:bg-slate-800 select-none cursor-pointer {{ 'active' if active_page=='customers'}}">
                         <span>{{ macros.svg("groups", size=20, class='fill-gray-400') }}</span><span>Customers</span>
@@ -90,6 +95,8 @@
                                 QR Code
                             {% elif active_page == 'settings' %}
                                 Settings
+                            {% elif active_page == 'search_coupon' %}
+                                Search Coupon
                             {% elif active_page == 'verify_email' %}
                                 Verify Email Address
                             {% endif %}
