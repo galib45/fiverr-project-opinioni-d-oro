@@ -6,11 +6,12 @@ import google.auth.transport.requests
 import google.oauth2.credentials
 import google_auth_oauthlib.flow
 import requests
-from flask import abort, redirect, render_template, request, session, url_for
+from flask import flash, abort, redirect, render_template, request, session, url_for
 from google.oauth2 import id_token
 from slugify import slugify
 
 from myapp import app, db
+from myapp.utils import generate_random_code, sendtext
 from myapp.forms import RegisterCustomerForm
 from myapp.models import Customer, Store
 
@@ -123,12 +124,9 @@ def give_review(store_slug):
                     store.customers.append(customer)
                     db.session.commit()
                 slug = f"{store_id}-{store_slug}"
-                return render_template(
-                    "give_review.html",
-                    customer=customer,
-                    store=store,
-                    store_slug=slug,
-                )
+                if not customer.phone_verified: 
+                    return redirect(url_for('verify_phone', slug=slug, customer_id=customer.id))
+                return render_template("give_review.html", customer=customer, store=store, store_slug=slug)
             else:
                 return redirect(url_for("registercustomer", store_id=store_id))
         else:
@@ -187,3 +185,42 @@ def review_url(store_slug):
         return redirect(url)
     else:
         abort(404)
+
+@app.route("/verifyphone/<slug>/<customer_id>", methods=["GET", "POST"])
+def verify_phone(slug, customer_id):
+    try:
+        store_id, store_slug = slug.split("-", 1)
+    except:
+        abort(404)
+    store = db.session.get(Store, store_id)
+    if not store: abort(404)
+    if slugify(store_slug) != slugify(store.name): abort(404)
+    if store_slug != slugify(store_slug): abort(404)
+    customer = db.session.get(Customer, customer_id)
+    if not customer: abort(404)
+    if request.method == "POST":
+        code = request.form.get("code")
+        if code == customer.verification_code:
+            flash("Phone Number verified successfully")
+            customer.phone_verified = True
+            db.session.commit()
+            return redirect(url_for("give_review", store_slug=slug))
+        else:
+            flash("Invalid verification code", category = "error")
+            return redirect(url_for("verify_phone", slug=slug, customer_id=customer_id))
+    return render_template("verifyphone.html", customer=customer, store=store, store_slug=slug)
+
+@app.route("/verifyphone/request/<store_id>/<customer_id>")
+def verify_phone_request(store_id, customer_id):
+    store = db.session.get(Store, store_id)
+    if not store: abort(404)
+    customer = db.session.get(Customer, customer_id)
+    if not customer: abort(404)
+    
+    code = generate_random_code(6)
+    customer.verification_code = code
+    db.session.commit()
+    message = render_template("sms/otp.txt", store=store, customer=customer, code=code)
+    sendtext([customer.phone_number], message)
+    
+    return redirect(url_for("give_review", store_slug=f"{store.id}-{slugify(store.name)}"))

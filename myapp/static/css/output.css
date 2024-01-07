@@ -1043,6 +1043,14 @@ input[type='submit']:focus {
   margin-top: 2rem;
 }
 
+.mb-1 {
+  margin-bottom: 0.25rem;
+}
+
+.mt-16 {
+  margin-top: 4rem;
+}
+
 .block {
   display: block;
 }
@@ -1318,6 +1326,10 @@ input[type='submit']:focus {
   justify-content: space-between;
 }
 
+.justify-evenly {
+  justify-content: space-evenly;
+}
+
 .justify-items-center {
   justify-items: center;
 }
@@ -1564,6 +1576,11 @@ input[type='submit']:focus {
 .bg-yellow-100 {
   --tw-bg-opacity: 1;
   background-color: rgb(254 249 195 / var(--tw-bg-opacity));
+}
+
+.bg-rose-600 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(225 29 72 / var(--tw-bg-opacity));
 }
 
 .bg-opacity-75 {
@@ -2146,6 +2163,11 @@ input[type='submit']:focus {
 .hover\:bg-teal-950:hover {
   --tw-bg-opacity: 1;
   background-color: rgb(4 47 46 / var(--tw-bg-opacity));
+}
+
+.hover\:bg-rose-800:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(159 18 57 / var(--tw-bg-opacity));
 }
 
 .hover\:fill-gray-700:hover {

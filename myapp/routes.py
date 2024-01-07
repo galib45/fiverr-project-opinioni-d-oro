@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+from threading import Thread
 
 from flask import (abort, flash, redirect, render_template, request, send_file,
                    url_for)
@@ -11,7 +12,19 @@ from myapp import (app, campaign_routes, cli_commands, customer_routes, db,
                    decorators, errorhandlers, login, mail, user_routes)
 from myapp.forms import *
 from myapp.models import *
-from myapp.utils import get_id_from_url, log_error, log_info
+from myapp.utils import get_id_from_url, log_error, log_info, sendtext
+
+
+def send_async_email(app, msg):
+    with app.app_context():
+        mail.send(msg)
+
+
+def send_email(subject, recipients, text_body, html_body):
+    msg = Message(subject, sender=app.config["MAIL_USERNAME"], recipients=recipients)
+    msg.body = text_body
+    msg.html = html_body
+    Thread(target=send_async_email, args=(app, msg)).start()
 
 
 @app.after_request
@@ -431,7 +444,8 @@ def search_coupon_by_code(code):
 @decorators.shop_owner_required
 @decorators.verified_email_required
 def redeem_coupon(code):
-    store_id = current_user.stores[0].id
+    store = current_user.stores[0]
+    store_id = store.id
     coupon = db.session.scalar(
       db.select(Coupon)
         .where(Coupon.store_id == store_id)
@@ -439,9 +453,22 @@ def redeem_coupon(code):
     )
     if not coupon:
         flash("This coupon does not belong to your store", category="error")
+        return redirect(url_for("search_coupon"))
     
-    db.session.delete(coupon)
+    customer = coupon.customer
     print(f"deleting {coupon}")
-    print(f"sending email and sms to its owner {coupon.customer}")
+    db.session.delete(coupon)
+
+    print(f"sending email and sms to its owner {customer}")
+    send_email(
+        "[Golden Opinions] Coupon Redeemed",
+        recipients=[customer.email],
+        text_body=render_template("email/redeem_coupon.txt", coupon=coupon, customer=customer, store=store),
+        html_body=render_template("email/redeem_coupon.html", coupon=coupon, customer=customer, store=store),
+    )
+    message = render_template("sms/redeem_coupon.txt", coupon=coupon, customer=customer, store=store)
+    sendtext([coupon.customer.phone_number], message)
     flash(f"Coupon({code}) has been redeemed succesfully")
     return redirect(url_for("search_coupon"))
+
+

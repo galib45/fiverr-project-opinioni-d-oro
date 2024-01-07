@@ -30,13 +30,25 @@
                 </div>
             </nav>
             <div class="container-inner">
-                {% block content %}{% endblock %}
+              {% with messages = get_flashed_messages(True) %}
+                    {% if messages %}
+                        {% for message in messages %}
+                            {% set alert_style = "text-green-800 bg-green-50 shadow-green-200" %}
+                            {% if message[0] == 'error' %}
+                                {% set alert_style = "text-red-800 bg-red-50 shadow-red-200" %}
+                            {% endif %}
+                            <div class="p-4 my-2 mx-auto w-fit max-w-[600px] text-sm rounded-md shadow {{ alert_style }}"
+                                 role="alert">{{ message[1] }}</div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}  
+							{% block content %}{% endblock %}
             </div>
             <div class="section copyright">
                 <span>{{ macros.svg("copyright") }}</span>
                 <p>2023 Golden Opinions. All Rights Reserved.</p>
             </div>
         </div>
-        <script>{% block script %}{% endblock %}</script>
+        {% block script %}{% endblock %}
     </body>
 </html>

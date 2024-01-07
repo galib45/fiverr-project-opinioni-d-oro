@@ -175,9 +175,50 @@ def get_review_list(unique_id, upto_timestamp):
 
     return review_list
 
+def sendtext(addresses, message): 
+    # The function that should be called from within the Flask app
+    
+    # Base URL for accessing the API
+    API_BASE = 'https://api.pushbullet.com/v2'
+    headers = {
+        'Access-Token': app.config["PB_ACCESS_TOKEN"],
+        'Content-Type': 'application/json'
+    }
 
-if __name__ == "__main__":
-    share_url = "https://maps.app.goo.gl/rTC36vzFQ4uKqZqC7"
-    _, unique_id = get_id_from_url(share_url)
-    review_list = get_review_list(share_url, unique_id)
-    print(request_count)
+    # To send a text message, we need the device ID of the mobile phone connected to Pushbullet
+    try:
+        response = requests.get(API_BASE + '/devices', headers = headers)
+        devices = json.loads(response.text)['devices']
+    except requests.ConnectionError:
+        print('Connection error. Please check your internet connection and try again.')
+        return
+                      
+    device_id = None
+    for device in devices:
+        can_send_sms = device.get('has_sms') and device.get('active')
+        if can_send_sms: 
+            device_id = device.get('iden')
+            break
+    
+    if not device_id:
+        print("Device is inactive or sms has not been enabled yet. Check your device.")
+        return
+    
+    data = {}
+    data['addresses'] = addresses
+    data['message'] = message
+    data['target_device_iden'] = device_id
+
+    try:
+        resp = requests.post(API_BASE + '/texts', headers = headers, json = { 'data': data })
+        return resp.status_code
+        
+    except requests.ConnectionError:
+        print("Connection error. Please check your internet connection and try again.")
+        return
+
+# if __name__ == "__main__":
+#     share_url = "https://maps.app.goo.gl/rTC36vzFQ4uKqZqC7"
+#     _, unique_id = get_id_from_url(share_url)
+#     review_list = get_review_list(share_url, unique_id)
+#     print(request_count)

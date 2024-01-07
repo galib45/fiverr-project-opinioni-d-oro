@@ -98,6 +98,7 @@ class Customer(db.Model):
     phone_number = db.Column(db.String(20))
     account_id = db.Column(db.String)
     phone_verified = db.Column(db.Boolean, default=False)
+    verification_code = db.Column(db.String(10))
     got_coupon_date = db.Column(db.DateTime())
     coupons = db.relationship("Coupon", backref="customer", lazy="dynamic")
     reviews = db.relationship("Review", backref="customer", lazy="dynamic")

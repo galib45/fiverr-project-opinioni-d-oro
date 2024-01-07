@@ -17,13 +17,9 @@
                 </div>
             </div>
         </div>
-        <div class="flex flex-col sm:flex-row sm:gap-4 space-y-4 sm:space-y-0">
-            <button class="w-fit bg-teal-800 hover:bg-teal-950 active:bg-teal-950 text-white font-bold py-2 px-4 rounded-lg shadow-teal-950 shadow">
-                <a href="{{ url_for('review_url', store_slug=store_slug) }}">Go to Review Page</a>
-            </button>
-            <button class="w-fit bg-teal-800 hover:bg-teal-950 active:bg-teal-950 text-white font-bold py-2 px-4 rounded-lg shadow-teal-950 shadow">
-                <a href="{{ url_for("google_logout") }}">Use Another Google Account</a>
-            </button>
-        </div>
+        <div class="flex justify-evenly">
+  			  <a href="{{ url_for('review_url', store_slug=store_slug) }}"><button class="primary">Go to Review Page</button></a>
+  			  <a href="{{ url_for("google_logout") }}"><button class="bg-rose-600 text-white hover:bg-rose-800">Logout</button></a>
+  			</div>
     </div>
 {% endblock %}

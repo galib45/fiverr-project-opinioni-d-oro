@@ -1,0 +1,5 @@
+Dear {{ customer.name }},
+Your verification code for {{ store.name }} is {{ code }}.
+
+Sincerely,
+Golden Opinions Team
