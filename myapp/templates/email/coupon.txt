@@ -1,0 +1,4 @@
+You received a discount coupon. Your coupon code is {{ coupon.code }}. It will expire at {{ formatted_expire_date }} CET.
+
+Sincerely,
+{{ coupon.store.name }}

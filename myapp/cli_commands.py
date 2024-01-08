@@ -1,26 +1,46 @@
-from myapp import app, db
+from myapp import app, db, mail
 from myapp.models import *
+from datetime import datetime, timedelta
+from flask_mail import Message
+
+def send_async_email(app, msg):
+    with app.app_context():
+        mail.send(msg)
+
+
+def send_email(subject, recipients, text_body, html_body):
+    msg = Message(subject, sender=app.config["MAIL_USERNAME"], recipients=recipients)
+    msg.body = text_body
+    msg.html = html_body
+    Thread(target=send_async_email, args=(app, msg)).start()
 
 
 def send_coupon_email(customer, coupon):
-    subject = f"Discount Coupon from {coupon.store.name}"
-    sender = app.config["MAIL_USERNAME"]
-    recipients = [customer.email]
-    msg = Message(subject, sender=sender, recipients=recipients)
-    msg.body = f"You received a discount coupon from {coupon.store.name}. Your coupon code is {coupon.code}. It will expire at {coupon.expire_date.strftime('%a %d %b %Y, %I:%M%p')} UTC"
+    cet_expire_date = coupon.expire_date + timedelta(hours=1)
+    formatted_expire_date = cet_expire_date.strftime("%B %d, %Y %I:%M %p")
+    send_email(
+        subject="Discount Coupon",
+        recipients=[customer.email],
+        text_body=render_template("email/coupon.txt", coupon=coupon, customer=customer, formatted_expire_date=formatted_expire_date)
+        html_body=render_template("email/coupon.html", coupon=coupon, customer=customer, formatted_expire_date=formatted_expire_date)
+    )
     try:
         mail.send(msg)
         coupon.email_sent = True
         db.session.commit()
     except Exception as e:
         print(f"ERROR sending email to {customer.email}: {e}")
-    # print(f'Sending email to {customer.email} for {coupon.code}')
-    # print(f'ERROR: NOT IMPLEMENTED')
 
 
 def send_coupon_sms(customer, coupon):
+    from myapp.utils import sendtext
+    cet_expire_date = coupon.expire_date + timedelta(hours=1)
+    formatted_expire_date = cet_expire_date.strftime("%B %d, %Y %I:%M %p")
     print(f"Sending sms to {customer.email} for {coupon.code}")
-    print(f"ERROR: NOT IMPLEMENTED")
+    sendtext(
+        [customer.phone_number], 
+        render_template("email/coupon.txt", coupon=coupon, customer=customer, formatted_expire_date=formatted_expire_date)
+    )
 
 
 @app.cli.command("send-coupons")
@@ -41,10 +61,15 @@ def fetch_reviews():
     stores = db.session.scalars(db.select(Store)).all()
     timestamp_now = datetime.utcnow()
     for store in stores:
+        if store.package == 'basic': continue
+        if store.package == 'basic-unlimited': continue
+        if store.owner.state != 'active': continue
+        print(f"Fetching reviews for {store.name}, package is {store.package}")
         account_id_list = [customer.account_id for customer in store.customers]
         review_list = get_review_list(
             store.hex_id, datetime.timestamp(store.upto_timestamp)
         )
+        print(f"{len(review_list)} reviews fetched")
         for review in review_list:
             account_id, timestamp, rating, text, photos = review
             print(account_id, end="")
@@ -82,6 +107,7 @@ def fetch_reviews():
                         customer.coupons.append(coupon)
                         customer.got_coupon_date = timestamp_now
                         store.coupons.append(coupon)
+                        store.coupons_generated += 1
                 customer.reviews.append(review)
                 store.reviews.append(review)
                 print(" - registered")

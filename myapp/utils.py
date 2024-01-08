@@ -90,23 +90,13 @@ def get_id_from_url(share_url):
     return place_id, unique_id
 
 
-def get_ua_id(share_url, ua):
-    response = requests_get(share_url, ua)
-    pattern = r"\"Bangladesh\"\],null,0,\".*?\""
-    result = re.search(pattern, response.text)
-    ua_id = None
-    if result:
-        ua_id = result.group()[22:-1]
-    return ua_id
-
-
 def build_pb(unique_id, page_id=""):
     pb = (
         "!1m7!1s"
         + unique_id
         + "!3s!6m4!4m1!1e1!4m1!1e3!2m2!1i10!2s"
         + page_id
-        + "!3e2!5m2!1sHE9HZbeXBv-t4-EPjcSyuA0!7e81!8m5!1b1!2b1!3b1!5b1!7b1!11m6!1e3!2e1!3sen!4sbd!6m1!1i2"
+        + "!3e2!5m2!1sHE9HZbeXBv-t4-EPjcSyuA0!7e81!8m5!1b1!2b1!3b1!5b1!7b1!11m6!1e3!2e1!3sen!4sit!6m1!1i2"
     )
     return pb
 
@@ -133,7 +123,7 @@ def get_review_list(unique_id, upto_timestamp):
     query_params = {
         "authuser": "0",
         "hl": "en",
-        "gl": "bd",
+        "gl": "it",
     }
 
     idx = 1

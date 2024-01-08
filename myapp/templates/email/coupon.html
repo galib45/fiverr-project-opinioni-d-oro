@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+	<body>
+	<p>
+		You received a discount coupon. Your coupon code is {{ coupon.code }}. 
+		It will expire at {{ formatted_expire_date }} CET.
+	</p>
+	<p>
+		Sincerely, <br>
+		{{ coupon.store.name }}
+	</p>
+	</body>
+</html>
