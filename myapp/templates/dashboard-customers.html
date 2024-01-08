@@ -17,8 +17,9 @@
                         <th class="p-3 text-sm font-semibold tracking-wide text-left">Name</th>
                         <th class="p-3 text-sm font-semibold tracking-wide text-left">Email Address</th>
                         <th class="p-3 text-sm font-semibold tracking-wide text-left">Phone Number</th>
-                        <th class="p-3 text-sm font-semibold tracking-wide text-right">Review Updates</th>
-                        <th class="p-3 text-sm font-semibold tracking-wide text-center">Coupon Codes</th>
+												{% if store.package == '5star' or store.package == '5star-unlimited' %}
+													<th class="p-3 text-sm font-semibold tracking-wide text-right">Review Updates</th>
+												{% endif %}
                     </tr>
                 </thead>
                 <tbody>
@@ -27,20 +28,9 @@
                             <td class="p-3 text-sm text-gray-700">{{ customer.name }}</td>
                             <td class="p-3 text-sm text-gray-700">{{ customer.email }}</td>
                             <td class="p-3 text-sm text-gray-700">{{ customer.phone_number }}</td>
-                            <td class="px-6 py-3 text-sm text-gray-700 text-right">{{ data[customer.id] or 0 }}</td>
-                            <td class="p-3 text-sm text-gray-700 text-center coupon">
-                                {% if customer.coupons.count() == 0 %}No Coupons{% endif %}
-                                {% for coupon in customer.coupons %}
-                                    {% if coupon.store_id == store.id %}
-                                        <span class="font-semibold font-mono">{{ coupon.code }}</span>
-                                        <div class="hidden">
-                                            Expires at: <span class="datetime">{{ coupon.expire_date.isoformat() }}</span>
-                                        </div>
-                                    {% else %}
-                                        No Coupons
-                                    {% endif %}
-                                {% endfor %}
-                            </td>
+														{% if store.package == '5star' or store.package == '5star-unlimited' %}
+															<td class="px-6 py-3 text-sm text-gray-700 text-right">{{ data[customer.id] or 0 }}</td>
+														{% endif %}
                         </tr>
                     {% endfor %}
                 </tbody>
@@ -52,20 +42,9 @@
                     <div class="text-base text-black font-semibold">{{ customer.name }}</div>
                     <div>{{ customer.email }}</div>
                     <div>{{ customer.phone_number }}</div>
-                    <div>Review Updates: {{ data[customer.id] or 0 }}</div>
-                    <div class="coupon">
-                        {% if customer.coupons.count() == 0 %}No Coupons{% endif %}
-                        {% for coupon in customer.coupons %}
-                            {% if coupon.store_id == store.id %}
-                                <span class="font-semibold font-mono">{{ coupon.code }}</span>
-                                <div class="hidden">
-                                    Expires at: <span class="datetime">{{ coupon.expire_date.isoformat() }}</span>
-                                </div>
-                            {% else %}
-                                No Coupons
-                            {% endif %}
-                        {% endfor %}
-                    </div>
+										{% if store.package == '5star' or store.package == '5star-unlimited' %}
+                    	<div>Review Updates: {{ data[customer.id] or 0 }}</div>
+										{% endif %}
                 </div>
             {% endfor %}
         </div>

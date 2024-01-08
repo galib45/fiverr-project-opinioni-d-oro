@@ -2,4 +2,4 @@ Dear {{ customer.name }},
 A coupon of yours from {{ store.name }} with the code of "{{ coupon.code }}" has just been redeemed. You or who has redeemed the coupon has recieved "{{ coupon.offer }}".
 
 Sincerely,
-Golden Opinions Team
+{{ store.name }}

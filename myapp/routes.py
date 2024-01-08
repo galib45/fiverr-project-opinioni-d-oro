@@ -117,9 +117,7 @@ def dashboard():
             customers = store.customers
             data = {}
             data["updates"] = {customer.id: 0 for customer in customers}
-            data["num_redeems"] = [coupon.redeemed for coupon in store.coupons].count(
-                True
-            )
+            
             for review in store.reviews:
                 data[review.customer.id] = review.updates.count()
             return render_template(
@@ -456,8 +454,9 @@ def redeem_coupon(code):
         return redirect(url_for("search_coupon"))
     
     customer = coupon.customer
-    print(f"deleting {coupon}")
+    store.coupons_redeemed += 1
     db.session.delete(coupon)
+    db.session.commit()
 
     print(f"sending email and sms to its owner {customer}")
     send_email(
@@ -471,4 +470,26 @@ def redeem_coupon(code):
     flash(f"Coupon({code}) has been redeemed succesfully")
     return redirect(url_for("search_coupon"))
 
-
+@app.route("/delete/<code>")
+@decorators.shop_owner_required
+@decorators.verified_email_required
+def delete_coupon(code):
+    store = current_user.stores[0]
+    store_id = store.id
+    coupon = db.session.scalar(
+      db.select(Coupon)
+        .where(Coupon.store_id == store_id)
+        .where(Coupon.code == code)
+    )
+    if not coupon:
+        flash("This coupon does not belong to your store", category="error")
+        return redirect(url_for("search_coupon"))
+    
+    if coupon.expire_date > datetime.utcnow():
+        flash("This coupon has not been expired yet", category="error")
+        return redirect(url_for("search_coupon"))
+    
+    db.session.delete(coupon)
+    db.session.commit()
+    flash(f"Coupon({code}) has been deleted successfully")
+    return redirect(url_for("search_coupon"))
