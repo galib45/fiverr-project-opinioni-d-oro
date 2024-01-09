@@ -37,7 +37,7 @@
                             </td>
                             <td class="p-3 text-sm text-gray-700">
                                 <div class="flex justify-center items-center">
-                                    <a href="">{{ macros.svg("visibility", class="fill-gray-500 hover:fill-gray-800") }}</a>
+																		<a href="{{ url_for('view_campaign', id=campaign.id) }}">{{ macros.svg("visibility", class="fill-gray-500 hover:fill-gray-800") }}</a>
                                     <a href="{{ url_for('delete_campaign', id=campaign.id) }}">{{ macros.svg("delete", class="fill-red-400 hover:fill-red-700") }}</a>
                                 </div>
                             </td>
@@ -60,7 +60,7 @@
                         <span class="datetime">{{ campaign.expire_date }}</span>
                     </div>
                     <div class="flex gap-2">
-                      <a href="" class="link">View</a>
+                      <a href="{{ url_for('view_campaign', id=campaign.id) }}" class="link">View</a>
                       <a href="{{ url_for('delete_campaign', id=campaign.id) }}" class="link">Delete</a>
                     </div>
                 </div>

@@ -21,7 +21,7 @@ def send_coupon_email(customer, coupon):
     send_email(
         subject="Discount Coupon",
         recipients=[customer.email],
-        text_body=render_template("email/coupon.txt", coupon=coupon, customer=customer, formatted_expire_date=formatted_expire_date)
+        text_body=render_template("email/coupon.txt", coupon=coupon, customer=customer, formatted_expire_date=formatted_expire_date),
         html_body=render_template("email/coupon.html", coupon=coupon, customer=customer, formatted_expire_date=formatted_expire_date)
     )
     try:

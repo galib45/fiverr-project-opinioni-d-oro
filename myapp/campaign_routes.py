@@ -1,7 +1,7 @@
 import json
 from datetime import datetime, timedelta
 
-from flask import flash, redirect, render_template, url_for
+from flask import flash, redirect, render_template, url_for, request
 from flask_login import current_user
 
 from myapp import app, db, decorators
@@ -88,5 +88,17 @@ def delete_campaign(id):
 
 
 
-
+@app.route("/dashboard/campaigns/<id>/view", methods=["GET", "POST"])
+@decorators.shop_owner_required
+@decorators.verified_email_required
+def view_campaign(id):
+    store = current_user.stores[0]
+    campaign = db.session.get(Campaign, id)
+    if not campaign: abort(404)
+    if request.method == "POST":
+        customer_id_list = request.form.getlist("customers")
+        for customer_id in customer_id_list:
+            customer = db.session.get()
+    return render_template("view-campaign.html", campaign=campaign, store=store)
+    
 

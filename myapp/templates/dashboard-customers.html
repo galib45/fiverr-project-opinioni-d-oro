@@ -19,6 +19,7 @@
                         <th class="p-3 text-sm font-semibold tracking-wide text-left">Phone Number</th>
 												{% if store.package == '5star' or store.package == '5star-unlimited' %}
 													<th class="p-3 text-sm font-semibold tracking-wide text-right">Review Updates</th>
+													<th class="p-3 text-sm font-semibold tracking-wide text-center">Action</th>
 												{% endif %}
                     </tr>
                 </thead>
@@ -30,6 +31,7 @@
                             <td class="p-3 text-sm text-gray-700">{{ customer.phone_number }}</td>
 														{% if store.package == '5star' or store.package == '5star-unlimited' %}
 															<td class="px-6 py-3 text-sm text-gray-700 text-right">{{ data[customer.id] or 0 }}</td>
+															<td class="px-6 py-3 text-sm text-gray-700 text-center"><a href="{{ url_for('view_reviews', customer_id=customer.id) }}" class="link">View Reviews</a></td>
 														{% endif %}
                         </tr>
                     {% endfor %}

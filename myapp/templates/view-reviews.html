@@ -1,0 +1,24 @@
+{% extends 'dashboard-shop-owner.html' %}
+{% set active_page = customer.name %}
+{% block title %}View Reviews{% endblock %}
+{% block content %}
+<div class="p-4 max-w-[600px]">
+{% if review %}
+	{% for update in review.updates %}
+  <div class="shadow shadow-gray-400 rounded p-6">
+		<div class="text-sm"><span class="datetime">{{ fromtimestamp(float(update.timestamp)) - timedelta(hours=1) }}</span></div>
+		<div class="text-gray-700 my-2">{{ update.text }}</div>
+		<div class="font-semibold my-1">Rating: {{ update.rating }}</div>
+		<div>{{ update.photos.count() }} photos</div>
+		{% if update.photos.count() > 0 %}
+			{% for photo in update.photos %}
+				<div><a href="{{ photo.url }}" class="link">View Photo</a></div>
+			{% endfor %}
+		{% endif %}
+  </div>
+	{% endfor %}
+{% else %}
+<div class="text-xl">No Review from {{ customer.name }}</div>
+{% endif %}
+</div>
+{% endblock %}

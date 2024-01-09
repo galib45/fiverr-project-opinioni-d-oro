@@ -362,10 +362,18 @@ def view_action(id):
     action = db.session.get(Action, id)
     if action:
         if action.category == "campaign":
+            if not action.data.isdecimal():
+                flash("This action does not contain valid data, deleted automatically", category="error")
+                db.session.delete(action)
+                db.session.commit()
+                return redirect(url_for('action_center'))
             campaign_id = int(action.data)
             campaign = db.session.get(Campaign, id)
             if not campaign:
-                abort(404)
+                flash("This Campaign does not exist, action deleted automatically", category="error")
+                db.session.delete(action)
+                db.session.commit()
+                return redirect(url_for('action_center'))
             return render_template("view-action.html", action=action, data=campaign)
         return f"Action-{action.id}\nCategory: {action.category}\nData: {action.data}"
     abort(404)
@@ -493,3 +501,21 @@ def delete_coupon(code):
     db.session.commit()
     flash(f"Coupon({code}) has been deleted successfully")
     return redirect(url_for("search_coupon"))
+
+@app.route("/view_reviews/<customer_id>")
+@decorators.shop_owner_required
+@decorators.verified_email_required
+def view_reviews(customer_id):
+    store = current_user.stores[0]
+    customer = db.session.get(Customer, customer_id)
+    if not customer: abort(404)
+    review = db.session.scalar(
+        db.select(Review)
+        .where(Review.store == store)
+        .where(Review.customer == customer)
+    )
+    return render_template(
+        "view-reviews.html", customer=customer, review=review, 
+        fromtimestamp=datetime.fromtimestamp, float=float,
+        timedelta=timedelta
+    )

@@ -1,0 +1,32 @@
+{% extends "dashboard-shop-owner.html" %}
+{% set active_page = campaign.name %}
+{% block title %}View Campaign{% endblock %}
+{% block content %}
+<div class="p-4">
+	<div class="flex items-center gap-4">
+		<div class="font-bold text-xl">{{ campaign.name }}</div>
+		{{ macros.badge(campaign.status) }}
+	</div>
+	<div class="mt-1 mb-4 text-sm text-gray-700">Category: {{ campaign.category[0] | upper }}{{ campaign.category[1:] }}</div>
+	{% if campaign.status == 'approved' %}
+	<div>
+		<div class="mb-4 border-b-2 border-blue-600 py-2 text-xl font-bold text-blue-600 w-fit">Customers in this campaign</div>
+		<div>{{ campaign.customers | length }} customers are in this campaign</div>
+	</div>
+	<div class="mt-8">
+		<div class="mb-4 border-b-2 border-rose-600 py-2 text-xl font-bold text-rose-600 w-fit">Customers not in this campaign</div>
+		<form method="post" novalidate>
+		{% for customer in store.customers %}
+		<div>
+			<input type="checkbox" name="customers" id="customer-{{ customer.id }}" value="{{ customer.id }}" class="m-2">
+			<label for="customer-{{ customer.id }}">{{ customer.name }}</label>
+		</div>
+		{% endfor %}
+		<div class="mt-4"><button class="primary" type="submit">Add These Customers</button></div>
+		</form>
+	</div>
+	{% else %}
+	<div>Please wait for Admin's approval</div>
+	{% endif %}
+</div>
+{% endblock %}
