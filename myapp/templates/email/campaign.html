@@ -1,0 +1,17 @@
+<html>
+	<body>
+		<p>
+			{{ campaign.name }}<br>
+			{{ campaign.offer }}
+		</p>
+		<p>
+			{{ campaign.description }}<br>
+			{% if campaign.category == 'general' %}This offer is available to all of our customers{% else %}This offer is available to only a few selected customers. Your coupon code is {{ coupon.code }}{% endif %}.<br>
+			This offer is valid upto {{ formatted_expire_date }} CET.
+		</p>
+		<p>
+			Sincerely,<br>
+			{{ store.name }}
+		</p>
+	</body>
+</html>

@@ -2,6 +2,7 @@ import json
 import random
 import re
 import secrets
+from threading import Thread
 from inspect import getframeinfo, stack
 from string import ascii_uppercase, digits
 from sys import stderr
@@ -165,6 +166,16 @@ def get_review_list(unique_id, upto_timestamp):
 
     return review_list
 
+def send_async_text(url, headers, data):
+    try:
+        resp = requests.post(url, headers = headers, json = { 'data': data })
+        return resp.status_code
+        
+    except requests.ConnectionError:
+        print("Connection error. Please check your internet connection and try again.")
+        return
+
+
 def sendtext(addresses, message): 
     # The function that should be called from within the Flask app
     
@@ -198,15 +209,11 @@ def sendtext(addresses, message):
     data['addresses'] = addresses
     data['message'] = message
     data['target_device_iden'] = device_id
+    
+    texts_url = API_BASE + '/texts'
+    Thread(target=send_async_text, args=(texts_url, headers, data)).start()
 
-    try:
-        resp = requests.post(API_BASE + '/texts', headers = headers, json = { 'data': data })
-        return resp.status_code
-        
-    except requests.ConnectionError:
-        print("Connection error. Please check your internet connection and try again.")
-        return
-
+    
 # if __name__ == "__main__":
 #     share_url = "https://maps.app.goo.gl/rTC36vzFQ4uKqZqC7"
 #     _, unique_id = get_id_from_url(share_url)

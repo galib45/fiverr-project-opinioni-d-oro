@@ -57,8 +57,8 @@ class Store(db.Model):
     campaigns = db.relationship("Campaign", backref="store", lazy="dynamic")
     coupons = db.relationship("Coupon", backref="store", lazy="dynamic")
     reviews = db.relationship("Review", backref="store", lazy="dynamic")
-    coupons_generated = db.Column(db.Integer)
-    coupons_redeemed = db.Column(db.Integer)
+    coupons_generated = db.Column(db.Integer, default=0)
+    coupons_redeemed = db.Column(db.Integer, default=0)
 
     def __repr__(self):
         return f"Store(name='{self.name}', address='{self.address}', phone_number='{self.phone_number}')"

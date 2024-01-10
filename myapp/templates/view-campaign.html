@@ -11,18 +11,29 @@
 	{% if campaign.status == 'approved' %}
 	<div>
 		<div class="mb-4 border-b-2 border-blue-600 py-2 text-xl font-bold text-blue-600 w-fit">Customers in this campaign</div>
-		<div>{{ campaign.customers | length }} customers are in this campaign</div>
+		<div class="font-semibold text-gray-700">{{ campaign.customers | length }} customers are in this campaign</div>
+		<div class="mt-2">
+		{% for customer in campaign.customers %}
+		<div>{{ customer.name }} ({{ customer.phone_number }})</div>
+		{% endfor %}
+		</div>
 	</div>
 	<div class="mt-8">
 		<div class="mb-4 border-b-2 border-rose-600 py-2 text-xl font-bold text-rose-600 w-fit">Customers not in this campaign</div>
 		<form method="post" novalidate>
 		{% for customer in store.customers %}
+		{% if customer not in campaign.customers %}
 		<div>
+			{% if campaign.category == 'general' %}
+			<input type="checkbox" name="customers" id="customer-{{ customer.id }}" value="{{ customer.id }}" class="m-2 pointer-events-none" checked>
+			{% else %}
 			<input type="checkbox" name="customers" id="customer-{{ customer.id }}" value="{{ customer.id }}" class="m-2">
-			<label for="customer-{{ customer.id }}">{{ customer.name }}</label>
+			{% endif %}
+			<label for="customer-{{ customer.id }}">{{ customer.name }} ({{ customer.phone_number }})</label>
 		</div>
+		{% endif %}
 		{% endfor %}
-		<div class="mt-4"><button class="primary" type="submit">Add These Customers</button></div>
+		<div class="mt-4"><button class="primary" type="submit" {{ "disabled" if campaign.customers|length == store.customers|length }}>Add These Customers</button></div>
 		</form>
 	</div>
 	{% else %}

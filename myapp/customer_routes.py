@@ -6,6 +6,7 @@ import google.auth.transport.requests
 import google.oauth2.credentials
 import google_auth_oauthlib.flow
 import requests
+from datetime import datetime, timedelta
 from flask import flash, abort, redirect, render_template, request, session, url_for
 from google.oauth2 import id_token
 from slugify import slugify
@@ -13,7 +14,7 @@ from slugify import slugify
 from myapp import app, db
 from myapp.utils import generate_random_code, sendtext
 from myapp.forms import RegisterCustomerForm
-from myapp.models import Customer, Store
+from myapp.models import Customer, Store, Coupon
 
 os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
 
@@ -157,12 +158,17 @@ def registercustomer(store_id):
                     )
                     db.session.add(customer)
                     store.customers.append(customer)
+                    
+                    code = generate_random_code(6)
+                    customer.verification_code = code
                     db.session.commit()
+                    
+                    message = render_template("sms/otp.txt", store=store, customer=customer, code=code)
+                    sendtext([customer.phone_number], message)
+                    
                     store_slug = f"{store_id}-{slugify(store.name)}"
                     return redirect(url_for("give_review", store_slug=store_slug))
-                return render_template(
-                    "registercustomer.html", store=store, session=session, form=form
-                )
+                return render_template("registercustomer.html", store=store, session=session, form=form)
         else:
             return redirect(url_for("google_login"))
     else:
@@ -203,6 +209,15 @@ def verify_phone(slug, customer_id):
         if code == customer.verification_code:
             flash("Phone Number verified successfully")
             customer.phone_verified = True
+            timestamp_now = datetime.utcnow()
+            coupon = Coupon(
+                code = generate_random_code(),
+                expire_date = timestamp_now + timedelta(days=30),
+                offer = store.general_coupon_offer
+            )
+            customer.coupons.append(coupon)
+            customer.got_coupon_date = timestamp_now
+            store.coupons.append(coupon)
             db.session.commit()
             return redirect(url_for("give_review", store_slug=slug))
         else:

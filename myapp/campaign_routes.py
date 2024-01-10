@@ -4,11 +4,23 @@ from datetime import datetime, timedelta
 from flask import flash, redirect, render_template, url_for, request
 from flask_login import current_user
 
-from myapp import app, db, decorators
+from myapp import app, db, decorators, mail
 from myapp.forms import NewCampaignForm
-from myapp.models import Action, Campaign
-from myapp.utils import generate_campaign_code
+from myapp.models import Action, Campaign, Customer, Coupon
+from myapp.utils import generate_campaign_code, generate_random_code, sendtext
+from threading import Thread
+from flask_mail import Message
 
+def send_async_email(app, msg):
+    with app.app_context():
+        mail.send(msg)
+
+
+def send_email(subject, recipients, text_body, html_body):
+    msg = Message(subject, sender=app.config["MAIL_USERNAME"], recipients=recipients)
+    msg.body = text_body
+    msg.html = html_body
+    Thread(target=send_async_email, args=(app, msg)).start()
 
 @app.route("/dashboard/campaigns")
 @decorators.shop_owner_required
@@ -49,6 +61,7 @@ def dashboard_campaigns_add():
             name = form.name.data
             description = form.description.data
             offer = form.offer.data
+            category = form.category.data
             expire_date = datetime.strptime(
                 form.expire_date.data, "%B %d, %Y"
             ) - timedelta(hours=1)
@@ -60,6 +73,7 @@ def dashboard_campaigns_add():
                 date_created = datetime.utcnow(),
                 expire_date=expire_date,
                 code=campaign_code,
+                category=category
             )
             store.campaigns.append(campaign)
             db.session.commit()
@@ -94,11 +108,49 @@ def delete_campaign(id):
 def view_campaign(id):
     store = current_user.stores[0]
     campaign = db.session.get(Campaign, id)
+    cet_expire_date = campaign.expire_date + timedelta(hours=1)
+    formatted_expire_date = cet_expire_date.strftime("%B %d, %Y %I:%M %p")
     if not campaign: abort(404)
     if request.method == "POST":
         customer_id_list = request.form.getlist("customers")
+        phone_numbers = []
+        emails = []
         for customer_id in customer_id_list:
-            customer = db.session.get()
+            customer = db.session.get(Customer, int(customer_id))
+            if not customer: continue
+            if customer in campaign.customers: continue
+            campaign.customers.append(customer)
+            if campaign.category == 'general':
+                phone_numbers.append(customer.phone_number)
+                emails.append(customer.email)
+            else:
+                coupon = Coupon(
+                    code = campaign.code + generate_random_code(4),
+                    expire_date = campaign.expire_date,
+                    offer = campaign.offer
+                )
+                customer.coupons.append(coupon)
+                customer.got_coupon_date = datetime.utcnow()
+                store.coupons.append(coupon)
+                message = render_template("email/campaign.txt", store=store, campaign=campaign, coupon=coupon, formatted_expire_date=formatted_expire_date)
+                sendtext([customer.phone_number], message)
+                send_email(
+                    subject = "New Campaign",
+                    recipients = [customer.email],
+                    text_body = message,
+                    html_body = render_template("email/campaign.html", store=store, campaign=campaign, coupon=coupon, formatted_expire_date=formatted_expire_date)
+                )
+
+        db.session.commit()
+        if campaign.category == 'general':
+            message = render_template("email/campaign.txt", store=store, campaign=campaign, formatted_expire_date=formatted_expire_date)
+            sendtext(phone_numbers, message)
+            send_email(
+                subject = "New Campaign",
+                recipients = emails,
+                text_body = message,
+                html_body = render_template("email/campaign.html", store=store, campaign=campaign, formatted_expire_date=formatted_expire_date)
+            )
     return render_template("view-campaign.html", campaign=campaign, store=store)
     
 

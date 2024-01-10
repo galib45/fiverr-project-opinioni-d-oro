@@ -1,11 +1,16 @@
+from threading import Thread
 from myapp import app, db, mail
 from myapp.models import *
 from datetime import datetime, timedelta
+from flask import render_template
 from flask_mail import Message
 
 def send_async_email(app, msg):
     with app.app_context():
-        mail.send(msg)
+        try:
+            mail.send(msg)
+        except Exception as e:
+            print(f"ERROR sending email to {customer.email}: {e}")
 
 
 def send_email(subject, recipients, text_body, html_body):
@@ -18,18 +23,16 @@ def send_email(subject, recipients, text_body, html_body):
 def send_coupon_email(customer, coupon):
     cet_expire_date = coupon.expire_date + timedelta(hours=1)
     formatted_expire_date = cet_expire_date.strftime("%B %d, %Y %I:%M %p")
+    print(f"Sending email to {customer.email} for {coupon.code}")
     send_email(
         subject="Discount Coupon",
         recipients=[customer.email],
         text_body=render_template("email/coupon.txt", coupon=coupon, customer=customer, formatted_expire_date=formatted_expire_date),
         html_body=render_template("email/coupon.html", coupon=coupon, customer=customer, formatted_expire_date=formatted_expire_date)
     )
-    try:
-        mail.send(msg)
-        coupon.email_sent = True
-        db.session.commit()
-    except Exception as e:
-        print(f"ERROR sending email to {customer.email}: {e}")
+    coupon.email_sent = True
+    db.session.commit()
+    
 
 
 def send_coupon_sms(customer, coupon):
@@ -37,10 +40,12 @@ def send_coupon_sms(customer, coupon):
     cet_expire_date = coupon.expire_date + timedelta(hours=1)
     formatted_expire_date = cet_expire_date.strftime("%B %d, %Y %I:%M %p")
     print(f"Sending sms to {customer.email} for {coupon.code}")
-    sendtext(
+    status = sendtext(
         [customer.phone_number], 
         render_template("email/coupon.txt", coupon=coupon, customer=customer, formatted_expire_date=formatted_expire_date)
     )
+    coupon.sms_sent = True
+    db.session.commit()
 
 
 @app.cli.command("send-coupons")
@@ -94,6 +99,7 @@ def fetch_reviews():
                             coupon = Coupon(
                                 code=generate_random_code(),
                                 expire_date=timestamp_now + timedelta(days=30),
+                                offer = store.general_coupon_offer
                             )
                             customer.coupons.append(coupon)
                             customer.got_coupon_date = timestamp_now

@@ -1,5 +1,5 @@
 url = new URL(document.URL)
-qrcodeData = url.origin + '/store/{{ store_slug }}/review'
+qrcodeData = url.origin + `/store/${store_slug}/review`
 
 options = {
   width: 150,

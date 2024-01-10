@@ -1,26 +1,11 @@
 {% extends "store-base.html" %}
 {% block title %}Register - {{ store.name }}{% endblock %}
-
-{% block style %}
-.two-buttons {
-    display: flex;
-    align-items: center;
-    flex-direction: row;
-}
-
-@media only screen and (max-width: 480px) {
-	.two-buttons {
-        flex-direction: column;
-    }
-}
-{% endblock %}
-
 {% block content %}
-<div class="form">
-    <form action="" method="post" id="register-customer-form" novalidate>
-        <div class="form-title">Register</div>
+<div class="mb-8 p-4 max-w-[400px] mx-auto">
+    <form action="" method="post" id="register-customer-form" class="flex flex-col gap-4" novalidate>
+        <div class="text-2xl font-bold my-2">Register</div>
         {{ form.hidden_tag() }}
-        <div>
+        <div class="flex flex-col gap-1">
             {{ form.email.label }}
             {{ form.email(readonly='readonly', value=session['customer_email']) }}
             <span class="form-error" id="email-error"></span>
@@ -28,7 +13,7 @@
                 <span class="form-error">{{ error }}</span>
             {% endfor %}
         </div>
-        <div>
+        <div class="flex flex-col gap-1">
             {{ form.name.label }}
             {{ form.name(placeholder='Enter your name', value=session['customer_name']) }}
             <span class="form-error" id="name-error"></span>
@@ -36,7 +21,7 @@
                 <span class="form-error">{{ error }}</span>
             {% endfor %}
         </div>
-        <div>
+        <div class="flex flex-col gap-1">
             {{ form.phone_number.label }}
             {{ form.phone_number(placeholder='Enter your phone number') }}
             <span class="form-error" id="phone-number-error"></span>
@@ -44,11 +29,11 @@
                 <span class="form-error">{{ error }}</span>
             {% endfor %}
         </div>
-        <div>
+        <div class="flex flex-col gap-1">
             <div>
                 {{ form.privacy_policy() }}
-                <label for="privacy_policy" style="padding: 0 10px;">
-                    By checking this, you are agreeing with our <a href="/privacy">privacy policy</a>
+                <label for="privacy_policy" class="text-sm">
+									By checking this, you are agreeing with our <a href="{{ url_for('helpcenter') }}" class="link text-sm">policies</a>
                 </label>
             </div>
             <span class="form-error" id="privacy-policy-error"></span>
@@ -56,9 +41,9 @@
                 <span class="form-error">{{ error }}</span>
             {% endfor %}
         </div>
-        <div class="two-buttons">
+        <div class="flex gap-4">
             {{ form.submit() }}
-            <div class="button"><a href="{{ url_for('google_logout') }}">Change Google Account</a></div>
+            <a href="{{ url_for('google_logout') }}"><button class="primary">Change Google Account</button></a>
         </div>
     </form>
 </div>

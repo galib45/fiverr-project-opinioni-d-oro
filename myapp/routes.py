@@ -417,7 +417,7 @@ def getid(google_map_url_id):
 def accept_policies():
     current_user.policies_accepted = True
     db.session.commit()
-    return f"{user.policies_accepted}"
+    return f"{current_user.policies_accepted}"
 
 @app.route("/search_coupon")
 @decorators.shop_owner_required
@@ -442,7 +442,6 @@ def search_coupon_by_code(code):
         data['email_sent'] = coupon.email_sent
         data['sms_sent'] = coupon.sms_sent
         data['offer'] = coupon.offer
-        data['redeemed'] = coupon.redeemed
         return jsonify(coupon=data)
     return jsonify(coupon=None)
 
@@ -466,7 +465,7 @@ def redeem_coupon(code):
     db.session.delete(coupon)
     db.session.commit()
 
-    print(f"sending email and sms to its owner {customer}")
+    print(f"sending email and sms to its owner {customer.name}")
     send_email(
         "[Golden Opinions] Coupon Redeemed",
         recipients=[customer.email],
@@ -494,7 +493,7 @@ def delete_coupon(code):
         return redirect(url_for("search_coupon"))
     
     if coupon.expire_date > datetime.utcnow():
-        flash("This coupon has not been expired yet", category="error")
+        flash("This coupon has not expired yet", category="error")
         return redirect(url_for("search_coupon"))
     
     db.session.delete(coupon)
